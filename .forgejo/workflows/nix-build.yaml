@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'devices/**'
+      - 'home/**'
+      - 'modules/**'
+      - 'flake.nix'
+      - 'flake.lock'
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: nix
+    outputs:
+      hosts: ${{ steps.list.outputs.hosts }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: list
+        run: |
+          set -eu
+          hosts=$(nix eval --json '.#nixosConfigurations' --apply \
+            'cfgs: builtins.filter (n: n != "steamos") (builtins.attrNames cfgs)')
+          echo "hosts=$hosts" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: discover
+    runs-on: nix
+    strategy:
+      fail-fast: false
+      matrix:
+        host: ${{ fromJSON(needs.discover.outputs.hosts) }}
+    steps:
+      - uses: actions/checkout@v6
+      - run: |
+          nix build \
+            ".#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel" \
+            --print-build-logs
