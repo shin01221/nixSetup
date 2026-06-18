@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+TMP_DIR="/tmp/rmpc"
+mkdir -p "$TMP_DIR"
+
+ALBUM_ART_PATH="$TMP_DIR/notification_cover"
+DEFAULT_ALBUM_ART_PATH="$TMP_DIR/default_album_art.jpg"
+
+if ! rmpc albumart --output "$ALBUM_ART_PATH"; then
+	ALBUM_ART_PATH="${DEFAULT_ALBUM_ART_PATH}"
+fi
+
+ARTIST="${ARTIST:-}"
+TITLE="${TITLE:-}"
+
+if [[ -z "$ARTIST" ]] || [[ -z "$TITLE" ]]; then
+	ARTIST=$(playerctl metadata artist 2>/dev/null)
+	TITLE=$(playerctl metadata title 2>/dev/null)
+fi
+
+notify-send -a "rmpc" -u normal -i "${ALBUM_ART_PATH}" "Now Playing" "${ARTIST:-Unknown} - ${TITLE:-Unknown}"
