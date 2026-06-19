@@ -43,5 +43,6 @@
   home.packages = with pkgs; [
     kdePackages.ffmpegthumbs
     kdePackages.kdegraphics-thumbnailers
+    kdePackages.qtimageformats
   ];
 }

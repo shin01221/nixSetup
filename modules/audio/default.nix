@@ -8,7 +8,6 @@
     mpc
     playerctl
     rmpc
-    spotify
-    spicetify-cli
+
   ];
 }

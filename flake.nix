@@ -49,6 +49,7 @@
       url = "github:yokoffing/Betterfox";
       flake = false;
     };
+
   };
 
   outputs =
@@ -162,6 +163,7 @@
             ./home/audio.nix
             ./home/obs-studio.nix
             ./home/xdg.nix
+            ./home/spotify.nix
           ];
         };
 
