@@ -148,6 +148,7 @@
            # ./home/fish.nix
             ./home/theming.nix
             ./home/niri.nix
+            ./home/dolphin
             ./home/audio.nix
             ./home/obs-studio.nix
             ./home/xdg.nix

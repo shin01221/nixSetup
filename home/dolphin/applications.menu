@@ -1,0 +1,11 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+  "http://www.freedesktop.org/standards/desktop-menu/menu.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Directory>menu-applications.directory</Directory>
+  <DefaultAppDirs/>
+  <DefaultDirectoryDirs/>
+  <Include>
+    <Category>Application</Category>
+  </Include>
+</Menu>
