@@ -28,7 +28,7 @@
     ../../../modules/system
     ../../../modules/memory
     ../../../modules/tuning/tlp
-    # ../../../modules/custom/mpv.nix
+    ../../../modules/media
   ];
 
   # hostname
@@ -66,6 +66,8 @@
     services.enable = true;       # enable fstrim, keyring
     system.enable = true;         # enable nix-index-database, GPG agent
     memory.enable = true;         # enable zRAM swap + oomd
+    media.enable = true;
+
     flatpak = {
       enable = true;
       onCalendar = "weekly";
