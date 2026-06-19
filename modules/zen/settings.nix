@@ -12,7 +12,7 @@ let
 in
 {
   "zen.view.use-single-toolbar" = false;
-  "zen.view.sidebar-expanded" = false;
+  "zen.view.sidebar-expanded" = true;
 
   "zen.view.compact.hide-toolbar" = true;
   "zen.view.compact.hide-tabbar" = true;
@@ -226,7 +226,6 @@ in
         "forward-button"
         "stop-reload-button"
         "urlbar-container"
-        # "developer-button"
         "downloads-button"
         "unified-extensions-button"
       ] ++ extensions.nav-bar;

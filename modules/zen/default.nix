@@ -28,6 +28,19 @@
               settings = import ./settings.nix { inherit self lib config; };
               bookmarks = import ./bookmarks.nix;
               search = import ./search.nix { inherit self pkgs; };
+              mods = [
+                "c5f7fb68-cc75-4df0-8b02-dc9ee13aa773" # Audio Tab Icon Plus
+                "f7c71d9a-bce2-420f-ae44-a64bd92975ab" # Better Unloaded Tabs
+                "b51ff956-6aea-47ab-80c7-d6c047c0d510" # Disable Status Bar
+                "c6813222-6571-4ba6-8faf-58f3343324f6" # Disable Rounded Corners
+                "d8b79d4a-6cba-4495-9ff6-d6d30b0e94fe" # Better Active Tab
+                "4ab93b88-151c-451b-a1b7-a1e0e28fa7f8" # No Sidebar Scrollbar
+                "e122b5d9-d385-4bf8-9971-e137809097d0" # No Top Sites
+                "642854b5-88b4-4c40-b256-e035532109df" # Transparent Zen
+                "72f8f48d-86b9-4487-acea-eb4977b18f21" # Better CtrlTab Panel
+              ];
+              userChrome = builtins.readFile ./themes/userChrome.css;
+              userContent = builtins.readFile ./themes/userContent.css;
               extraConfig = ''
                 ${builtins.readFile "${inputs.betterfox}/Fastfox.js"}
                 ${builtins.readFile "${inputs.betterfox}/Peskyfox.js"}
