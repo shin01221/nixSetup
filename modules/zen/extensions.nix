@@ -56,7 +56,6 @@
         userSettings = rec {
           uiTheme = "dark";
           uiAccentCustom = true;
-          uiAccentCustom0 = "#cba6f7"; # Catppuccin Mauve
           cloudStorageEnabled = lib.mkForce false;
           advancedUserEnabled = true;
           userFiltersTrusted = true;
@@ -125,14 +124,11 @@
         grayscale = 0;
         sepia = 0;
         useFont = false;
-        fontFamily = "JetBrainsMono Nerd Font";
+        fontFamily = "Dejavu Sans Mono";
         textStroke = 0;
         engine = "staticTheme";
         stylesheet = "";
-        darkSchemeBackgroundColor = "#1e1e2e";
-        darkSchemeTextColor = "#cdd6f4";
         scrollbarColor = "";
-        selectionColor = "#313244";
         styleSystemControls = true;
         lightColorScheme = "Default";
         darkColorScheme = "Default";

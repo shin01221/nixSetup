@@ -15,6 +15,7 @@ let
     sesh
     git
     killall
+    lazygit
     bat
     chafa
     curl
@@ -47,7 +48,6 @@ let
     smartmontools
     pciutils
     file
-    dig
     imagemagick
     jq
     brightnessctl
