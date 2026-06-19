@@ -30,9 +30,18 @@ in
     nixpkgs.config.allowUnfree = true;
 
     boot = {
+      tmp.cleanOnBoot = true;
+
+      kernel.sysctl."vm.swappiness" = 100;
+
+      kernelParams = [ "preempt=full" ];
+
       loader = {
         systemd-boot.enable = true;
+        systemd-boot.consoleMode = "auto";
         efi.canTouchEfiVariables = true;
+        efi.efiSysMountPoint = "/boot";
+        timeout = 10;
       };
       kernelPackages = pkgs.linuxPackages_latest;
       kernelModules = [ "uvcvideo" ];

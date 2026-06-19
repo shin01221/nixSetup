@@ -39,6 +39,16 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    betterfox = {
+      url = "github:yokoffing/Betterfox";
+      flake = false;
+    };
   };
 
   outputs =
@@ -67,7 +77,7 @@
         in
         libU.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs userName homeDir; };
+          specialArgs = { inherit self inputs userName homeDir; };
           modules = [
             deviceModule
             home-managerU.nixosModules.home-manager
@@ -78,7 +88,7 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "backup";
-                extraSpecialArgs = { inherit inputs userName homeDir; };
+                extraSpecialArgs = { inherit self inputs userName homeDir; };
                 sharedModules = [
                   (
                     { osConfig, ... }:

@@ -32,6 +32,9 @@
       [MainWindow]
       MenuBar=Disabled
 
+      [UiSettings]
+      ColorScheme=noctalia
+
       [PreviewSettings]
       Plugins=ffmpegthumbnailer,appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,gsf-office,opendocumentthumbnail,svgthumbnail,ffmpegthumbs
     '';
