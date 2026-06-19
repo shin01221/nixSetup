@@ -19,12 +19,8 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "kde";
+    platformTheme.name = "qtct";
   };
-
-  home.packages = with pkgs; [
-    kdePackages.breeze              # Breeze Qt widget style
-  ];
 
   xdg.configFile = {
   };
