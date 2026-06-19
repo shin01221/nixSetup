@@ -1,20 +1,12 @@
 { lib, config, ... }:
 {
-  nav-bar = [
-    "_c4b582ec-4343-438c-bda2-2f691c16c262_-browser-action"
-    "firemonkey_eros_man-browser-action"
-    "ublock0_raymondhill_net-browser-action"
-    # "addon_darkreader_org-browser-action"
-    # "queryamoid_kaply_com-browser-action"
-    # "_aecec67f-0d10-4fa7-b7c7-609a2db280cf_-browser-action"
-  ];
+  nav-bar = [ ];
 
   unified-extensions-area = [
     "ublock0_raymondhill_net-browser-action"
-    "firemonkey_eros_man-browser-action"
     "addon_darkreader_org-browser-action"
-    "queryamoid_kaply_com-browser-action"
-    # "_aecec67f-0d10-4fa7-b7c7-609a2db280cf_-browser-action"
+    "_91aa3897-2634-4a8a-9092-279db23a7689_-browser-action"
+    "sponsorblock_ajay_app-browser-action"
   ];
 
   extensionSettings = {
@@ -24,61 +16,26 @@
     };
     "uBlock0@raymondhill.net" = {
       private_browsing = true;
-      default_area = "navbar";
+      default_area = "menupanel";
       installation_mode = "force_installed";
       install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
     };
-    "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
-      private_browsing = true;
-      default_area = "navbar";
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
-    };
-    "vpn@proton.ch" = {
-      private_browsing = true;
-      default_area = "navbar";
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/proton-vpn-firefox-extension/latest.xpi";
-    };
-    "jid0-adyhmvsP91nUO8pRv0Mn2VKeB84@jetpack" = {
-      private_browsing = true;
-      default_area = "navbar";
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/raindropio/latest.xpi";
-    };
-    "firemonkey@eros.man" = {
-      private_browsing = true;
-      default_area = "navbar";
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/firemonkey/latest.xpi";
-    };
     "addon@darkreader.org" = {
       private_browsing = true;
-      # default_area = "navbar";
       installation_mode = "force_installed";
       install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+    };
+    "{91aa3897-2634-4a8a-9092-279db23a7689}" = {
+      private_browsing = true;
+      default_area = "menupanel";
+      installation_mode = "force_installed";
+      install_url = "https://addons.mozilla.org/firefox/downloads/latest/zen-internet/latest.xpi";
     };
     "sponsorBlocker@ajay.app" = {
       private_browsing = true;
       default_area = "menupanel";
       installation_mode = "force_installed";
       install_url = "https://addons.mozilla.org/firefox/downloads/latest/sponsorblock/latest.xpi";
-    };
-    "{762f9885-5a13-4abd-9c77-433dcd38b8fd}" = {
-      private_browsing = true;
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/return-youtube-dislikes/latest.xpi";
-    };
-    "frankerfacez@frankerfacez.com" = {
-      private_browsing = true;
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/frankerfacez/latest.xpi";
-    };
-    # View Xpi Id's in Firefox Extension Store
-    "queryamoid@kaply.com" = {
-      private_browsing = true;
-      installation_mode = "force_installed";
-      install_url = "https://github.com/mkaply/queryamoid/releases/download/v0.2/query_amo_addon_id-0.2-fx.xpi";
     };
   };
 
