@@ -17,7 +17,6 @@
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     QT_QPA_PLATFORM = "wayland";
-    QT_QPA_PLATFORMTHEME = "kde";
     XDG_MENU_PREFIX = "plasma-";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
     GTK_IM_MODULE = "simple";
