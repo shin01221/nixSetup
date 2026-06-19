@@ -193,17 +193,17 @@ in
       createDirectories = true;
       setSessionVariables = true;
 
-      documents = "${config.home.homeDirectory}/documents";
-      download = "${config.home.homeDirectory}/downloads";
-      desktop = "${config.home.homeDirectory}/desktop";
-      videos = "${config.home.homeDirectory}/media/videos";
-      music = "${config.home.homeDirectory}/media/music";
-      pictures = "${config.home.homeDirectory}/media/pictures";
-      publicShare = "${config.home.homeDirectory}/public/share";
-      templates = "${config.home.homeDirectory}/public/templates";
+      documents = "${config.home.homeDirectory}/Documents";
+      download = "${config.home.homeDirectory}/Downloads";
+      desktop = "${config.home.homeDirectory}/Desktop";
+      videos = "${config.home.homeDirectory}/Videos";
+      music = "${config.home.homeDirectory}/Music";
+      pictures = "${config.home.homeDirectory}/Pictures";
+      publicShare = "${config.home.homeDirectory}/Public/share";
+      templates = "${config.home.homeDirectory}/Public/templates";
 
       extraConfig = {
-        SCREENSHOTS = "${config.home.homeDirectory}/media/pictures/screenshots";
+        SCREENSHOTS = "${config.home.homeDirectory}/Pictures/Screenshots";
         DEV = "${config.home.homeDirectory}/dev";
       };
     };
