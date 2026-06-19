@@ -83,6 +83,7 @@ let
     yubioath-flutter
     evtest
     kdePackages.dolphin.out
+    thunar
     vlc
     wlr-which-key
     libreoffice
@@ -90,6 +91,7 @@ let
     kdePackages.okular
     kdePackages.gwenview
     opencode
+    wayscriber
     mpv
     calibre
     obs-studio

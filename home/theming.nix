@@ -23,9 +23,7 @@
   };
 
   home.packages = with pkgs; [
-    kdePackages.plasma-integration  # KDE platform theme — reads kdeglobals
     kdePackages.breeze              # Breeze Qt widget style
-    kdePackages.kconfig             # kwriteconfig6 CLI for configuring
   ];
 
   xdg.configFile = {
