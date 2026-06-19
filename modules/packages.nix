@@ -84,6 +84,7 @@ let
     yubioath-flutter
     evtest
     kdePackages.dolphin.out
+    kdePackages.qtsvg
     thunar
     vlc
     wlr-which-key

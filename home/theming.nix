@@ -22,6 +22,10 @@
     platformTheme.name = "qtct";
   };
 
-  xdg.configFile = {
-  };
+  xdg.configFile."gtk-4.0/settings.ini".force = true;
+
+  home.packages = with pkgs; [
+    darkly
+    colloid-icon-theme
+  ];
 }

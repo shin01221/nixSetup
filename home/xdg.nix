@@ -165,6 +165,10 @@ let
   };
 in
 {
+  xdg.configFile."mimeapps.list".force = true;
+  xdg.configFile."user-dirs.dirs".force = true;
+  xdg.configFile."user-dirs.conf".force = true;
+
   home.preferXdgDirectories = true;
 
   xdg = {
