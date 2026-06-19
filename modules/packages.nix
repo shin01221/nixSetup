@@ -90,6 +90,7 @@ let
     gnome-calculator
     kdePackages.okular
     kdePackages.gwenview
+    kdePackages.ark
     opencode
     wayscriber
     mpv

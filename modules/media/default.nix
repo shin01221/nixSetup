@@ -6,18 +6,7 @@
 }:
 let
   cfg = config.workstation.media;
-in
-{
-  options.workstation.media.enable = lib.mkEnableOption "Media tools (mpv, yt-dlp)";
-
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      yt-dlp
-      ff2mpv-rust
-      ffmpeg
-      playerctl
-    ];
-
+  mpvConfig = {
     programs.mpv = {
       enable = true;
       scripts =
@@ -133,5 +122,20 @@ in
         };
       };
     };
+  };
+in
+{
+  options.workstation.media.enable = lib.mkEnableOption "Media tools (mpv, yt-dlp)";
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      mpv
+      yt-dlp
+      ff2mpv-rust
+      ffmpeg
+      playerctl
+    ];
+
+    home-manager.sharedModules = [ mpvConfig ];
   };
 }

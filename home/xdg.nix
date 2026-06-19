@@ -111,6 +111,55 @@ let
     "application/x-cbr" = "calibre-gui.desktop";
     "application/x-cbz" = "calibre-gui.desktop";
 
+    # ark
+    "application/gzip" = "org.kde.ark.desktop";
+    "application/x-7z-compressed" = "org.kde.ark.desktop";
+    "application/x-archive" = "org.kde.ark.desktop";
+    "application/x-arj" = "org.kde.ark.desktop";
+    "application/x-bzip" = "org.kde.ark.desktop";
+    "application/x-bzip-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-bzip1" = "org.kde.ark.desktop";
+    "application/x-bzip1-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-cabinet" = "org.kde.ark.desktop";
+    "application/x-compress" = "org.kde.ark.desktop";
+    "application/x-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-cpio" = "org.kde.ark.desktop";
+    "application/x-deb" = "org.kde.ark.desktop";
+    "application/x-ear" = "org.kde.ark.desktop";
+    "application/x-gtar" = "org.kde.ark.desktop";
+    "application/x-gzip" = "org.kde.ark.desktop";
+    "application/x-gzip-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-iso9660-image" = "org.kde.ark.desktop";
+    "application/x-java-archive" = "org.kde.ark.desktop";
+    "application/x-lha" = "org.kde.ark.desktop";
+    "application/x-lhz" = "org.kde.ark.desktop";
+    "application/x-lrzip" = "org.kde.ark.desktop";
+    "application/x-lrzip-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-lz4" = "org.kde.ark.desktop";
+    "application/x-lz4-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-lzip" = "org.kde.ark.desktop";
+    "application/x-lzip-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-lzma" = "org.kde.ark.desktop";
+    "application/x-lzma-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-lzo" = "org.kde.ark.desktop";
+    "application/x-lzo-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-rar" = "org.kde.ark.desktop";
+    "application/x-rar-compressed" = "org.kde.ark.desktop";
+    "application/x-rpm" = "org.kde.ark.desktop";
+    "application/x-rzip" = "org.kde.ark.desktop";
+    "application/x-tar" = "org.kde.ark.desktop";
+    "application/x-tarz" = "org.kde.ark.desktop";
+    "application/x-tgz" = "org.kde.ark.desktop";
+    "application/x-xar" = "org.kde.ark.desktop";
+    "application/x-xz" = "org.kde.ark.desktop";
+    "application/x-xz-compressed-tar" = "org.kde.ark.desktop";
+    "application/x-zip" = "org.kde.ark.desktop";
+    "application/x-zip-compressed" = "org.kde.ark.desktop";
+    "application/x-zoo" = "org.kde.ark.desktop";
+    "application/zip" = "org.kde.ark.desktop";
+    "application/zstd" = "org.kde.ark.desktop";
+    "application/x-zstd-compressed-tar" = "org.kde.ark.desktop";
+
     # file manager
     "inode/directory" = "org.kde.dolphin.desktop";
   };
