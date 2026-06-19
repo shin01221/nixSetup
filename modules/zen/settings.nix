@@ -97,7 +97,7 @@ in
   "dom.block_multiple_popups" = lock-true;
   "browser.privatebrowsing.forceMediaMemoryCache" = lock-false;
   "browser.contentblocking.category" = {
-    Value = "strict";
+    Value = "standard";
     Status = "locked";
   };
   "browser.search.suggest.enabled" = lock-false;
