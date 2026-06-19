@@ -11,13 +11,14 @@
     ./hardware-configuration.nix
     ../../../modules/baseline.nix
 
-    ../../../modules/flatpak.nix
+    # ../../../modules/flatpak.nix
     ../../../modules/niri.nix
     ../../../modules/nixvim.nix
     ../../../modules/packages.nix
     ../../../modules/yazi.nix
     ../../../modules/virtualization.nix
     ../../../modules/polkit.nix
+    ../../../modules/zen
     ../../../modules/audio
     ../../../modules/hardware/nvidia.nix
     ../../../modules/hardware/touchpad.nix
@@ -69,13 +70,11 @@
     memory.enable = true;         # enable zRAM swap + oomd
     media.enable = true;
 
-    flatpak = {
-      enable = true;
-      onCalendar = "weekly";
-      packages = [
-        "flathub:app/app.zen_browser.zen//stable"
-      ];
-    };
+    # flatpak = {
+    #   enable = true;
+    #   onCalendar = "weekly";
+    #   packages = [ ];
+    # };
   };
 
   services.openssh.enable = false;
