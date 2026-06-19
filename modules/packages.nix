@@ -87,6 +87,7 @@ let
     kdePackages.qtsvg
     thunar
     vlc
+    upscayl
     wlr-which-key
     libreoffice
     gnome-calculator
@@ -98,7 +99,6 @@ let
     mpv
     calibre
     obs-studio
-    obs-do
     qbittorrent
   ];
 in
