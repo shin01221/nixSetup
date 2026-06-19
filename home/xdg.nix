@@ -1,0 +1,173 @@
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  associations = {
+    # nvim
+    "application/json" = "nvim.desktop";
+    "text/english" = "nvim.desktop";
+    "text/plain" = "nvim.desktop";
+    "text/x-makefile" = "nvim.desktop";
+    "text/x-c++hdr" = "nvim.desktop";
+    "text/x-c++src" = "nvim.desktop";
+    "text/x-chdr" = "nvim.desktop";
+    "text/x-csrc" = "nvim.desktop";
+    "text/x-java" = "nvim.desktop";
+    "text/x-moc" = "nvim.desktop";
+    "text/x-pascal" = "nvim.desktop";
+    "text/x-tcl" = "nvim.desktop";
+    "text/x-tex" = "nvim.desktop";
+    "application/x-shellscript" = "nvim.desktop";
+    "text/x-c" = "nvim.desktop";
+    "text/x-c++" = "nvim.desktop";
+
+    # zen browser
+    "text/html" = "app.zen_browser.zen.desktop";
+    "application/pdf" = "app.zen_browser.zen.desktop";
+    "x-scheme-handler/http" = "app.zen_browser.zen.desktop";
+    "x-scheme-handler/https" = "app.zen_browser.zen.desktop";
+    "x-scheme-handler/ftp" = "app.zen_browser.zen.desktop";
+    "x-scheme-handler/about" = "app.zen_browser.zen.desktop";
+    "x-scheme-handler/unknown" = "app.zen_browser.zen.desktop";
+
+    # gwenview
+    "image/avif" = "org.kde.gwenview.desktop";
+    "image/bmp" = "org.kde.gwenview.desktop";
+    "image/gif" = "org.kde.gwenview.desktop";
+    "image/jpeg" = "org.kde.gwenview.desktop";
+    "image/jpg" = "org.kde.gwenview.desktop";
+    "image/png" = "org.kde.gwenview.desktop";
+    "image/svg+xml" = "org.kde.gwenview.desktop";
+    "image/tiff" = "org.kde.gwenview.desktop";
+    "image/webp" = "org.kde.gwenview.desktop";
+    "image/x-bmp" = "org.kde.gwenview.desktop";
+    "image/x-portable-bitmap" = "org.kde.gwenview.desktop";
+    "image/x-portable-graymap" = "org.kde.gwenview.desktop";
+    "image/x-portable-pixmap" = "org.kde.gwenview.desktop";
+    "image/x-tga" = "org.kde.gwenview.desktop";
+
+    # mpv
+    "audio/aac" = "mpv.desktop";
+    "audio/flac" = "mpv.desktop";
+    "audio/m4a" = "mpv.desktop";
+    "audio/mp3" = "mpv.desktop";
+    "audio/mpeg" = "mpv.desktop";
+    "audio/ogg" = "mpv.desktop";
+    "audio/wav" = "mpv.desktop";
+    "audio/webm" = "mpv.desktop";
+    "audio/x-flac" = "mpv.desktop";
+    "audio/x-m4a" = "mpv.desktop";
+    "audio/x-matroska" = "mpv.desktop";
+    "audio/x-vorbis" = "mpv.desktop";
+    "audio/x-wav" = "mpv.desktop";
+    "video/3gpp" = "mpv.desktop";
+    "video/avi" = "mpv.desktop";
+    "video/mp2t" = "mpv.desktop";
+    "video/mp4" = "mpv.desktop";
+    "video/mpeg" = "mpv.desktop";
+    "video/ogg" = "mpv.desktop";
+    "video/quicktime" = "mpv.desktop";
+    "video/webm" = "mpv.desktop";
+    "video/x-flv" = "mpv.desktop";
+    "video/x-matroska" = "mpv.desktop";
+    "video/x-mpeg" = "mpv.desktop";
+    "video/x-msvideo" = "mpv.desktop";
+    "video/x-ms-wmv" = "mpv.desktop";
+
+    # libreoffice
+    "application/msword" = "writer.desktop";
+    "application/rtf" = "writer.desktop";
+    "application/vnd.oasis.opendocument.text" = "writer.desktop";
+    "application/vnd.oasis.opendocument.text-template" = "writer.desktop";
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "writer.desktop";
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.template" = "writer.desktop";
+    "application/vnd.ms-word" = "writer.desktop";
+    "application/vnd.ms-word.document.macroEnabled.12" = "writer.desktop";
+    "application/vnd.wordperfect" = "writer.desktop";
+    "text/csv" = "calc.desktop";
+    "application/vnd.oasis.opendocument.spreadsheet" = "calc.desktop";
+    "application/vnd.oasis.opendocument.spreadsheet-template" = "calc.desktop";
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "calc.desktop";
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.template" = "calc.desktop";
+    "application/vnd.ms-excel" = "calc.desktop";
+    "application/vnd.ms-excel.sheet.macroEnabled.12" = "calc.desktop";
+    "application/vnd.oasis.opendocument.presentation" = "impress.desktop";
+    "application/vnd.oasis.opendocument.presentation-template" = "impress.desktop";
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation" = "impress.desktop";
+    "application/vnd.openxmlformats-officedocument.presentationml.slideshow" = "impress.desktop";
+    "application/vnd.ms-powerpoint" = "impress.desktop";
+    "application/vnd.ms-powerpoint.presentation.macroEnabled.12" = "impress.desktop";
+    "application/vnd.oasis.opendocument.database" = "base.desktop";
+    "application/vnd.oasis.opendocument.graphics" = "draw.desktop";
+    "application/vnd.oasis.opendocument.formula" = "math.desktop";
+
+    # calibre
+    "application/epub+zip" = "calibre-gui.desktop";
+    "application/x-mobipocket-ebook" = "calibre-gui.desktop";
+    "application/vnd.amazon.ebook" = "calibre-gui.desktop";
+    "application/x-cbr" = "calibre-gui.desktop";
+    "application/x-cbz" = "calibre-gui.desktop";
+
+    # file manager
+    "inode/directory" = "org.kde.dolphin.desktop";
+  };
+in
+{
+  home.preferXdgDirectories = true;
+
+  xdg = {
+    enable = true;
+
+    cacheHome = "${config.home.homeDirectory}/.cache";
+    configHome = "${config.home.homeDirectory}/.config";
+    dataHome = "${config.home.homeDirectory}/.local/share";
+    stateHome = "${config.home.homeDirectory}/.local/state";
+
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+      setSessionVariables = true;
+
+      documents = "${config.home.homeDirectory}/documents";
+      download = "${config.home.homeDirectory}/downloads";
+      desktop = "${config.home.homeDirectory}/desktop";
+      videos = "${config.home.homeDirectory}/media/videos";
+      music = "${config.home.homeDirectory}/media/music";
+      pictures = "${config.home.homeDirectory}/media/pictures";
+      publicShare = "${config.home.homeDirectory}/public/share";
+      templates = "${config.home.homeDirectory}/public/templates";
+
+      extraConfig = {
+        SCREENSHOTS = "${config.home.homeDirectory}/media/pictures/screenshots";
+        DEV = "${config.home.homeDirectory}/dev";
+      };
+    };
+
+    mimeApps = {
+      enable = true;
+      associations.added = associations;
+      defaultApplications = associations;
+    };
+
+    portal = {
+      enable = true;
+      config = {
+        common = {
+          default = [ "kde" ];
+          "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+        };
+      };
+    };
+  };
+
+  home.sessionVariables = {
+    XDG_CONFIG_HOME = "${config.home.homeDirectory}/.config";
+    XDG_DATA_HOME = "${config.home.homeDirectory}/.local/share";
+    XDG_CACHE_HOME = "${config.home.homeDirectory}/.cache";
+    XDG_STATE_HOME = "${config.home.homeDirectory}/.local/state";
+    GNUPGHOME = "${config.home.homeDirectory}/.local/share/gnupg";
+  };
+}

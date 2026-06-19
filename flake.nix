@@ -150,6 +150,7 @@
             ./home/niri.nix
             ./home/audio.nix
             ./home/obs-studio.nix
+            ./home/xdg.nix
           ];
         };
 
