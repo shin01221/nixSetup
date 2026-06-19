@@ -208,12 +208,11 @@ in
     portal = {
       enable = true;
       extraPortals = with pkgs; [
-        kdePackages.xdg-desktop-portal-kde
-        xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
       ];
       config = {
         common = {
-          default = [ "kde" ];
+          default = [ "hyprland" ];
           "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
         };
       };
