@@ -173,6 +173,15 @@ in
 
   xdg = {
     enable = true;
+    portal = {
+      extraPortals = with pkgs; [
+        kdePackages.xdg-desktop-portal-kde
+        xdg-desktop-portal-gtk
+      ];
+      config = {
+        common.default = [ "gtk" ];
+      };
+    };
 
     cacheHome = "${config.home.homeDirectory}/.cache";
     configHome = "${config.home.homeDirectory}/.config";
@@ -203,19 +212,6 @@ in
       enable = true;
       associations.added = associations;
       defaultApplications = associations;
-    };
-
-    portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
-      ];
-      config = {
-        common = {
-          default = [ "hyprland" ];
-          "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-        };
-      };
     };
   };
 
