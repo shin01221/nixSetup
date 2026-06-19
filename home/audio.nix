@@ -7,6 +7,7 @@
     mpc
     playerctl
     rmpc
+    (pkgs.callPackage ../pkgs/lrc_tty.nix { })
   ];
 
   systemd.user.services.mpd = {
