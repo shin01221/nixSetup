@@ -74,9 +74,10 @@ in
         "input"
         "sound"
         "video"
+        "render"
         "audio"
         "libvirtd"
-        "borg"
+        # "borg"
       ];
     };
 
@@ -119,7 +120,7 @@ in
     programs.fish.enable = true;
 
     services = {
-      tailscale.enable = true;
+      tailscale.enable = false;
       pcscd.enable = true; # yubikey dep
       libinput.enable = true;
       upower.enable = true;

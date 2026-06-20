@@ -18,7 +18,14 @@ in
       libvirtd = {
         enable = true;
         allowedBridges = [ "virbr0" "br0" ];
-        qemu.swtpm.enable = true;
+        qemu = {
+          swtpm.enable = true;
+          package = pkgs.qemu.override {
+            gtkSupport = true;
+            openGLSupport = true;
+            virglSupport = true;
+          };
+        };
       };
       spiceUSBRedirection.enable = true;
     };
