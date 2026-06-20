@@ -12,7 +12,7 @@ in
   config = lib.mkIf cfg.enable {
     zramSwap = {
       enable = true;
-      memoryPercent = 50;
+      memoryPercent = 100;
       algorithm = "zstd";
     };
 
