@@ -101,6 +101,8 @@ let
     calibre
     obs-studio
     qbittorrent
+    kdePackages.kio-extras
+    libmtp
   ];
 in
 {
@@ -117,5 +119,7 @@ in
       ++ (lib.optionals cfg.dev devPackages)
       ++ (lib.optionals cfg.themes themePackages)
       ++ (lib.optionals cfg.apps appsPackages);
+
+    services.udev.packages = [ pkgs.libmtp ];
   };
 }
