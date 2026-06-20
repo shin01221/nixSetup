@@ -14,11 +14,8 @@
       CPU_MIN_PERF_ON_BAT = 0;
       CPU_MAX_PERF_ON_BAT = 50;
 
-      # Protect battery
-      START_CHARGE_THRESH_BAT0 = 82;
-      STOP_CHARGE_THRESH_BAT0 = 95;
-      START_CHARGE_THRESH_BAT1 = 82;
-      STOP_CHARGE_THRESH_BAT1 = 95;
+      # Protect battery (Ideapad uses binary conservation mode 0/1)
+      STOP_CHARGE_THRESH_BAT0 = 1;
     };
   };
 }
