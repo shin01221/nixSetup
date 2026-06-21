@@ -168,6 +168,12 @@
               #     desc = "Previous buffer";
               #   };
               # };
+              "<leader>bd" = {
+                action = "<cmd>bd<CR>";
+                options = {
+                  desc = "Close current buffer";
+                };
+              };
               "<leader>wd" = {
                 action = "<C-W>c";
                 options = {
