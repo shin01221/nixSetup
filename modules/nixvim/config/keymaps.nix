@@ -505,10 +505,24 @@
     vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
     vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 
-    -- Snacks color picker
+    -- Snacks color picker (filters built-in vim colorschemes)
     vim.keymap.set("n", "<leader>uC", function()
-      Snacks.picker.pick_color()
-    end, { desc = "Color Picker" })
+      local builtin = {
+        "default", "blue", "darkblue", "delek", "desert",
+        "elflord", "evening", "habamax", "industry", "koehler",
+        "lunaperche", "morning", "murphy", "pablo", "peachpuff",
+        "quiet", "retrobox", "ron", "shine", "slate", "sorbet",
+        "sunburst", "swamp", "torte", "wildcharm", "zaibatsu",
+        "vim", "zellner", "unokai",
+      }
+      Snacks.picker.colorschemes({
+        transform = function(item)
+          if vim.tbl_contains(builtin, item.text) then
+            return false
+          end
+        end,
+      })
+    end, { desc = "Colorschemes (user only)" })
   '';
 }
 

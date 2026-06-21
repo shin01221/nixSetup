@@ -72,13 +72,24 @@
       libS = nixpkgs-stable.lib;
 
       mkWorkstation =
-        { deviceModule, hmImports, userName ? "gumbo" }:
+        {
+          deviceModule,
+          hmImports,
+          userName ? "gumbo",
+        }:
         let
           homeDir = "/home/${userName}";
         in
         libU.nixosSystem {
           inherit system;
-          specialArgs = { inherit self inputs userName homeDir; };
+          specialArgs = {
+            inherit
+              self
+              inputs
+              userName
+              homeDir
+              ;
+          };
           modules = [
             deviceModule
             home-managerU.nixosModules.home-manager
@@ -89,7 +100,14 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "backup";
-                extraSpecialArgs = { inherit self inputs userName homeDir; };
+                extraSpecialArgs = {
+                  inherit
+                    self
+                    inputs
+                    userName
+                    homeDir
+                    ;
+                };
                 sharedModules = [
                   (
                     { osConfig, ... }:
@@ -156,7 +174,7 @@
           userName = "shin";
           hmImports = [
             ./home/common.nix
-           # ./home/fish.nix
+            # ./home/fish.nix
             ./home/theming.nix
             ./home/niri.nix
             ./home/dolphin
@@ -176,7 +194,7 @@
           ];
         };
 
-          seed = mkWorkstation {
+        seed = mkWorkstation {
           deviceModule = ./devices/server/vms/seed/default.nix;
           hmImports = [
             ./home/common.nix

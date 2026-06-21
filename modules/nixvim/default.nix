@@ -13,8 +13,7 @@ in
     inputs.nixvim.nixosModules.nixvim
   ];
 
-  options.workstation.nixvim.enable =
-    lib.mkEnableOption "Nvim configuration";
+  options.workstation.nixvim.enable = lib.mkEnableOption "Nvim configuration";
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -22,6 +21,7 @@ in
       stylua
       shellcheck
       shfmt
+      fd
       python3Packages.flake8
     ];
     environment.sessionVariables = {
