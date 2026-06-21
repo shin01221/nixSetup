@@ -40,8 +40,8 @@
         };
       };
 
-      nushell.enable = true;
-      qmlls.enable = pkgs.stdenv.hostPlatform.isLinux;
+      nushell.enable = false;
+      qmlls.enable = false;
       sqls.enable = true;
       taplo.enable = true;
     };
@@ -156,6 +156,12 @@
       key = "<leader>cl";
       action = "<cmd>LspInfo<cr>";
       options.desc = "Lsp Info";
+    }
+    {
+      mode = "n";
+      key = "<leader>cr";
+      action.__raw = "function() vim.lsp.buf.rename() end";
+      options.desc = "Rename Variable";
     }
   ];
 }

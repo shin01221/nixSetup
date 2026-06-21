@@ -20,6 +20,7 @@
           '';
           # Will make sure all names in bufferline are unique
           enforce_regular_tabs = false;
+          always_show_bufferline = false;
 
           offsets = [
             {

@@ -1,10 +1,10 @@
 {
   lsp.servers = {
-    cssls.enable = true;
-    stylelint_lsp.enable = true;
+    cssls.enable = false;
+    stylelint_lsp.enable = false;
 
     tailwindcss = {
-      enable = true;
+      enable = false;
       config.filetypes = [
         "css"
         "scss"
