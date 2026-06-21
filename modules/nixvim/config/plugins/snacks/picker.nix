@@ -131,7 +131,7 @@ in
         function()
           require("snacks.picker").files {
             prompt_title = "Config Files",
-            cwd = vim.fn.stdpath("config"),
+            cwd = "~/nixos",
           }
         end
       '';
