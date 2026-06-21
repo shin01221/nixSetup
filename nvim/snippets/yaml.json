@@ -1,0 +1,275 @@
+{
+  "Kubernetes StorageClass": {
+    "prefix": "k8s-sc",
+    "body": [
+      "apiVersion: storage.k8s.io/v1",
+      "kind: StorageClass",
+      "metadata:",
+      "  name: ${1:my-storage-class}",
+      "provisioner: ${2:kubernetes.io/no-provisioner}",
+      "reclaimPolicy: ${3:Retain}",
+      "volumeBindingMode: ${4:WaitForFirstConsumer}",
+      "allowVolumeExpansion: ${5:true}"
+    ],
+    "description": "Kubernetes StorageClass"
+  },
+  "Kubernetes PersistentVolume": {
+    "prefix": "k8s-pv",
+    "body": [
+      "apiVersion: v1",
+      "kind: PersistentVolume",
+      "metadata:",
+      "  name: ${1:my-pv}",
+      "spec:",
+      "  capacity:",
+      "    storage: ${2:10Gi}",
+      "  volumeMode: ${3:Filesystem}",
+      "  accessModes:",
+      "    - ${4:ReadWriteOnce}",
+      "  persistentVolumeReclaimPolicy: ${5:Retain}",
+      "  storageClassName: ${6:storage-class-name}",
+      "  hostPath:",
+      "    path: ${7:/data/pv}"
+    ],
+    "description": "Kubernetes PersistentVolume"
+  },
+  "Kubernetes-Role": {
+    "prefix": "k8s-role",
+    "body": [
+        "apiVersion: rbac.authorization.k8s.io/v1",
+        "kind: Role",
+        "metadata:",
+        "  name: ${1:name}",
+        "rules:",
+        "- apiGroups: []",
+        "  resources: [pods]",
+        "  verbs: [get, list, watch]"
+    ],
+    "description": "Kubernetes Role"
+	},
+	"Kubernetes-RoleBinding": {
+		"prefix": "k8s-roleBinding",
+		"body": [
+			"apiVersion: rbac.authorization.k8s.io/v1",
+			"kind: RoleBinding",
+			"metadata:",
+			"  name: ${1:name}",
+			"subjects:",
+			"- kind: User",
+			"  name: ${2:user}",
+			"  apiGroup: rbac.authorization.k8s.io",
+			"roleRef:",
+			"  kind: Role",
+			"  name: ${3:role}",
+			"  apiGroup: rbac.authorization.k8s.io"
+		],
+		"description": "Kubernetes RoleBinding"
+	},
+    "Kubernetes-TLS": {
+		"prefix": "k8s-TLS",
+		"body": [
+			"tls:",
+			"- hosts:",
+			"  - ${1:host}",
+			"  secretName: ${2:$1-tls}"
+		],
+		"description": "Kubernetes Ingress - TLS"
+	},
+    "Kubernetes-volumeMounts": {
+		"prefix": "k8s-volumeMounts",
+		"body": [
+			"volumeMounts:",
+			"- name: ${1:name}",
+			"  mountPath: ${2:mountPath}"
+		],
+		"description": "Kubernetes Container Volume Mounts"
+	},
+    "Kubernetes-Command": {
+		"prefix": "k8s-command",
+		"body": [
+			"command:",
+			"- /bin/sh",
+			"- -c",
+			"- ${1:command}"
+		],
+		"description": "Kubernetes Container Command"
+	},
+    "Kubernetes-Environment": {
+		"prefix": "k8s-environment",
+		"body": [
+			"env:",
+			"- name: ${1:name}",
+			"  valueFrom:",
+			"    configMapKeyRef:",
+			"      name: ${2:config}",
+			"      key: ${3:key}"
+		],
+		"description": "Kubernetes Container Environment"
+	},
+    "Kubernetes-Resources": {
+		"prefix": "k8s-Resources",
+		"body": [
+			"resources:",
+			"  requests:",
+			"    cpu: 100m",
+			"    memory: 100Mi",
+			"  limits:",
+			"    cpu: 200m",
+			"    memory: 1Gi"
+		],
+		"description": "Kubernetes Container Resources"
+	},
+    "Kubernetes-gitRepo Volume": {
+		"prefix": "k8s-gitRepo",
+		"body": [
+			"gitRepo:",
+			"  repository: ${1:repository}",
+			"  directory: ."
+		],
+		"description": "Kubernetes gitRepo Volume"
+	},
+    "Kubernetes-NFS Volume": {
+		"prefix": "k8s-nfs",
+		"body": [
+			"nfs:",
+			"  server: ${1:nfs}",
+			"  path: /",
+			"  readOnly: false"
+		],
+		"description": "Kubernetes NFS Volume"
+	},
+    "Kubernetes-readinessProbe": {
+		"prefix": "k8s-readinessProbe",
+		"body": [
+			"readinessProbe:",
+			"  httpGet:",
+			"    path: /ready",
+			"    port: 80",
+			"  initialDelaySeconds: 5",
+			"  periodSeconds: 5"
+		],
+		"description": "Kubernetes Container readinessProbe"
+	},
+    "Kubernetes-HorizontalPodAutoscaler": {
+		"prefix": "k8s-horizontalPodAutoscaler",
+		"body": [
+			"apiVersion: autoscaling/v2",
+			"kind: HorizontalPodAutoscaler",
+			"metadata:",
+			"  name: ${1:name}",
+			"spec:",
+			"  scaleTargetRef:",
+			"    apiVersion: apps/v1",
+			"    kind: Deployment",
+			"    name: $1",
+			"  minReplicas: 1",
+			"  maxReplicas: 10",
+			"  metrics:",
+			"  - type: Resource",
+			"    resource:",
+			"      name: cpu",
+			"      target:",
+			"        type: Utilization",
+			"        averageUtilization: 50"
+		],
+		"description": "Kubernetes HorizontalPodAutoscaler"
+	},
+    "Kubernetes-Namespace": {
+		"prefix": "k8s-namespace",
+		"body": [
+			"apiVersion: v1",
+			"kind: Namespace",
+			"metadata:",
+			"  name: ${1:name}"
+		],
+		"description": "Kubernetes Namespace"
+	},
+    "Kubernetes-ReplicaSet": {
+		"prefix": "k8s-replicaSet",
+		"body": [
+			"apiVersion: apps/v1",
+			"kind: ReplicaSet",
+			"metadata:",
+			"  name: ${1:name}",
+			"spec:",
+			"  replicas: 1",
+			"  selector:",
+			"    matchLabels:",
+			"      app: $1",
+			"  template:",
+			"    metadata:",
+			"      labels:",
+			"        app: $1",
+			"    spec:",
+			"      restartPolicy: Always            # Always, OnFailure, Never",
+			"      containers:",
+			"      - name: $1",
+			"        image: ${2:image}",
+			"        imagePullPolicy: IfNotPresent  # Always, IfNotPresent, Never",
+			"        ports:",
+			"        - containerPort: ${3:port}"
+		],
+		"description": "Kubernetes ReplicaSet"
+	},
+	"Kubernetes-ServiceAccount": {
+		"prefix": "k8s-serviceAccount",
+		"body": [
+			"apiVersion: v1",
+			"kind: ServiceAccount",
+			"metadata:",
+			"  name: ${1:name}"
+		],
+		"description": "Kubernetes ServiceAccount"
+	},
+    "Kubernetes-ReplicationController": {
+		"prefix": "ReplicationController",
+		"body": [
+			"apiVersion: apps/v1",
+			"kind: ReplicationController",
+			"metadata:",
+			"  name: ${1:name}",
+			"spec:",
+			"  replicas: 1",
+			"  selector:",
+			"    app: $1",
+			"  template:",
+			"    metadata:",
+			"      labels:",
+			"        app: $1",
+			"    spec:",
+			"      restartPolicy: Always            # Always, OnFailure, Never",
+			"      containers:",
+			"      - name: $1",
+			"        image: ${2:image}",
+			"        imagePullPolicy: IfNotPresent  # Always, IfNotPresent, Never",
+			"        ports:",
+			"        - containerPort: ${3:port}"
+		],
+		"description": "Kubernetes ReplicationController"
+	},
+    "Kubernetes-RabbitmqCluster": {
+		"prefix": "k8s-rabbitmqCluster",
+		"body": [
+			"apiVersion: rabbitmq.com/v1beta1",
+			"kind: RabbitmqCluster",
+			"metadata:",
+			"  name: ${1:name}",
+			"spec:",
+			"  replicas: 1",
+			"  persistence:",
+			"    storage: 1Mi",
+			"  resources:",
+			"    requests:",
+			"      cpu: 100m",
+			"      memory: 100Mi",
+			"    limits:",
+			"      cpu: 200m",
+			"      memory: 1Gi",
+			"  rabbitmq:",
+			"    envConfig: |",
+			"      RABBITMQ_DEFAULT_USER=${2:username}",
+			"      RABBITMQ_DEFAULT_PASS=${3:password}"
+		],
+		"description": "Kubernetes RabbitmqCluster"
+	}
+}

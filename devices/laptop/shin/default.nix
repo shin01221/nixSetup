@@ -10,7 +10,6 @@
   imports = [
     ./hardware-configuration.nix
     ../../../modules/baseline.nix
-
     # ../../../modules/flatpak.nix
     ../../../modules/niri.nix
     ../../../modules/nixvim

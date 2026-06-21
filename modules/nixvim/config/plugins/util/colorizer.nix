@@ -38,7 +38,7 @@
   keymaps = [
     {
       mode = "n";
-      key = "<leader>uC";
+      key = "<leader>uc";
       action.__raw = ''
         function ()
           vim.cmd('ColorizerToggle')

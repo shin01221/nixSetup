@@ -420,6 +420,96 @@
           };
     in
     lib.nixvim.keymaps.mkKeymaps { options.silent = true; } (normal ++ visual ++ insert);
+
+  extraConfigLua = ''
+    -- Treewalker movement
+    vim.keymap.set({ "n", "v" }, "<leader>k", "<cmd>Treewalker Up<cr>", { silent = true })
+    vim.keymap.set({ "n", "v" }, "<leader>j", "<cmd>Treewalker Down<cr>", { silent = true })
+    vim.keymap.set({ "n", "v" }, "<leader>h", "<cmd>Treewalker Left<cr>", { silent = true })
+    vim.keymap.set({ "n", "v" }, "<leader>l", "<cmd>Treewalker Right<cr>", { silent = true })
+    vim.keymap.set("n", "<A-k>", "<cmd>Treewalker SwapUp<cr>", { silent = true })
+    vim.keymap.set("n", "<A-j>", "<cmd>Treewalker SwapDown<cr>", { silent = true })
+    vim.keymap.set("n", "<A-h>", "<cmd>Treewalker SwapLeft<cr>", { silent = true })
+    vim.keymap.set("n", "<A-l>", "<cmd>Treewalker SwapRight<cr>", { silent = true })
+
+    -- Themify
+    vim.keymap.set("n", "tt", "<cmd>Themify<cr>")
+
+    -- Markview toggle
+    vim.keymap.set("n", "<leader>um", "<cmd>Markview Toggle<cr>", { desc = "Toggle markdown" })
+
+    -- Bufferline visibility toggle
+    vim.keymap.set("n", "<leader>us", function()
+      if vim.o.showtabline == 0 then
+        vim.o.showtabline = 2
+      else
+        vim.o.showtabline = 0
+      end
+    end, { desc = "Toggle bufferline visibility" })
+
+    -- Conform format
+    vim.keymap.set("n", "<leader>cf", function()
+      require("conform").format({ lsp_format = "fallback" })
+    end, { desc = "Format current file" })
+
+    -- Bufferline navigation
+    vim.keymap.set("n", "<S-l>", "<Cmd>BufferLineCycleNext<CR>", { desc = "NextBuffer" })
+    vim.keymap.set("n", "<S-h>", "<Cmd>BufferLineCyclePrev<CR>", { desc = "PrevBuffer" })
+
+    -- Diagnostics float
+    vim.keymap.set("n", "gl", function()
+      vim.diagnostic.open_float()
+    end, { desc = "Open Diagnostics in Float" })
+
+    -- Select all
+    vim.keymap.set("n", "aa", "gg<S-v>G")
+    vim.keymap.set("n", "<C-a>", "gg<S-v>G")
+    vim.keymap.set("n", "vv", "0v$h")
+    vim.keymap.set("i", "jj", "<esc>")
+    vim.keymap.set("n", "n", "nzzzv")
+    vim.keymap.set("n", "N", "Nzzzv")
+    vim.keymap.set("n", "gf", "<C-W>gf")
+
+    -- Deletion don't affect buffer
+    vim.keymap.set("n", "x", '"_x')
+    vim.keymap.set("n", "<Leader>p", '"0p')
+    vim.keymap.set("n", "<Leader>P", '"0P')
+    vim.keymap.set("v", "<Leader>p", '"0p')
+    vim.keymap.set("n", "<Leader>c", '"_c')
+    vim.keymap.set("n", "<Leader>C", '"_C')
+    vim.keymap.set("v", "<Leader>c", '"_c')
+    vim.keymap.set("v", "<Leader>C", '"_C')
+    vim.keymap.set("n", "<Leader>d", '"_d')
+    vim.keymap.set("n", "<Leader>D", '"_D')
+    vim.keymap.set("v", "<Leader>d", '"_d')
+    vim.keymap.set("v", "<Leader>D", '"_D')
+
+    -- Split window
+    vim.keymap.set("n", "ss", ":split<Return>", { silent = true })
+    vim.keymap.set("n", "sv", ":vsplit<Return>", { silent = true })
+    vim.keymap.set("n", "qq", vim.cmd.q)
+
+    -- Move window
+    vim.keymap.set("n", "sh", "<C-w>h")
+    vim.keymap.set("n", "sk", "<C-w>k")
+    vim.keymap.set("n", "sj", "<C-w>j")
+    vim.keymap.set("n", "sl", "<C-w>l")
+
+    -- Resize window
+    vim.keymap.set("n", "<C-w><l>", "<C-w><")
+    vim.keymap.set("n", "<C-w><h>", "<C-w>>")
+    vim.keymap.set("n", "<C-w><j>", "<C-w>+")
+    vim.keymap.set("n", "<C-w><k>", "<C-w>-")
+
+    -- Move highlighted text
+    vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+    vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
+    -- Snacks color picker
+    vim.keymap.set("n", "<leader>uC", function()
+      Snacks.picker.pick_color()
+    end, { desc = "Color Picker" })
+  '';
 }
 
 # {
