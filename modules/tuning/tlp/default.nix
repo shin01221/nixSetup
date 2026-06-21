@@ -15,7 +15,7 @@
       CPU_MAX_PERF_ON_BAT = 50;
 
       # Protect battery (Ideapad uses binary conservation mode 0/1)
-      STOP_CHARGE_THRESH_BAT0 = 1;
+      STOP_CHARGE_THRESH_BAT0 = 0;
     };
   };
 }
