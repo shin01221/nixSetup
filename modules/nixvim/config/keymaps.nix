@@ -447,6 +447,12 @@
       end
     end, { desc = "Toggle bufferline visibility" })
 
+    -- Toggle background (light/dark)
+    vim.keymap.set("n", "<leader>ub", function()
+      local cur = vim.api.nvim_get_option_value("background", {})
+      vim.api.nvim_set_option_value("background", cur == "light" and "dark" or "light", { scope = "global" })
+    end, { desc = "Toggle background (light/dark)" })
+
     -- Conform format
     vim.keymap.set("n", "<leader>cf", function()
       require("conform").format({ lsp_format = "fallback" })
