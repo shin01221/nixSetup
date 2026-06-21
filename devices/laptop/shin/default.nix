@@ -13,7 +13,7 @@
 
     # ../../../modules/flatpak.nix
     ../../../modules/niri.nix
-    ../../../modules/nixvim.nix
+    ../../../modules/nixvim
     ../../../modules/packages.nix
     ../../../modules/yazi.nix
     ../../../modules/virtualization.nix
