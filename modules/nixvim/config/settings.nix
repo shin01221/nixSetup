@@ -13,7 +13,7 @@
         group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
         pattern = "*",
         callback = function()
-          vim.highlight.on_yank()
+          vim.highlight.on_yank({ timeout = 5 })
         end,
         desc = "Highlight yank",
       })
@@ -37,6 +37,7 @@
     clipboard.providers.wl-copy.enable = true;
 
     opts = {
+      clipboard = "unnamedplus";
       # Performance & Timing
       updatetime = 100; # CursorHold delay; faster completion and git signs
       lazyredraw = false; # Breaks noice plugin

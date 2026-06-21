@@ -84,7 +84,7 @@
       enable.__raw = ''
         function()
           if pcall(require, "bufferline") then
-            vim.opt.showtabline = 2
+            vim.opt.showtabline = 1
           end
         end
       '';
@@ -97,7 +97,7 @@
         function()
           vim.api.nvim_create_user_command("FasterEnableBufferline", function()
             if pcall(require, "bufferline") then
-              vim.opt.showtabline = 2
+              vim.opt.showtabline = 1
             end
           end, {})
           vim.api.nvim_create_user_command("FasterDisableBufferline", function()

@@ -20,6 +20,7 @@
         neotree = true;
         noice = true;
         notify = true;
+        bufferline = true;
         telescope.enabled = true;
         treesitter = true;
         treesitter_context = true;
