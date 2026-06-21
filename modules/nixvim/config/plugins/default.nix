@@ -19,9 +19,12 @@
     # ./editor/undotree.nix
     ./editor/whichkey.nix
     ./editor/yanky.nix
-    ./editor/yazi.nix
+    ./editor/oil.nix
+    ./editor/vim-tmux-navigator.nix
 
     ./theme
+    ./theme/colorsaver.nix
+    # ./theme/matugen.nix
     ./luasnip
 
     ./mini
@@ -47,6 +50,7 @@
     ./lang/lua.nix
     ./lang/markdown.nix
     ./lang/nix.nix
+    ./lang/obsidian.nix
     ./lang/python.nix
     ./lang/shell.nix
     ./lang/typescript.nix
@@ -67,16 +71,22 @@
     ./ui/nui.nix
     ./ui/precognition.nix
     ./ui/toggleterm.nix
+    ./ui/markdown-preview.nix
+    ./ui/transparent.nix
+    ./ui/better-diagnostics.nix
+    ./ui/render-markdown.nix
+    ./ui/markdoc.nix
+    ./ui/markdowny.nix
     # ./ui/ufo.nix
 
     ./util/colorizer.nix
     ./util/compiler.nix
     ./util/devdocs.nix
-    ./util/firenvim.nix
+    # ./util/firenvim.nix
     ./util/glance.nix
     # ./util/hardtime.nix
     ./util/img-clip.nix
-    ./util/kulala.nix
+    # ./util/kulala.nix
     ./util/nvim-autopairs.nix
     ./util/nvim-surround.nix
     ./util/overseer.nix
@@ -85,5 +95,6 @@
     ./util/package-info.nix
     ./util/refactoring.nix
     ./util/todo-comments.nix
+    ./util/mtoc.nix
   ];
 }

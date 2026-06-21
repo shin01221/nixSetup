@@ -5,20 +5,36 @@
       vim.fn.sign_define("diagnosticsignwarn", { text = " ", texthl = "diagnosticwarn", linehl = "", numhl = "" })
       vim.fn.sign_define("diagnosticsignhint", { text = "󰌵", texthl = "diagnostichint", linehl = "", numhl = "" })
       vim.fn.sign_define("diagnosticsigninfo", { text = " ", texthl = "diagnosticinfo", linehl = "", numhl = "" })
+
+      vim.o.undodir = os.getenv("HOME") .. "/.local/state/nvim/undo"
+      vim.o.backspace = "start,eol,indent"
+
+      vim.api.nvim_create_autocmd("TextYankPost", {
+        group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
+        pattern = "*",
+        callback = function()
+          vim.highlight.on_yank()
+        end,
+        desc = "Highlight yank",
+      })
+
+      vim.env.JAVA_HOME = "/usr/lib/jvm/java-17-openjdk"
+      vim.env.PATH = vim.env.JAVA_HOME .. "/bin:" .. vim.env.PATH
     '';
-
-    # feature that enhances the way Neovim loads and executes Lua modules,
-    # offering improved performance and flexibility.
-    luaLoader.enable = true;
-
-    clipboard.providers.wl-copy.enable = true;
 
     globals = {
       # Disable useless providers
       loaded_ruby_provider = 0; # Ruby
       loaded_perl_provider = 0; # Perl
       loaded_python_provider = 0; # Python 2
+      vim_markdown_frontmatter = 1;
     };
+
+    # feature that enhances the way Neovim loads and executes Lua modules,
+    # offering improved performance and flexibility.
+    luaLoader.enable = true;
+
+    clipboard.providers.wl-copy.enable = true;
 
     opts = {
       # Performance & Timing
@@ -62,15 +78,15 @@
       modelines = 100; # Scan first/last 100 lines for modelines
 
       # Indentation & Formatting
-      tabstop = 2; # Tab spacing 2 spaces
-      shiftwidth = 2;
+      tabstop = 4; # Tab spacing 4 spaces
+      shiftwidth = 4;
       expandtab = true;
       autoindent = true;
       breakindent = true; # Smart indent on word wrap
       copyindent = true;
       preserveindent = true;
       linebreak = true;
-      wrap = true;
+      wrap = false;
 
       # Completion & Popup
       pumheight = 10; # Maximum number of items to show in the popup menu (0 means "use available screen space")
@@ -85,6 +101,13 @@
       virtualedit = "block"; # Allow cursor to move where there is no text in visual block mode
       startofline = true;
       title = true;
+      conceallevel = 2;
+      concealcursor = "c";
+      smarttab = true;
+      smartindent = true;
+      shell = "fish";
+      confirm = true;
+      list = true;
 
       # cmdheight = 2; # more space in the neovim command line for displaying messages
 
