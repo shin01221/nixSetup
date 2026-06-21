@@ -25,7 +25,11 @@
       checkbox = {
         enabled = true;
         create_new = true;
-        order = [ " " "x" "!" ];
+        order = [
+          " "
+          "x"
+          "!"
+        ];
       };
       daily_notes = {
         folder = "dailies";
@@ -58,7 +62,7 @@
     keymap.set("n", "<leader>ols", "<cmd>Obsidian links<cr>", { desc = "Search Links" })
     keymap.set("n", "<leader>op", "<cmd>Obsidian paste_img<cr>", { desc = "Paste Image" })
     keymap.set("n", "<leader>or", "<cmd>Obsidian rename<cr>", { desc = "rename note" })
-    keymap.set("n", "<leader>l", "<cmd>Obsidian toggle_checkbox<cr>", { desc = "toggle checkbox" })
+    keymap.set("n", "<leader>oll", "<cmd>Obsidian toggle_checkbox<cr>", { desc = "toggle checkbox" })
     keymap.set("n", "<leader>on", "<cmd>Obsidian new<cr>", { desc = "New Note" })
     keymap.set("n", "<leader>og", "<cmd>Obsidian search<cr>", { desc = "Search notes" })
     keymap.set("n", "<leader>os", function()

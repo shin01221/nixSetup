@@ -58,8 +58,8 @@ let
     satty
     sd
     slurp
-    future-cursors
     screen
+    gh
     speedtest
     unzip
     parallel
