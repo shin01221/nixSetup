@@ -135,6 +135,17 @@
         min_keyword_length = 3;
         max_items = 8;
         score_offset = 8;
+        enabled.__raw = ''
+          function()
+            local ft = vim.bo.filetype
+            local text_fts = {
+              "markdown", "txt", "text", "help", "notes", "mail",
+              "rmd", "org", "vimwiki", "pandoc", "asciidoc",
+              "gitcommit", "gitrebase",
+            }
+            return vim.tbl_contains(text_fts, ft)
+          end
+        '';
         opts = lib.mkIf config.plugins.blink-cmp-words.enable {
           dictionary_search_threshold = 3;
           definition_pointers = [

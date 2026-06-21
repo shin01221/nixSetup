@@ -4,14 +4,14 @@
     enable = true;
     settings = {
       mappings = {
-        toggle = "gs"; # Toggle split/join
+        toggle = "gS"; # Toggle split/join
       };
     };
   };
 
   plugins.which-key.settings.spec = lib.mkIf config.plugins.mini-splitjoin.enable [
     {
-      __unkeyed-1 = "gs";
+      __unkeyed-1 = "gS";
       desc = "Toggle split/join";
       icon = "󰘞";
     }
