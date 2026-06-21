@@ -4,6 +4,7 @@
     ./hipatterns.nix
     ./move.nix
     ./splitjoin.nix
+    ./surround.nix
   ];
 
   plugins = {
@@ -39,14 +40,14 @@
     # Start session at first tabstop. Type text to replace placeholder. When finished with current tabstop, jump to next with <C-l>. Repeat. If changed mind about some previous tabstop, jump back with <C-h>. Jumping also wraps around the edge (first tabstop is next after final).
     # If tabstop has choices, use <C-n> / <C-p> to select next / previous item.
 
-    mini-snippets = {
-      enable = true;
-      settings = {
-        snippets = {
-          __unkeyed-1.__raw = lib.mkIf config.plugins.friendly-snippets.enable "require('mini.snippets').gen_loader.from_file('${config.plugins.friendly-snippets.package}/snippets/global.json')";
-          __unkeyed-2.__raw = "require('mini.snippets').gen_loader.from_lang()";
-        };
-      };
-    };
+    # mini-snippets = {
+    #   enable = true;
+    #   settings = {
+    #     snippets = {
+    #       __unkeyed-1.__raw = lib.mkIf config.plugins.friendly-snippets.enable "require('mini.snippets').gen_loader.from_file('${config.plugins.friendly-snippets.package}/snippets/global.json')";
+    #       __unkeyed-2.__raw = "require('mini.snippets').gen_loader.from_lang()";
+    #     };
+    #   };
+    # };
   };
 }

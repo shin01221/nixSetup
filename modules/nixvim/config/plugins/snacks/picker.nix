@@ -315,6 +315,38 @@ in
     }
     {
       mode = "n";
+      key = "<leader>gs";
+      action = "<cmd>lua Snacks.picker.git_status()<cr>";
+      options = {
+        desc = "Git Status";
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>gl";
+      action = "<cmd>lua Snacks.picker.git_log()<cr>";
+      options = {
+        desc = "Git Log";
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>gb";
+      action = "<cmd>lua Snacks.picker.git_log_line()<cr>";
+      options = {
+        desc = "Git Blame Line";
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>gf";
+      action = "<cmd>lua Snacks.picker.git_log_file()<cr>";
+      options = {
+        desc = "Git Current File History";
+      };
+    }
+    {
+      mode = "n";
       key = "<leader>X";
       action = "<cmd>lua Snacks.profiler.toggle()<cr>";
       options = {
