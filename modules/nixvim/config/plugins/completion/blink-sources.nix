@@ -23,7 +23,6 @@
           ${lib.optionalString config.plugins.blink-emoji.enable "table.insert(common_sources, 'emoji')"}
           ${lib.optionalString (lib.elem pkgs.vimPlugins.blink-nerdfont-nvim config.extraPlugins) "table.insert(common_sources, 'nerdfont')"}
           ${lib.optionalString config.plugins.blink-cmp-spell.enable "table.insert(common_sources, 'spell')"}
-          ${lib.optionalString (lib.elem pkgs.vimPlugins.blink-cmp-yanky config.extraPlugins) "table.insert(common_sources, 'yank')"}
           ${lib.optionalString config.plugins.blink-ripgrep.enable "table.insert(common_sources, 'ripgrep')"}
           ${lib.optionalString (lib.elem pkgs.vimPlugins.blink-cmp-npm-nvim config.extraPlugins) "if vim.fn.expand('%:t') == 'package.json' then table.insert(common_sources, 'npm') end"}
 
@@ -229,12 +228,6 @@
         score_offset = 15;
       };
 
-      yank = lib.mkIf (lib.elem pkgs.vimPlugins.blink-cmp-yanky config.extraPlugins) {
-        name = "yank";
-        module = "blink-yanky";
-        score_offset = 69;
-        max_items = 3;
-      };
     };
   };
 }
