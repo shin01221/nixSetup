@@ -61,28 +61,25 @@ in
           enable = true;
           enableSessionWide = true;
           settings = {
-            no_display = true;
-            fps_limit = [ 60 0 144 165 240 ];
+            position = "bottom-right";
+            font_size = 12;
+            fps_limit = [
+              60
+              0
+              144
+              165
+              240
+            ];
             fps_limit_method = "late";
             vsync = 2;
             gl_vsync = 1;
             toggle_hud = "Shift_R+F12";
             toggle_fps_limit = "Shift_R+F1";
             fps = true;
-            show_fps_limit = true;
-            frametime = true;
-            frame_timing = true;
-            present_mode = true;
             cpu_stats = true;
             cpu_temp = true;
-            cpu_power = true;
-            cpu_mhz = true;
             gpu_stats = true;
             gpu_temp = true;
-            gpu_core_clock = true;
-            gpu_mem_clock = true;
-            gpu_power = true;
-            vram = true;
             throttling_status = true;
             ram = true;
           };
