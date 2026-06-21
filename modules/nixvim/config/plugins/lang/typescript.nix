@@ -18,7 +18,7 @@ in
       ];
     };
 
-    eslint.enable = true;
+    eslint.enable = false;
   };
 
   plugins = {

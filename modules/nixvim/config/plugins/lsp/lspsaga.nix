@@ -106,6 +106,15 @@
     }
     {
       mode = "n";
+      key = "<leader>cr";
+      action = "<cmd>Lspsaga rename<CR>";
+      options = {
+        desc = "Rename Variable";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
       key = "<leader>ca";
       action = "<cmd>Lspsaga code_action<CR>";
       options = {
