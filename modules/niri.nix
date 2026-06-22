@@ -8,9 +8,10 @@
 let
   cfg = config.workstation.niri;
   userName =
-      if config.workstation ? baseline && config.workstation.baseline ? userName
-      then config.workstation.baseline.userName
-      else "gumbo";
+    if config.workstation ? baseline && config.workstation.baseline ? userName then
+      config.workstation.baseline.userName
+    else
+      "shin";
 in
 {
   options.workstation.niri.enable = lib.mkEnableOption "Niri-based workstation environment with Noctalia Shell";
@@ -30,12 +31,7 @@ in
     environment.systemPackages = with pkgs; [
       inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
       xwayland-satellite
-      tokyonight-gtk-theme
-      swayimg
-      rose-pine-cursor
       papirus-icon-theme
-      nemo
-      fuzzel
       gpu-screen-recorder
       wl-clipboard
       libsForQt5.qt5ct

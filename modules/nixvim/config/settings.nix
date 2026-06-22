@@ -1,3 +1,5 @@
+{ ... }:
+
 {
   config = {
     extraConfigLuaPre = ''
@@ -18,8 +20,13 @@
         desc = "Highlight yank",
       })
 
-      vim.env.JAVA_HOME = "/usr/lib/jvm/java-17-openjdk"
-      vim.env.PATH = vim.env.JAVA_HOME .. "/bin:" .. vim.env.PATH
+      if vim.g.neovide then
+        vim.g.neovide_theme = "dark"
+        vim.o.guifont = "DejaVu Sans Mono:h11"
+        vim.g.neovide_padding_top = 0
+        vim.g.neovide_padding_right = 20
+        vim.g.neovide_padding_left = 20
+      end
     '';
 
     globals = {
@@ -126,36 +133,6 @@
 
       # Set encoding type
       encoding = "utf-8";
-
     };
-
-    # extraConfigLua = ''
-    #   local opt = vim.opt
-    #   local g = vim.g
-    #   local o = vim.o
-    #     -- Neovide
-    #   if g.neovide then
-    #     -- Neovide options
-    #     g.neovide_fullscreen = false
-    #     g.neovide_hide_mouse_when_typing = false
-    #     g.neovide_refresh_rate = 165
-    #     g.neovide_cursor_vfx_mode = "ripple"
-    #     g.neovide_cursor_animate_command_line = true
-    #     g.neovide_cursor_animate_in_insert_mode = true
-    #     g.neovide_cursor_vfx_particle_lifetime = 5.0
-    #     g.neovide_cursor_vfx_particle_density = 14.0
-    #     g.neovide_cursor_vfx_particle_speed = 12.0
-    #     g.neovide_transparency = 0.8
-    #
-    #     -- Neovide Fonts
-    #     o.guifont = "MonoLisa Trial:Medium:h15"
-    #     -- o.guifont = "CommitMono:Medium:h15"
-    #     -- o.guifont = "JetBrainsMono Nerd Font:h14:Medium:i"
-    #     -- o.guifont = "FiraMono Nerd Font:Medium:h14"
-    #     -- o.guifont = "CaskaydiaCove Nerd Font:h14:b:i"
-    #     -- o.guifont = "BlexMono Nerd Font Mono:h14:Medium:i"
-    #     -- o.guifont = "Liga SFMono Nerd Font:b:h15"
-    #   end
-    # '';
   };
 }

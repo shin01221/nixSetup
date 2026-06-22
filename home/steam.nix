@@ -1,9 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
-  home.username = "gumbo";
-  home.homeDirectory = "/home/gumbo";
+  home.username = "shin";
+  home.homeDirectory = "/home/shin";
   home.stateVersion = "25.05";
   programs.home-manager.enable = true;
 

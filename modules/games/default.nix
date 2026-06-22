@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.workstation.games;
-  userName = config.workstation.baseline.userName or "gumbo";
+  userName = config.workstation.baseline.userName or "shin";
 in
 {
   options.workstation.games.enable = lib.mkEnableOption "Gaming support (Steam, GameMode, MangoHud, Gamescope)";
