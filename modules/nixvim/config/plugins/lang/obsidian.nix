@@ -77,6 +77,6 @@
     keymap.set("n", "<leader>od", "<cmd>Obsidian dailies<cr>", { desc = "New Daily Note" })
     keymap.set("n", "<leader>oh", "<cmd>Obsidian tags<cr>", { desc = "Search Tags" })
     keymap.set("n", "<leader>oc", "<cmd>Obsidian toc<cr>", { desc = "TOC search" })
-    keymap.set("n", "<leader>oP", vim.cmd.MarkdownPreviewToggle, { desc = "Toggle markdown preview" })
+    keymap.set("n", "<leader>oP", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Toggle markdown preview" })
   '';
 }

@@ -37,8 +37,8 @@ in
   plugins = {
     conform-nvim.settings = {
       formatters_by_ft = {
-        cpp = [ "clang-format" ];
-        cmake = [ "cmake-format" ];
+        cpp = [ "clang_format" ];
+        cmake = [ "cmake_format" ];
       };
     };
 
