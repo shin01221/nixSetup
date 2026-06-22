@@ -16,7 +16,7 @@ in
 
     userName = lib.mkOption {
       type = lib.types.str;
-      default = "gumbo";
+      default = "shin";
       description = "Primary user account name";
     };
   };
@@ -132,7 +132,7 @@ in
       };
     };
     security.rtkit.enable = true;
-    
+
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
     system.stateVersion = "25.05";
