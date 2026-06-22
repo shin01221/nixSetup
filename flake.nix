@@ -75,7 +75,7 @@
         {
           deviceModule,
           hmImports,
-          userName ? "gumbo",
+          userName ? "shin",
         }:
         let
           homeDir = "/home/${userName}";
