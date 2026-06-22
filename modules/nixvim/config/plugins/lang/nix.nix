@@ -17,21 +17,6 @@ in
         formatting = {
           command = [ "${getExe pkgs.nixfmt}" ];
         };
-        nixpkgs = {
-          expr = "import <nixpkgs> { }";
-        };
-        options = {
-          nixos = {
-            expr = ''
-              (builtins.getFlake (builtins.toString ./.)).nixosConfigurations.shin.options
-            '';
-          };
-          home-manager = {
-            expr = ''
-              (builtins.getFlake (builtins.toString ./.)).nixosConfigurations.shin.options.home-manager.users.type.getSubOptions []
-            '';
-          };
-        };
       };
     };
   };
