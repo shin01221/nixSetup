@@ -339,6 +339,166 @@
                 };
               }
             )
+            // {
+              "<leader>us" = {
+                action.__raw = ''
+                  function()
+                    if vim.o.showtabline == 0 then
+                      vim.o.showtabline = 2
+                    else
+                      vim.o.showtabline = 0
+                    end
+                  end
+                '';
+                options = {
+                  desc = "Toggle bufferline visibility";
+                };
+              };
+              # Toggle background (light/dark)
+              "<leader>ub" = {
+                action.__raw = ''
+                  function()
+                    local cur = vim.api.nvim_get_option_value("background", {})
+                    vim.api.nvim_set_option_value("background", cur == "light" and "dark" or "light", { scope = "global" })
+                  end
+                '';
+                options = {
+                  desc = "Toggle background (light/dark)";
+                };
+              };
+              # Conform format
+              "<leader>cf" = {
+                action.__raw = ''
+                  function()
+                    require("conform").format({ lsp_format = "fallback" })
+                  end
+                '';
+                options = {
+                  desc = "Format current file";
+                };
+              };
+              # Bufferline navigation
+              "<S-l>" = {
+                action = "<Cmd>BufferLineCycleNext<CR>";
+                options = {
+                  desc = "NextBuffer";
+                };
+              };
+              "<S-h>" = {
+                action = "<Cmd>BufferLineCyclePrev<CR>";
+                options = {
+                  desc = "PrevBuffer";
+                };
+              };
+              # Select all / cursor movement
+              "aa" = {
+                action = "gg<S-v>G";
+              };
+              "<C-a>" = {
+                action = "gg<S-v>G";
+              };
+              "vv" = {
+                action = "0v$h";
+              };
+              "n" = {
+                action = "nzzzv";
+              };
+              "N" = {
+                action = "Nzzzv";
+              };
+              "gf" = {
+                action = "<C-W>gf";
+              };
+              # Deletion (black hole register)
+              "x" = {
+                action = "\"_x";
+              };
+              "<Leader>p" = {
+                action = "\"0p";
+              };
+              "<Leader>P" = {
+                action = "\"0P";
+              };
+              "<Leader>c" = {
+                action = "\"_c";
+              };
+              "<Leader>C" = {
+                action = "\"_C";
+              };
+              "<Leader>d" = {
+                action = "\"_d";
+              };
+              "<Leader>D" = {
+                action = "\"_D";
+              };
+              # Split window
+              "ss" = {
+                action = ":split<Return>";
+                options = {
+                  silent = true;
+                };
+              };
+              "sv" = {
+                action = ":vsplit<Return>";
+                options = {
+                  silent = true;
+                };
+              };
+              "qq" = {
+                action = "<cmd>q<CR>";
+              };
+              # Move window
+              "sh" = {
+                action = "<C-w>h";
+              };
+              "sk" = {
+                action = "<C-w>k";
+              };
+              "sj" = {
+                action = "<C-w>j";
+              };
+              "sl" = {
+                action = "<C-w>l";
+              };
+              # Resize window
+              "<C-w><l>" = {
+                action = "<C-w><";
+              };
+              "<C-w><h>" = {
+                action = "<C-w>>";
+              };
+              "<C-w><j>" = {
+                action = "<C-w>+";
+              };
+              "<C-w><k>" = {
+                action = "<C-w>-";
+              };
+              # Snacks color picker (filters built-in vim colorschemes)
+              "<leader>uC" = {
+                action.__raw = ''
+                  function()
+                    local builtin = {
+                      "default", "blue", "darkblue", "delek", "desert",
+                      "elflord", "evening", "habamax", "industry", "koehler",
+                      "lunaperche", "morning", "murphy", "pablo", "peachpuff",
+                      "quiet", "retrobox", "ron", "shine", "slate", "sorbet",
+                      "sunburst", "swamp", "torte", "wildcharm", "zaibatsu",
+                      "vim", "zellner", "unokai",
+                    }
+                    Snacks.picker.colorschemes({
+                      transform = function(item)
+                        if vim.tbl_contains(builtin, item.text) then
+                          return false
+                        end
+                      end,
+                    })
+                  end
+                '';
+                options = {
+                  desc = "Colorschemes (user only)";
+                };
+              };
+            }
           );
       visual =
         lib.mapAttrsToList
@@ -388,9 +548,33 @@
             # Move selected line/block in visual mode
             "K" = {
               action = "<cmd>m '<-2<CR>gv=gv<cr>";
+              options = {
+                noremap = true;
+                silent = true;
+              };
             };
             "J" = {
               action = "<cmd>m '>+1<CR>gv=gv<cr>";
+              options = {
+                noremap = true;
+                silent = true;
+              };
+            };
+            # Deletion (black hole register)
+            "<Leader>p" = {
+              action = "\"0p";
+            };
+            "<Leader>c" = {
+              action = "\"_c";
+            };
+            "<Leader>C" = {
+              action = "\"_C";
+            };
+            "<Leader>d" = {
+              action = "\"_d";
+            };
+            "<Leader>D" = {
+              action = "\"_D";
             };
           };
 
@@ -423,119 +607,15 @@
             "<C-a>" = {
               action = "<cmd> norm! ggVG<cr>";
             };
+            # Exit insert mode
+            "jj" = {
+              action = "<esc>";
+            };
           };
     in
     lib.nixvim.keymaps.mkKeymaps { options.silent = true; } (normal ++ visual ++ insert);
 
-  extraConfigLua = ''
-    -- Treewalker movement
-    vim.keymap.set({ "n", "v" }, "<leader>k", "<cmd>Treewalker Up<cr>", { silent = true })
-    vim.keymap.set({ "n", "v" }, "<leader>j", "<cmd>Treewalker Down<cr>", { silent = true })
-    vim.keymap.set({ "n", "v" }, "<leader>h", "<cmd>Treewalker Left<cr>", { silent = true })
-    vim.keymap.set({ "n", "v" }, "<leader>l", "<cmd>Treewalker Right<cr>", { silent = true })
-    vim.keymap.set("n", "<A-k>", "<cmd>Treewalker SwapUp<cr>", { silent = true })
-    vim.keymap.set("n", "<A-j>", "<cmd>Treewalker SwapDown<cr>", { silent = true })
-    vim.keymap.set("n", "<A-h>", "<cmd>Treewalker SwapLeft<cr>", { silent = true })
-    vim.keymap.set("n", "<A-l>", "<cmd>Treewalker SwapRight<cr>", { silent = true })
-
-    -- Themify
-    vim.keymap.set("n", "tt", "<cmd>Themify<cr>")
-
-    -- Markview toggle
-    vim.keymap.set("n", "<leader>um", "<cmd>Markview Toggle<cr>", { desc = "Toggle markdown" })
-
-    -- Bufferline visibility toggle
-    vim.keymap.set("n", "<leader>us", function()
-      if vim.o.showtabline == 0 then
-        vim.o.showtabline = 2
-      else
-        vim.o.showtabline = 0
-      end
-    end, { desc = "Toggle bufferline visibility" })
-
-    -- Toggle background (light/dark)
-    vim.keymap.set("n", "<leader>ub", function()
-      local cur = vim.api.nvim_get_option_value("background", {})
-      vim.api.nvim_set_option_value("background", cur == "light" and "dark" or "light", { scope = "global" })
-    end, { desc = "Toggle background (light/dark)" })
-
-    -- Conform format
-    vim.keymap.set("n", "<leader>cf", function()
-      require("conform").format({ lsp_format = "fallback" })
-    end, { desc = "Format current file" })
-
-    -- Bufferline navigation
-    vim.keymap.set("n", "<S-l>", "<Cmd>BufferLineCycleNext<CR>", { desc = "NextBuffer" })
-    vim.keymap.set("n", "<S-h>", "<Cmd>BufferLineCyclePrev<CR>", { desc = "PrevBuffer" })
-
-    -- Diagnostics float
-    vim.keymap.set("n", "gl", function()
-      vim.diagnostic.open_float()
-    end, { desc = "Open Diagnostics in Float" })
-
-    -- Select all
-    vim.keymap.set("n", "aa", "gg<S-v>G")
-    vim.keymap.set("n", "<C-a>", "gg<S-v>G")
-    vim.keymap.set("n", "vv", "0v$h")
-    vim.keymap.set("i", "jj", "<esc>")
-    vim.keymap.set("n", "n", "nzzzv")
-    vim.keymap.set("n", "N", "Nzzzv")
-    vim.keymap.set("n", "gf", "<C-W>gf")
-
-    -- Deletion don't affect buffer
-    vim.keymap.set("n", "x", '"_x')
-    vim.keymap.set("n", "<Leader>p", '"0p')
-    vim.keymap.set("n", "<Leader>P", '"0P')
-    vim.keymap.set("v", "<Leader>p", '"0p')
-    vim.keymap.set("n", "<Leader>c", '"_c')
-    vim.keymap.set("n", "<Leader>C", '"_C')
-    vim.keymap.set("v", "<Leader>c", '"_c')
-    vim.keymap.set("v", "<Leader>C", '"_C')
-    vim.keymap.set("n", "<Leader>d", '"_d')
-    vim.keymap.set("n", "<Leader>D", '"_D')
-    vim.keymap.set("v", "<Leader>d", '"_d')
-    vim.keymap.set("v", "<Leader>D", '"_D')
-
-    -- Split window
-    vim.keymap.set("n", "ss", ":split<Return>", { silent = true })
-    vim.keymap.set("n", "sv", ":vsplit<Return>", { silent = true })
-    vim.keymap.set("n", "qq", vim.cmd.q)
-
-    -- Move window
-    vim.keymap.set("n", "sh", "<C-w>h")
-    vim.keymap.set("n", "sk", "<C-w>k")
-    vim.keymap.set("n", "sj", "<C-w>j")
-    vim.keymap.set("n", "sl", "<C-w>l")
-
-    -- Resize window
-    vim.keymap.set("n", "<C-w><l>", "<C-w><")
-    vim.keymap.set("n", "<C-w><h>", "<C-w>>")
-    vim.keymap.set("n", "<C-w><j>", "<C-w>+")
-    vim.keymap.set("n", "<C-w><k>", "<C-w>-")
-
-    -- Move highlighted text
-    vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
-    vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-
-    -- Snacks color picker (filters built-in vim colorschemes)
-    vim.keymap.set("n", "<leader>uC", function()
-      local builtin = {
-        "default", "blue", "darkblue", "delek", "desert",
-        "elflord", "evening", "habamax", "industry", "koehler",
-        "lunaperche", "morning", "murphy", "pablo", "peachpuff",
-        "quiet", "retrobox", "ron", "shine", "slate", "sorbet",
-        "sunburst", "swamp", "torte", "wildcharm", "zaibatsu",
-        "vim", "zellner", "unokai",
-      }
-      Snacks.picker.colorschemes({
-        transform = function(item)
-          if vim.tbl_contains(builtin, item.text) then
-            return false
-          end
-        end,
-      })
-    end, { desc = "Colorschemes (user only)" })
-  '';
+  extraConfigLua = "";
 }
 
 # {

@@ -8,18 +8,6 @@
       vim.fn.sign_define("diagnosticsignhint", { text = "󰌵", texthl = "diagnostichint", linehl = "", numhl = "" })
       vim.fn.sign_define("diagnosticsigninfo", { text = " ", texthl = "diagnosticinfo", linehl = "", numhl = "" })
 
-      vim.o.undodir = os.getenv("HOME") .. "/.local/state/nvim/undo"
-      vim.o.backspace = "start,eol,indent"
-
-      vim.api.nvim_create_autocmd("TextYankPost", {
-        group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
-        pattern = "*",
-        callback = function()
-          vim.highlight.on_yank({ timeout = 5 })
-        end,
-        desc = "Highlight yank",
-      })
-
       if vim.g.neovide then
         vim.g.neovide_theme = "dark"
         vim.o.guifont = "DejaVu Sans Mono:h11"
@@ -79,6 +67,8 @@
       # Files & Buffers
       swapfile = false;
       undofile = true;
+      undodir.__raw = "os.getenv(\"HOME\") .. \"/.local/state/nvim/undo\"";
+      backspace = "start,eol,indent";
       autoread = true;
       writebackup = false;
       fileencoding = "utf-8";
