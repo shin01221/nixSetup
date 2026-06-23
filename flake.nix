@@ -150,7 +150,7 @@
                     }
                   )
                 ];
-                users.gumbo = {
+                users.shin = {
                   imports = hmImports;
                 };
               };
@@ -160,15 +160,6 @@
     in
     {
       nixosConfigurations = {
-        erebos = mkWorkstation {
-          deviceModule = ./devices/desktop/erebos/default.nix;
-          hmImports = [
-            ./home/common.nix
-            ./home/zsh.nix
-            ./home/kde.nix
-          ];
-        };
-
         shin = mkWorkstation {
           deviceModule = ./devices/laptop/shin/default.nix;
           userName = "shin";
@@ -182,66 +173,6 @@
             ./home/obs-studio.nix
             ./home/xdg.nix
             ./home/spotify.nix
-          ];
-        };
-
-        null = mkWorkstation {
-          deviceModule = ./devices/desktop/null/default.nix;
-          hmImports = [
-            ./home/common.nix
-            ./home/zsh.nix
-            ./home/kde.nix
-          ];
-        };
-
-        seed = mkWorkstation {
-          deviceModule = ./devices/server/vms/seed/default.nix;
-          hmImports = [
-            ./home/common.nix
-            ./home/zsh.nix
-            ./home/kde.nix
-          ];
-        };
-        secret-mgmt = mkServer {
-          deviceModule = ./devices/server/vms/secret-mgmt/default.nix;
-          hmImports = [
-            ./home/server.nix
-            ./home/zsh.nix
-          ];
-        };
-        k3s-a1 = mkServer {
-          deviceModule = ./devices/server/vms/k3s-a1/default.nix;
-          hmImports = [
-            ./home/server.nix
-            ./home/zsh.nix
-          ];
-        };
-        k3s-a2 = mkServer {
-          deviceModule = ./devices/server/vms/k3s-a2/default.nix;
-          hmImports = [
-            ./home/server.nix
-            ./home/zsh.nix
-          ];
-        };
-        k3s-a3 = mkServer {
-          deviceModule = ./devices/server/vms/k3s-a3/default.nix;
-          hmImports = [
-            ./home/server.nix
-            ./home/zsh.nix
-          ];
-        };
-        k3s-a4 = mkServer {
-          deviceModule = ./devices/server/vms/k3s-a4/default.nix;
-          hmImports = [
-            ./home/server.nix
-            ./home/zsh.nix
-          ];
-        };
-        k3s-s1 = mkServer {
-          deviceModule = ./devices/server/vms/k3s-s1/default.nix;
-          hmImports = [
-            ./home/server.nix
-            ./home/zsh.nix
           ];
         };
       };

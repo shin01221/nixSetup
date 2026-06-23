@@ -7,22 +7,22 @@
 let
   associations = {
     # nvim
-    "application/json" = "nvim.desktop";
-    "text/english" = "nvim.desktop";
-    "text/plain" = "nvim.desktop";
-    "text/x-makefile" = "nvim.desktop";
-    "text/x-c++hdr" = "nvim.desktop";
-    "text/x-c++src" = "nvim.desktop";
-    "text/x-chdr" = "nvim.desktop";
-    "text/x-csrc" = "nvim.desktop";
-    "text/x-java" = "nvim.desktop";
-    "text/x-moc" = "nvim.desktop";
-    "text/x-pascal" = "nvim.desktop";
-    "text/x-tcl" = "nvim.desktop";
-    "text/x-tex" = "nvim.desktop";
-    "application/x-shellscript" = "nvim.desktop";
-    "text/x-c" = "nvim.desktop";
-    "text/x-c++" = "nvim.desktop";
+    "application/json" = "neovide.desktop";
+    "text/english" = "neovide.desktop";
+    "text/plain" = "neovide.desktop";
+    "text/x-makefile" = "neovide.desktop";
+    "text/x-c++hdr" = "neovide.desktop";
+    "text/x-c++src" = "neovide.desktop";
+    "text/x-chdr" = "neovide.desktop";
+    "text/x-csrc" = "neovide.desktop";
+    "text/x-java" = "neovide.desktop";
+    "text/x-moc" = "neovide.desktop";
+    "text/x-pascal" = "neovide.desktop";
+    "text/x-tcl" = "neovide.desktop";
+    "text/x-tex" = "neovide.desktop";
+    "application/x-shellscript" = "neovide.desktop";
+    "text/x-c" = "neovide.desktop";
+    "text/x-c++" = "neovide.desktop";
 
     # zen browser
     "text/html" = "app.zen_browser.zen.desktop";
