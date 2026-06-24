@@ -104,6 +104,7 @@ let
     kdePackages.kio-extras
     libmtp
     neovide
+    handbrake
   ];
 in
 {

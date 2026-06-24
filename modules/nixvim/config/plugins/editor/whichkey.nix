@@ -28,6 +28,18 @@
           ];
           group = "Code";
         }
+        {
+          __unkeyed-1 = "<leader>ca";
+          desc = "Code Action";
+        }
+        {
+          __unkeyed-1 = "<leader>cd";
+          desc = "Line Diagnostics";
+        }
+        {
+          __unkeyed-1 = "<leader>co";
+          desc = "Organize Imports";
+        }
 
         {
           __unkeyed-1 = "<leader>f";

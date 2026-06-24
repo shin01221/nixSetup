@@ -7,14 +7,15 @@
 }:
 let
   cfg = config.workstation.ssh;
-  userName = if config.workstation ? baseline then config.workstation.baseline.userName else cfg.userName;
+  userName =
+    if config.workstation ? baseline then config.workstation.baseline.userName else cfg.userName;
 in
 {
   options.workstation.ssh = {
     enable = lib.mkEnableOption "Default SSH configuration";
     userName = lib.mkOption {
       type = lib.types.str;
-      default = "gumbo";
+      default = "shin";
       description = "SSH user account name";
     };
   };
