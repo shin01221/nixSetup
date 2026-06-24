@@ -153,9 +153,42 @@
   keymaps = [
     {
       mode = "n";
+      key = "<leader>ca";
+      action.__raw = "function() vim.lsp.buf.code_action() end";
+      options.desc = "Code Action";
+    }
+    {
+      mode = "v";
+      key = "<leader>ca";
+      action.__raw = "function() vim.lsp.buf.code_action() end";
+      options.desc = "Code Action";
+    }
+    {
+      mode = "n";
+      key = "<leader>cd";
+      action.__raw = "vim.diagnostic.open_float";
+      options.desc = "Line Diagnostics";
+    }
+    {
+      mode = "n";
       key = "<leader>cl";
       action = "<cmd>LspInfo<cr>";
       options.desc = "Lsp Info";
+    }
+    {
+      mode = "n";
+      key = "<leader>co";
+      action.__raw = ''
+        function()
+          vim.lsp.buf.code_action({
+            filter = function(action)
+              return action.title:find("^Organize Imports") ~= nil
+            end,
+            apply = true,
+          })
+        end
+      '';
+      options.desc = "Organize Imports";
     }
     {
       mode = "n";

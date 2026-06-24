@@ -33,6 +33,14 @@
         }
         {
           mode = "n";
+          key = "<leader>ss";
+          action = "<cmd>lua Snacks.picker.lsp_symbols()<cr>";
+          options = {
+            desc = "Find lsp document symbols";
+          };
+        }
+        {
+          mode = "n";
           key = "<leader>ld";
           action = "<cmd>lua Snacks.picker.lsp_definitions()<cr>";
           options = {

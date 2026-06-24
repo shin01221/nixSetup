@@ -1,4 +1,9 @@
-{ self, lib, config, ... }:
+{
+  self,
+  lib,
+  config,
+  ...
+}:
 let
   lock-false = {
     Value = false;
@@ -228,7 +233,8 @@ in
         "urlbar-container"
         "downloads-button"
         "unified-extensions-button"
-      ] ++ extensions.nav-bar;
+      ]
+      ++ extensions.nav-bar;
       toolbar-menubar = [ "menubar-items" ];
       TabsToolbar = [
         "firefox-view-button"

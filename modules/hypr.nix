@@ -27,7 +27,7 @@ in
         };
         initial_session = {
           command = "uwsm start hyprland-uwsm.desktop";
-          user = "gumbo";
+          user = "shin";
         };
       };
     };
