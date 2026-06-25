@@ -52,11 +52,11 @@ let
         msg-module = "yes";
         save-watch-history = "yes";
         volume-max = 200;
-        hwdec = "auto-copy";
-        gpu-api = "vulkan";
+        hwdec = "auto-safe";
+        gpu-api = "opengl";
         profile = "gpu-hq";
-        vo = "gpu-next";
-        screenshot-directory = "~/media/pictures/screenshots";
+        vo = "gpu";
+        screenshot-directory = "~/Pictures/Screenshots";
         screenshot-template = "%x/screenshot-%F-%wH.%wM.%wS-F%{estimated-frame-number}";
         screenshot-format = "png";
         screenshot-png-compression = 4;
@@ -64,6 +64,8 @@ let
         screenshot-high-bit-depth = "yes";
         alang = "en,jpn,jp";
         stop-screensaver = "yes";
+        auto-window-resize = "yes";
+        keepaspect-window = "no";
         cursor-autohide = 100;
         reset-on-next-file = "video-zoom,panscan,video-unscaled,video-rotate,video-align-x,video-align-y";
       };
@@ -101,7 +103,7 @@ let
       scriptOpts = {
         modernz = {
           idlescreen = "no";
-          download_path = "~/media/videos";
+          download_path = "~/Videos";
           ontop_button = "no";
           speed_button = "yes";
           info_button = "no";
@@ -115,8 +117,8 @@ let
         };
 
         videoclip = {
-          video_folder_path = "~/media/videos/clips";
-          audio_folder_path = "~/media/music/clips";
+          video_folder_path = "~/Videos/clips";
+          audio_folder_path = "~/Music/clips";
           video_quality = 10;
           custom_upload_command = "gup -c -s %f";
         };

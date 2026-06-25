@@ -97,6 +97,7 @@ let
     kdePackages.ark
     opencode
     wayscriber
+    gparted-full
     mpv
     calibre
     obs-studio
