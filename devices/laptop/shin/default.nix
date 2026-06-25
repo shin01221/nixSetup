@@ -62,7 +62,10 @@
       };
     };
     games.enable = true;          # enable gaming support
-    network.enable = true;        # enable firewall
+    network = {
+      enable = true;        # enable firewall
+      torProxy.enable = true;  # enable Tor SOCKS proxy for blocked sites
+    };
     security.enable = true;       # enable AppArmor
     services.enable = true;       # enable fstrim, keyring
     system.enable = true;         # enable nix-index-database, GPG agent

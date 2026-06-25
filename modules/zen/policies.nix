@@ -1,4 +1,4 @@
-{ self, lib, config, ... }:
+{ self, lib, config, pkgs, ... }:
 let
   extensions = import ./extensions.nix { inherit lib config; };
 in
@@ -76,6 +76,25 @@ in
     ExtensionRecommendations = false;
     SkipOnboarding = true;
   };
+  Proxy =
+    let
+      pacFile = pkgs.writeText "proxy.pac" ''
+        function FindProxyForURL(url, host) {
+          var proxied = ["nix.dev"];
+          for (var i = 0; i < proxied.length; i++) {
+            if (dnsDomainIs(host, proxied[i]) || host == proxied[i]) {
+              return "SOCKS5 127.0.0.1:9050";
+            }
+          }
+          return "DIRECT";
+        }
+      '';
+    in
+    {
+      Mode = "autoConfig";
+      AutoConfigURL = "file://${pacFile}";
+      Locked = false;
+    };
   ExtensionSettings = extensions.extensionSettings;
   "3rdparty".Extensions = extensions.extensionConfig;
 }
