@@ -15,7 +15,7 @@
 
         programs.zen-browser = {
           enable = true;
-          policies = import ./policies.nix { inherit self lib config; };
+          policies = import ./policies.nix { inherit self lib config pkgs; };
           languagePacks = [
             "en-GB"
             "en-US"

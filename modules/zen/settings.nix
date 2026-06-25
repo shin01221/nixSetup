@@ -220,6 +220,9 @@ in
   "extensions.ui.sitepermission.hidden" = lock-true;
   "extensions.ui.locale.hidden" = lock-true;
 
+  # Allow file:// PAC proxy URLs for Tor proxy
+  "network.filepaths.enabled" = lock-true;
+
   "browser.uiCustomization.state" = builtins.toJSON {
     currentVersion = 20;
     newElementCount = 7;
