@@ -26,7 +26,7 @@ let
 
     # zen browser
     "text/html" = "app.zen_browser.zen.desktop";
-    "application/pdf" = "app.zen_browser.zen.desktop";
+    "application/pdf" = "org.kde.okular.desktop";
     "x-scheme-handler/http" = "app.zen_browser.zen.desktop";
     "x-scheme-handler/https" = "app.zen_browser.zen.desktop";
     "x-scheme-handler/ftp" = "app.zen_browser.zen.desktop";
