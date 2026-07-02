@@ -51,6 +51,7 @@ let
         msg-color = "yes";
         msg-module = "yes";
         save-watch-history = "yes";
+        save-position-on-quit = "yes";
         volume-max = 200;
         hwdec = "auto-safe";
         gpu-api = "opengl";

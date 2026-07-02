@@ -82,8 +82,12 @@
   services.openssh.enable = false;
   services.fprintd.enable = false;
 
-  age.identityPaths = [ "/home/shin/.ssh/agenix_shin" ];
-  
+age.identityPaths = [ "/home/shin/.ssh/agenix_shin" ];
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "pnpm-10.29.2" # build-time dep for heroic, vesktop - revisit when nixpkgs updates pnpm
+  ];
+
   # symlink agenix key so I can use it in cli
   # system.activationScripts.agenix-cli-identity = ''
   #   mkdir -p /home/shin/.ssh

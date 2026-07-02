@@ -30,7 +30,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
+    # flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs-stable";
@@ -62,7 +62,6 @@
       noctalia,
       agenix,
       nixvim,
-      flatpaks,
       disko,
       ...
     }@inputs:
@@ -93,7 +92,6 @@
           modules = [
             deviceModule
             home-managerU.nixosModules.home-manager
-            flatpaks.nixosModules.default
             agenix.nixosModules.default
             {
               home-manager = {

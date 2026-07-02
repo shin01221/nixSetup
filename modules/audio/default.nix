@@ -8,6 +8,6 @@
     mpc
     playerctl
     rmpc
-
+    lrcget
   ];
 }
