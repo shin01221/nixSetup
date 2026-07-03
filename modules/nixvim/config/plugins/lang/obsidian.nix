@@ -59,7 +59,7 @@
     keymap.set("v", "<leader>ofl", ":lua require('markdowny').link()<cr>", { desc = "link" })
     keymap.set("v", "<leader>ofe", ":lua require('markdowny').code()<cr>", { desc = "code block" })
     keymap.set("v", "<leader>oll", "<cmd>Obsidian link_new<cr>", { desc = "New Link" })
-    keymap.set("n", "<leader>ols", "<cmd>Obsidian links<cr>", { desc = "Search Links" })
+    keymap.set("n", "<leader>ols", "<cmd>PasteImage<cr>", { desc = "Search Links" })
     keymap.set("n", "<leader>op", "<cmd>Obsidian paste_img<cr>", { desc = "Paste Image" })
     keymap.set("n", "<leader>or", "<cmd>Obsidian rename<cr>", { desc = "rename note" })
     keymap.set("n", "<leader>oll", "<cmd>Obsidian toggle_checkbox<cr>", { desc = "toggle checkbox" })
