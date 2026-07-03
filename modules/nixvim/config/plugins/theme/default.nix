@@ -60,6 +60,8 @@
     ayu-vim
     miasma-nvim
     oxocarbon-nvim
+    kanagawa-nvim
     omni-vim
+    kanagawa-paper-nvim
   ];
 }
