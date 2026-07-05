@@ -3,3 +3,5 @@ terra/.terraform/
 terra/terraform.tfstate
 terra/terraform.tfstate.backup
 terra/.terraform.tfstate.lock.info
+secrets.fish
+config/fish/secrets.fish
