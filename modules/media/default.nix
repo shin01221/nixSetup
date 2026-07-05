@@ -69,6 +69,7 @@ let
         keepaspect-window = "no";
         cursor-autohide = 100;
         reset-on-next-file = "video-zoom,panscan,video-unscaled,video-rotate,video-align-x,video-align-y";
+        title = "\${path}";
       };
 
       profiles = {

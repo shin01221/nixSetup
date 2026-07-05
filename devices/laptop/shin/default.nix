@@ -82,6 +82,9 @@
     # };
   };
 
+  # tmux: enable all plugins except sessionx on this host
+  home-manager.users.shin.programs.nix-tmux.plugins.sessionx.enable = false;
+
   services.openssh.enable = false;
   services.fprintd.enable = false;
 

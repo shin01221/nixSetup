@@ -163,7 +163,7 @@
           userName = "shin";
           hmImports = [
             ./home/common.nix
-            # ./home/fish.nix
+            ./home/fish.nix
             ./home/theming.nix
             ./home/niri.nix
             ./home/dolphin
@@ -171,6 +171,10 @@
             ./home/obs-studio.nix
             ./home/xdg.nix
             ./home/spotify.nix
+            ./home/foot.nix
+            ./home/ghostty.nix
+            ./home/wlr-which-key.nix
+            ./home/tmux.nix
           ];
         };
       };
