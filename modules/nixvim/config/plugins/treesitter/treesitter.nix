@@ -40,7 +40,7 @@
     };
 
     treesitter-context = {
-      inherit (config.plugins.treesitter) enable;
+      enable = false;
       lazyLoad.settings.event = [
         "BufReadPost"
         "BufNewFile"

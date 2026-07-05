@@ -632,6 +632,18 @@ let
         match namespace="^noctalia-wallpaper*"
         place-within-backdrop true
       }
+
+    ''
+
+    # Noctalia media player desktop widget
+    ''
+      layer-rule {
+          match namespace="noctalia-desktop-widget-media_player.*"
+          background-effect {
+                  blur true
+                  xray false
+         }
+      }
     ''
 
     # ── Overview ─────────────────────────────────────────────
