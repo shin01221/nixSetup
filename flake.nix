@@ -175,6 +175,7 @@
             ./home/ghostty.nix
             ./home/wlr-which-key.nix
             ./home/tmux.nix
+            ./home/noctalia.nix
           ];
         };
       };

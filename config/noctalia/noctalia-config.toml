@@ -1,44 +1,82 @@
 [audio]
 enable_overdrive = true
 enable_sounds = true
+notification_sound = ""
+sound_volume = 0.5
+volume_change_sound = ""
+
+[backdrop]
+blur_intensity = 0.5
+enabled = false
+tint_intensity = 0.30000001192092896
 
 [bar]
 order = [ "main" ]
 
     [bar.main]
-    
-    border_width = 0.29999999999999999
+    auto_hide = false
+    background_opacity = 1.00
+    border = "outline"
+    border_width = 0.30000001192092896
     capsule = true
-    capsule_opacity = 0.5
+    capsule_fill = "surface_variant"
+    capsule_opacity = 1.00
+    capsule_padding = 6.0
+    capsule_thickness = 0.75999999046325684
     center = [ "group:g3" ]
     color = "primary"
-    end = [ "tray", "clock-12h", "group:g1", "group:g4" ]
+    contact_shadow = false
+    enabled = true
+    end = [ "tray", "clock-12h", "group:g1", "recorder" ]
     font_weight = 700
+    layer = "top"
     margin_edge = 0
     margin_ends = 0
+    margin_opposite_edge = 0
+    padding = 14
+    panel_overlap = 1
     position = "top"
     radius = 0
-    scale = 0.90000000596046448
+    radius_bottom_left = 0
+    radius_bottom_right = 0
+    radius_top_left = 0
+    radius_top_right = 0
+    reserve_space = true
+    scale = 0.89999997615814209
+    shadow = true
+    show_on_workspace_switch = true
     start = [ "Shin", "group:g2" ]
     thickness = 25
+    widget_spacing = 6
+
+        [bar.main.dead_zone]
+        command = ""
+        middle_command = ""
+        right_command = ""
+        scroll_down_command = ""
+        scroll_up_command = ""
 
         [[bar.main.capsule_group]]
+        enabled = true
         fill = "surface_variant"
         id = "g3"
-        members = [ "media", "lrc" ]
-        opacity = 1.0
+        members = [ "media", "lrc_2" ]
+        opacity = 0.5
         padding = 6.0
         radius = 8.0
 
         [[bar.main.capsule_group]]
+        border = ""
+        enabled = true
         fill = "surface_variant"
         id = "g2"
-        members = [ "workspaces", "audio_visualizer", "bongocat" ]
-        opacity = 1.0
+        members = [ "workspaces", "audio_visualizer", "cat" ]
+        opacity = 0.5
         padding = 6.0
         radius = 8.0
 
         [[bar.main.capsule_group]]
+        enabled = true
         fill = "surface_variant"
         id = "g1"
         members = [ "ram", "cpu", "battery" ]
@@ -46,16 +84,50 @@ order = [ "main" ]
         padding = 6.0
         radius = 8.0
 
-        [[bar.main.capsule_group]]
-        fill = "surface_variant"
-        id = "g4"
-        members = [ "screen_recorder" ]
-        opacity = 1.0
-        padding = 6.0
+[battery]
+warning_threshold = 10
+
+[brightness]
+enable_ddcutil = false
+ignore_mmids = []
+minimum_brightness = 0.0
+sync_all_monitors = false
+
+[calendar]
+enabled = false
+refresh_minutes = 15
+
+[control_center]
+hidden_tabs = []
+sidebar = "compact"
+sidebar_section = "compact"
+width = 700
+
+    [control_center.calendar]
+    show_events_card = true
+
+    [[control_center.shortcuts]]
+    type = "wifi"
+
+    [[control_center.shortcuts]]
+    type = "bluetooth"
+
+    [[control_center.shortcuts]]
+    type = "caffeine"
+
+    [[control_center.shortcuts]]
+    type = "nightlight"
+
+    [[control_center.shortcuts]]
+    type = "notification"
+
+    [[control_center.shortcuts]]
+    type = "power_profile"
 
 [desktop_widgets]
+enabled = true
 schema_version = 1
-widget_order = [ "desktop-widget-0000000000000003" ]
+widget_order = [ "desktop-widget-0000000000000003", "desktop-widget-0000000000000005", "desktop-widget-0000000000000006" ]
 
     [desktop_widgets.grid]
     cell_size = 16
@@ -63,11 +135,13 @@ widget_order = [ "desktop-widget-0000000000000003" ]
     visible = true
 
     [desktop_widgets.widget.desktop-widget-0000000000000003]
+    box_height = 0.0
+    box_width = 0.0
     cx = 976.0
     cy = 1080.0
+    enabled = true
     output = "eDP-2"
     rotation = 0.0
-    scale = 5.1639776229858398
     type = "audio_visualizer"
 
         [desktop_widgets.widget.desktop-widget-0000000000000003.settings]
@@ -78,38 +152,138 @@ widget_order = [ "desktop-widget-0000000000000003" ]
         mirrored = true
         show_when_idle = false
 
-[dock]
-auto_hide = true
+    [desktop_widgets.widget.desktop-widget-0000000000000005]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 151.0
+    cy = 275.0
+    enabled = true
+    output = "eDP-1"
+    rotation = 0.0
+    type = "fancy_audio_visualizer"
 
+        [desktop_widgets.widget.desktop-widget-0000000000000005.settings]
+        background = false
+        background_opacity = 1.00
+        bloom_intensity = 0.5
+        inner_diameter = 0.70000000000000007
+        primary_color = "primary"
+        ring_opacity = 0.80000000000000004
+        rotation_speed = 0.80000000000000004
+        secondary_color = "surface_variant"
+        sensitivity = 0.90000000000000002
+        visualization_mode = "wave_rings"
+        wave_thickness = 0.80000000000000004
+
+    [desktop_widgets.widget.desktop-widget-0000000000000006]
+    box_height = 128.0
+    box_width = 304.0
+    cx = 1752.0
+    cy = 1004.0
+    enabled = true
+    output = "eDP-1"
+    rotation = 0.0
+    type = "media_player"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000006.settings]
+        background = true
+        background_color = "surface"
+        background_opacity = 1.00
+        background_padding = 10.0
+        background_radius = 12.0
+        color = "on_surface"
+        font_family = ""
+        hide_when_no_media = false
+        layout = "horizontal"
+        shadow = true
+
+[dock]
+active_monitor_only = false
+active_opacity = 1.0
+active_scale = 1.0
+auto_hide = true
+background_opacity = 1.00
+cross_axis_padding = 8
 enabled = true
 icon_size = 30
+inactive_opacity = 0.85000002384185791
+inactive_scale = 0.85000002384185791
+item_spacing = 6
+launcher_custom_image = ""
+launcher_custom_image_colorize = false
+launcher_icon = "grid-dots"
+launcher_position = "none"
+magnification = true
+magnification_scale = 1.4500000476837158
+main_axis_padding = 16
+margin_edge = 8
+margin_ends = 0
+monitors = []
+pinned = []
+position = "bottom"
 radius = 5
+radius_bottom_left = 5
+radius_bottom_right = 5
+radius_top_left = 5
+radius_top_right = 5
+reserve_space = false
+shadow = true
+show_dots = false
+show_instance_count = true
+show_running = true
 
 [hooks]
-colors_changed = "plasma-apply-colorscheme noctalia"
-session_locked = "~/.local/bin/kb-hook.bash"
-theme_mode_changed = "plasma-apply-colorscheme noctalia"
+battery_charging = []
+battery_discharging = []
+battery_percentage_changed = []
+battery_plugged = []
+bluetooth_disabled = []
+bluetooth_enabled = []
+colors_changed = []
+logging_out = []
+power_profile_changed = []
+rebooting = []
+session_locked = []
+session_unlocked = []
+shutting_down = []
+started = []
+theme_mode_changed = []
+wallpaper_changed = []
+wifi_disabled = []
+wifi_enabled = []
 
 [idle]
 behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+pre_action_fade_seconds = 2.0
 
     [idle.behavior.lock]
     action = "lock"
+    command = ""
     enabled = true
-    timeout = 600
+    resume_command = ""
+    timeout = 600.0
 
     [idle.behavior.lock-and-suspend]
     action = "lock_and_suspend"
+    command = ""
     enabled = false
-    timeout = 900
+    resume_command = ""
+    timeout = 900.0
 
     [idle.behavior.screen-off]
     action = "screen_off"
+    command = ""
     enabled = true
-    timeout = 660
+    resume_command = ""
+    timeout = 660.0
 
 [keybinds]
+cancel = [ "Escape" ]
 down = [ "Ctrl+n", "Down" ]
+left = [ "Left" ]
+right = [ "Right" ]
+tab_next = [ "Tab" ]
+tab_previous = [ "Shift+ISO_Left_Tab" ]
 up = [ "Ctrl+p", "Up" ]
 validate = [ "Ctrl+y", "Return" ]
 
@@ -120,159 +294,381 @@ sunrise = "8:00"
 sunset = "21:00"
 
 [lockscreen]
-blur_intensity = 0.89999997988343239
-blurred_desktop = true
-wallpaper = "/home/shin/Pictures/homework/norm/143296243-4a29a38c6585c30d999b3a1d719f2893_p28.png"
+allow_empty_password = false
+blur_intensity = 0.69999998807907104
+blurred_desktop = false
+enabled = true
+fingerprint = false
+monitors = []
+tint_intensity = 0.30000001192092896
+wallpaper = "/home/shin/Pictures/Wallpapers/loock.webp"
 
 [lockscreen_widgets]
 enabled = true
 schema_version = 1
-widget_order = []
+widget_order = [ "lockscreen-login-box@eDP-1" ]
 
     [lockscreen_widgets.grid]
     cell_size = 8
     major_interval = 4
     visible = true
 
-    [lockscreen_widgets.widget]
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 960.0
+    cy = 957.0
+    enabled = true
+    output = "eDP-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 1.00
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_login_button = true
 
 [nightlight]
 enabled = true
+force = false
+temperature_day = 6500
+temperature_night = 4000
 
 [notification]
-show_app_name = false
-
-[notifications]
-
+background_opacity = 1.00
+collapse_on_dismiss = true
+enable_daemon = true
+layer = "top"
+monitors = []
+offset_x = 20
+offset_y = 8
+position = "top_right"
+scale = 1.0
+show_actions = true
+show_app_name = true
 
 [osd]
-
+background_opacity = 1.00
+monitors = []
+offset_x = 20
+offset_y = 8
 orientation = "vertical"
 position = "bottom_right"
+position_vertical = "bottom_right"
+scale = 1.0
+
+    [osd.kinds]
+    bluetooth = true
+    brightness = true
+    caffeine = true
+    dnd = true
+    keyboard_layout = true
+    lock_keys = true
+    media = false
+    nightlight = true
+    power_profile = true
+    privacy = true
+    volume = true
+    volume_input = true
+    volume_output = true
+    wifi = true
+
+[plugins]
+enabled = [ "noctalia/bongocat", "noctalia/screen_recorder", "shin/lrc", "noctalia/timer", "noctalia/translator" ]
+
+    [[plugins.source]]
+    auto_update = false
+    enabled = true
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    auto_update = false
+    enabled = true
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
 
 [shell]
 app_icon_colorize = true
-avatar_path = "/home/shin/Pictures/homework/ecchi/random-poses/134115683_p34.webp"
+avatar_path = "/home/shin/Pictures/homework/norm/random_wallpaper2.webp"
 clipboard_auto_paste = "off"
-corner_radius_scale = 0.70000001043081284
+clipboard_confirm_clear_history = true
+clipboard_enabled = true
+clipboard_history_max_entries = 100
+clipboard_image_action_command = ""
+corner_radius_scale = 0.69999998807907104
+date_format = "%A, %x"
+disable_mipmaps = false
+external_ip_enabled = false
 font_family = "DejaVu Sans Mono"
 launch_apps_as_systemd_services = true
+launch_apps_custom_command = ""
+middle_click_opens_widget_settings = true
+niri_overview_type_to_launch_enabled = false
+offline_mode = false
 password_style = "random"
 polkit_agent = true
 screen_time_enabled = true
 settings_show_advanced = true
+setup_wizard_enabled = true
+shared_gl_context = true
+show_location = true
 telemetry_enabled = false
-ui_scale = 0.90000000596046448
+time_format = "{:%H:%M}"
+ui_scale = 0.89999997615814209
+
+    [shell.animation]
+    enabled = true
+    speed = 1.0
+
+    [shell.greeter_sync]
+    auto_sync = false
+
+    [shell.launcher]
+    app_grid = false
+    categories = true
+    compact = false
+    session_search = false
+    show_icons = true
+    sort_by_usage = true
+
+        [shell.launcher.dmenu]
+
+    [shell.mpris]
+    blacklist = [ "mpv", "firefox.*" ]
 
     [shell.panel]
+    borders = true
     clipboard_placement = "attached"
+    clipboard_position = "center"
+    control_center_placement = "attached"
+    control_center_position = "auto"
+    floating_offset = 8
     launcher_placement = "attached"
+    launcher_position = "center"
+    open_near_click_clipboard = false
+    open_near_click_control_center = false
+    open_near_click_launcher = false
+    open_near_click_session = false
+    open_near_click_wallpaper = false
+    polkit_placement = "floating"
+    polkit_position = "center"
+    session_placement = "attached"
+    session_position = "auto"
+    shadow = true
+    transparency_mode = "solid"
+    wallpaper_placement = "attached"
+    wallpaper_position = "auto"
+
+    [shell.privacy]
+    cam_filter_regex = ""
+    mic_filter_regex = ""
+    screen_filter_regex = ""
 
     [shell.screen_corners]
+    enabled = true
     size = 1
 
     [shell.screenshot]
+    confirm_region = true
+    copy_to_clipboard = true
     directory = "/home/shin/Pictures/Screenshots"
+    filename_pattern = ""
+    freeze_screen = true
     pipe_command = "swappy"
+    pipe_to_command = false
+    save_to_file = true
+
+    [shell.session.power]
 
     [[shell.session.actions]]
     action = "lock"
+    command = ""
+    countdown_seconds = 0.0
     enabled = true
+    glyph = ""
+    label = ""
     shortcut = "1"
     variant = "default"
 
     [[shell.session.actions]]
     action = "logout"
+    command = ""
+    countdown_seconds = 0.0
     enabled = true
+    glyph = ""
+    label = ""
     shortcut = "2"
     variant = "default"
 
     [[shell.session.actions]]
     action = "lock_and_suspend"
+    command = ""
+    countdown_seconds = 0.0
     enabled = true
+    glyph = ""
     label = "Suspend"
     shortcut = "3"
     variant = "default"
 
     [[shell.session.actions]]
     action = "reboot"
+    command = ""
+    countdown_seconds = 0.0
     enabled = true
+    glyph = ""
+    label = ""
     shortcut = "4"
     variant = "default"
 
     [[shell.session.actions]]
     action = "shutdown"
+    command = ""
+    countdown_seconds = 0.0
     enabled = true
+    glyph = ""
+    label = ""
     shortcut = "5"
     variant = "destructive"
 
     [shell.shadow]
-    alpha = 0.69999998435378075
+    alpha = 0.0
     direction = "center"
 
+[system.monitor]
+cpu_poll_seconds = 2.0
+cpu_temp_activity_threshold = 60.0
+cpu_temp_critical_threshold = 85.0
+cpu_temp_sensor_path = ""
+cpu_usage_activity_threshold = 50.0
+cpu_usage_critical_threshold = 90.0
+disk_pct_activity_threshold = 80.0
+disk_pct_critical_threshold = 95.0
+disk_poll_seconds = 10.0
+enabled = true
+gpu_poll_seconds = 0.0
+gpu_temp_activity_threshold = 60.0
+gpu_temp_critical_threshold = 85.0
+gpu_usage_activity_threshold = 50.0
+gpu_usage_critical_threshold = 95.0
+gpu_vram_activity_threshold = 50.0
+gpu_vram_critical_threshold = 90.0
+memory_poll_seconds = 2.0
+net_rx_activity_threshold = 1.0
+net_rx_critical_threshold = 50.0
+net_tx_activity_threshold = 1.0
+net_tx_critical_threshold = 1.0
+network_poll_seconds = 3.0
+ram_pct_activity_threshold = 60.0
+ram_pct_critical_threshold = 90.0
+swap_pct_activity_threshold = 20.0
+swap_pct_critical_threshold = 80.0
+
 [theme]
-builtin = "Gruvbox"
-community_palette = "Shien"
+builtin = "Kanagawa"
+community_palette = "Miasma"
 custom_palette = "Miasma"
-mode = "light"
+mode = "dark"
 source = "custom"
 wallpaper_scheme = "m3-tonal-spot"
 
     [theme.templates]
-    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "ghostty", "kcolorscheme", "kitty", "niri", "qt", "starship" ]
-    community_ids = [ "spicetify", "zen-browser", "discord", "papirus-icons", "telegram", "yazi" ]
+    builtin_ids = [ "btop", "cava", "foot", "gtk3", "gtk4", "ghostty", "kcolorscheme", "niri", "qt", "starship" ]
+    community_ids = [ "spicetify", "zen-browser", "discord", "telegram", "yazi" ]
     enable_builtin_templates = true
     enable_community_templates = true
 
+        [theme.templates.user.fzf]
+        compare_to = ""
+        enabled = true
+        index = 0
+        input_path = "~/.config/matugen/templates/fzf/fzf-colors.fish"
+        output_path = [ "~/.config/fzf/fzf-colors.fish" ]
+        output_path_dynamic = ""
+        post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
+        pre_hook = ""
+
         [theme.templates.user.starship]
+        compare_to = ""
+        enabled = true
+        index = 0
         input_path = "~/.config/matugen/templates/starship/starship-colors.toml"
-        output_path = "~/.config/starship.toml"
+        output_path = [ "~/.config/starship.toml" ]
+        output_path_dynamic = ""
         post_hook = "bash ~/.local/bin/theme-switch-hook.bash"
+        pre_hook = ""
 
         [theme.templates.user.tmux]
+        compare_to = ""
+        enabled = true
+        index = 0
         input_path = "~/.config/matugen/templates/tmux/tmux-colors.conf"
-        output_path = "~/.config/tmux/theme.conf"
+        output_path = [ "~/.config/tmux/theme.conf" ]
+        output_path_dynamic = ""
         post_hook = "~/.local/bin/tmux-hook.bash"
+        pre_hook = ""
 
         [theme.templates.user.which-key]
+        compare_to = ""
+        enabled = true
+        index = 0
         input_path = "~/.config/matugen/templates/which-key/colors.json"
-        output_path = "~/.config/wlr-which-key/colors.json"
+        output_path = [ "~/.config/wlr-which-key/colors.json" ]
+        output_path_dynamic = ""
         post_hook = "~/.local/bin/which-key.sh"
+        pre_hook = ""
 
 [wallpaper]
 directory = "/home/shin/Pictures"
+directory_dark = ""
+directory_light = ""
+edge_smoothness = 0.30000001192092896
 enabled = true
 fill_color = "#111111"
 fill_mode = "stretch"
-transition = [ "disc", "zoom" ]
+per_monitor_directories = false
+transition = [ "disc", "fade", "wipe", "zoom" ]
+transition_duration = 1500.0
+transition_on_startup = false
 
     [wallpaper.automation]
     enabled = false
-    interval_minutes = 30
+    interval_seconds = 1800
     order = "random"
     recursive = false
 
-    [wallpaper.default]
-    path = "/home/shin/Pictures/homework/ecchi/leaning-boobi/138187398_p36.webp"
-
-    [wallpaper.last]
-    path = "/home/shin/Pictures/homework/ecchi/leaning-boobi/138187398_p36.webp"
-
-    [wallpaper.monitors.eDP-2]
-    path = "/home/shin/Pictures/homework/ecchi/leaning-boobi/138187398_p36.webp"
+[weather]
+effects = true
+enabled = true
+refresh_minutes = 30
+unit = "metric"
 
 [widget.Shin]
 anchor = true
 capsule = true
+capsule_opacity = 1.00
 font_weight = 700
 glyph = ""
 label = "死Shin  "
 scale = 1.05
-scroll_down_command = "noctalia msg volume-down"
-scroll_up_command = "noctalia msg volume-up"
+scroll_down_command = "noctalia msg volume-down 5"
+scroll_up_command = "noctalia msg volume-up 5"
 type = "custom_button"
 
+[widget.active_window]
+icon_size = 14.0
+max_length = 260.0
+min_length = 80.0
+title_scroll = "none"
+type = "active_window"
+
 [widget.audio_visualizer]
+type = "audio_visualizer"
 width = 100.0
 
 [widget.battery]
@@ -280,6 +676,7 @@ capsule = true
 capsule_radius = 0
 hide_when_full = true
 hide_when_plugged = true
+type = "battery"
 
 [widget.bongocat]
 audio_spectrum = true
@@ -288,16 +685,26 @@ script = "scripts/bongocat.lua"
 tappy_mode = true
 type = "scripted"
 
+[widget.cat]
+audio_spectrum = true
+input_devices = [ "/dev/input/by-id/usb-SINO_WEALTH_Gaming_KB-event-kbd" ]
+rave_mode = true
+scale = 1.1000000000000001
+tappy_mode = true
+type = "noctalia/bongocat:cat"
+
 [widget.clock]
 format = """{:%H:%M}
 {:%d/%m}"""
 tooltip_format = "{:%A, %B %d, %Y}"
+type = "clock"
 vertical_format = """{:%H
 %M}"""
 
 [widget.clock-12h]
 capsule = true
-format = "{:%-I:%M %p} - {:%d/%m}"
+capsule_opacity = 1.00
+format = "{:%-I:%M %p} {:%d/%m}"
 tooltip_format = "{:%A, %B %d, %Y}"
 type = "clock"
 
@@ -310,11 +717,14 @@ capsule = true
 capsule_padding = 14.0
 glyph = "navigation-filled"
 scale = 0.90000000000000013
+type = "control-center"
 
 [widget.cpu]
 capsule = true
 scale = 1.05
 show_label = false
+stat = "cpu_usage"
+type = "sysmon"
 
 [widget.custom_button_2]
 capsule = true
@@ -328,14 +738,52 @@ glyph = ""
 label = "|"
 type = "custom_button"
 
+[widget.date]
+format = "{:%a %d %b}"
+type = "clock"
+
+[widget.input_volume]
+device = "input"
+type = "volume"
+
+[widget.keyboard_layout]
+cycle_command = ""
+hide_when_single_layout = false
+type = "keyboard_layout"
+
+[widget.lock_keys]
+display = "short"
+hide_when_off = false
+show_caps_lock = true
+show_num_lock = true
+show_scroll_lock = false
+type = "lock_keys"
+
 [widget.lrc]
+type = "shin/lrc:lrc"
+
+[widget.lrc_2]
 type = "shin/lrc:lrc"
 
 [widget.media]
 art_size = 20.0
 capsule_radius = 0
 max_length = 350
+min_length = 80.0
 title_scroll = "on_hover"
+type = "media"
+
+[widget.network_rx]
+stat = "net_rx"
+type = "sysmon"
+
+[widget.network_tx]
+stat = "net_tx"
+type = "sysmon"
+
+[widget.output_volume]
+device = "output"
+type = "volume"
 
 [widget.pomodoro]
 hot_reload = true
@@ -346,6 +794,11 @@ type = "scripted"
 [widget.ram]
 scale = 1.05
 show_label = false
+stat = "ram_used"
+type = "sysmon"
+
+[widget.recorder]
+type = "noctalia/screen_recorder:recorder"
 
 [widget.screen_recorder]
 color_range = "full"
@@ -362,15 +815,25 @@ type = "scripted"
 [widget.scripted_3]
 type = "scripted"
 
+[widget.spacer]
+type = "spacer"
+
+[widget.temp]
+stat = "cpu_temp"
+type = "sysmon"
+
 [widget.tray]
 capsule = true
+capsule_opacity = 1.00
 drawer = true
 hidden = [ "wayscriber", "blueman", "network" ]
 match_adjacent_spacing = true
+type = "tray"
 
 [widget.volume]
 capsule = true
 show_label = false
+type = "volume"
 
 [widget.workspaces]
 display = "name"
@@ -378,3 +841,4 @@ hide_when_empty = false
 labels_only_when_occupied = true
 max_label_chars = 2
 pill_scale = 0.84999999999999998
+type = "workspaces"
