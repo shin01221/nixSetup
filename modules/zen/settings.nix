@@ -149,6 +149,7 @@ in
 
   # General settings
   "ui.key.accelKey" = 17; # Set CTRL as master key
+  "browser.backspace_action" = 0; # Backspace goes back in history
   "intl.locale.requested" = "en-GB,en-US";
   "browser.tabs.inTitlebar" = 0;
   "browser.aboutConfig.showWarning" = lock-false;

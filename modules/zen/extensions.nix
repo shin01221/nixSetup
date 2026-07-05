@@ -7,6 +7,7 @@
     "addon_darkreader_org-browser-action"
     "_91aa3897-2634-4a8a-9092-279db23a7689_-browser-action"
     "sponsorblock_ajay_app-browser-action"
+    "_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action"
   ];
 
   extensionSettings = {
@@ -36,6 +37,12 @@
       default_area = "menupanel";
       installation_mode = "force_installed";
       install_url = "https://addons.mozilla.org/firefox/downloads/latest/sponsorblock/latest.xpi";
+    };
+    "{d7742d87-e61d-4b78-b8a1-b469842139fa}" = {
+      private_browsing = true;
+      default_area = "menupanel";
+      installation_mode = "force_installed";
+      install_url = "https://addons.mozilla.org/firefox/downloads/latest/vimium-ff/latest.xpi";
     };
   };
 
