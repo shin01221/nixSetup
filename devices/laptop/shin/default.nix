@@ -36,23 +36,26 @@
   networking.hostName = "shin";
   hardware.cpu.amd.updateMicrocode = true;
 
-  boot.kernelModules = [ "i2c_hid" "hid_multitouch" ];
+  boot.kernelModules = [
+    "i2c_hid"
+    "hid_multitouch"
+  ];
 
   workstation = {
     baseline = {
-      enable = true;              # enable baseline config
+      enable = true; # enable baseline config
       userName = "shin";
       packages = {
-        tools = true;             # enable common suite of CLI tools
-        dev = false;               # enable common langs/lang related tools
-        apps = true;              # enable common desktop applications
+        tools = true; # enable common suite of CLI tools
+        dev = false; # enable common langs/lang related tools
+        apps = true; # enable common desktop applications
         themes = true;
       };
-    }; 
-    nixvim.enable = true;         # enable nixvim configuration
-    niri.enable = true;           # change to a different profile if you want
+    };
+    nixvim.enable = true; # enable nixvim configuration
+    niri.enable = true; # change to a different profile if you want
     polkit.enable = true;
-    yazi.enable = true;           # yazi
+    yazi.enable = true; # yazi
     virtualization.enable = true; # enable QEMU/KVM virtualization
     nvidia = {
       enable = true;
@@ -61,15 +64,15 @@
         nvidiaBusId = "PCI:1:0:0";
       };
     };
-    games.enable = true;          # enable gaming support
+    games.enable = true; # enable gaming support
     network = {
-      enable = true;        # enable firewall
-      torProxy.enable = true;  # enable Tor SOCKS proxy for blocked sites
+      enable = true; # enable firewall
+      torProxy.enable = true; # enable Tor SOCKS proxy for blocked sites
     };
-    security.enable = true;       # enable AppArmor
-    services.enable = true;       # enable fstrim, keyring
-    system.enable = true;         # enable nix-index-database, GPG agent
-    memory.enable = true;         # enable zRAM swap + oomd
+    security.enable = true; # enable AppArmor
+    services.enable = true; # enable fstrim, keyring
+    system.enable = true; # enable nix-index-database, GPG agent
+    memory.enable = true; # enable zRAM swap + oomd
     media.enable = true;
 
     # flatpak = {
@@ -82,11 +85,11 @@
   services.openssh.enable = false;
   services.fprintd.enable = false;
 
-age.identityPaths = [ "/home/shin/.ssh/agenix_shin" ];
+  age.identityPaths = [ "/home/shin/.ssh/agenix_shin" ];
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "pnpm-10.29.2" # build-time dep for heroic, vesktop - revisit when nixpkgs updates pnpm
-  ];
+  # nixpkgs.config.permittedInsecurePackages = [
+  #   "pnpm-10.29.2" # build-time dep for heroic, vesktop - revisit when nixpkgs updates pnpm
+  # ];
 
   # symlink agenix key so I can use it in cli
   # system.activationScripts.agenix-cli-identity = ''
