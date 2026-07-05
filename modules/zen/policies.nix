@@ -78,7 +78,7 @@ in
   };
   Proxy =
     let
-      pacFile = pkgs.writeText "proxy.pac" ''
+      pacContent = ''
         function FindProxyForURL(url, host) {
           var proxied = ["nix.dev"];
           for (var i = 0; i < proxied.length; i++) {
@@ -89,10 +89,14 @@ in
           return "DIRECT";
         }
       '';
+      pacFile = pkgs.writeText "proxy.pac" pacContent;
+      pacDataUri = pkgs.runCommandLocal "pac-data-uri" { } ''
+        base64 -w0 < ${pacFile} > $out
+      '';
     in
     {
       Mode = "autoConfig";
-      AutoConfigURL = "file://${pacFile}";
+      AutoConfigURL = "data:application/x-ns-proxy-autoconfig;base64,${builtins.readFile pacDataUri}";
       Locked = false;
     };
   ExtensionSettings = extensions.extensionSettings;
