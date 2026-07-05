@@ -1,0 +1,136 @@
+binds {
+    Mod+Return { spawn "foot"; }
+    Mod+Alt+D { spawn-sh "qs -c noctalia-shell ipc call launcher windows"; }
+    Mod+Shift+Return { spawn "env" "NO_TMUX=1" "foot"; }
+    Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }
+    // Mod+Print { spawn "niri-shot" "-r"; }
+    Mod+Print { spawn-sh "noctalia msg screenshot-region"; }
+    // Mod+Alt+Print { spawn-sh "qs -c noctalia-shell ipc call plugin:screen-toolkit annotateFullscreen"; }
+    Mod+Alt+Print { spawn-sh "noctalia msg screenshot-fullscreen all"; }
+    // Mod+Alt+Print { spawn "niri-shot" "-f"; }
+    Mod+F1 { spawn-sh "pkill -SIGUSR1 wayscriber"; }
+    Mod+Equal{ spawn-sh "noctalia msg volume-up 5"; }
+    Mod+Minus{ spawn-sh "noctalia msg volume-down 5"; }
+    Mod+U { switch-layout "next"; }
+    Mod+Alt+Return { spawn-sh "~/.local/bin/scratchpad.sh foot-dropterm"; }
+    Mod+BracketRight { spawn-sh "playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10+"; }
+    Mod+BracketLeft { spawn-sh "playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10-"; }
+
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86MonBrightnessUp allow-when-locked=true { spawn-sh   "~/.local/bin/brightnesscontrol.sh -i"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "~/.local/bin/brightnesscontrol.sh -d"; }
+
+// window management
+    Mod+O repeat=false { toggle-overview; }
+    Mod+Q repeat=false { close-window; }
+    Mod+Left  { spawn-sh "~/.local/bin/float-tile-niri-navigation.sh left"; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { spawn-sh "~/.local/bin/float-tile-niri-navigation.sh right"; }
+    Mod+H     { focus-column-left; }
+    Mod+L     { focus-column-right; }
+
+    Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Down  { move-window-down; }
+    Mod+Ctrl+Up    { move-window-up; }
+    Mod+Ctrl+Right { move-column-right; }
+    Mod+Ctrl+H     { move-column-left; }
+    Mod+Ctrl+L     { move-column-right; }
+
+    Mod+J     { focus-window-or-workspace-down; }
+    Mod+K     { focus-window-or-workspace-up; }
+    Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
+    Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+Ctrl+Home { move-column-to-first; }
+    Mod+Ctrl+End  { move-column-to-last; }
+
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up        { focus-workspace-up; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+
+    Mod+Shift+J         { move-workspace-down; }
+    Mod+Shift+K         { move-workspace-up; }
+    Mod+Shift+U         { move-workspace-down; }
+    Mod+Shift+I         { move-workspace-up; }
+
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+
+    Mod+Alt+WheelScrollDown      { focus-column-right; }
+    Mod+Alt+WheelScrollUp       { focus-column-left; }
+    Mod+Ctrl+Alt+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Alt+WheelScrollUp  { move-column-left; }
+
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    Mod+Alt+BracketLeft  { consume-or-expel-window-left; }
+    Mod+Alt+BracketRight { consume-or-expel-window-right; }
+
+    Mod+Shift+BracketRight  { consume-window-into-column; }
+    Mod+Shift+BracketLeft { expel-window-from-column; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+Shift+R { quit; }
+    Mod+Ctrl+R { reset-window-height; }
+    Mod+Alt+F { maximize-column; }
+    Mod+F { fullscreen-window; }
+    Mod+Shift+F { expand-column-to-available-width; }
+
+    // Mod+C { center-column; }
+    Mod+Ctrl+C { center-visible-columns; }
+
+    Mod+Alt+H { set-column-width "-6%"; }
+    Mod+Alt+L { set-column-width "+6%"; }
+
+    Mod+Alt+K { set-window-height "-6%"; }
+    Mod+Alt+J { set-window-height "+6%"; }
+
+    Mod+space { spawn-sh "~/.local/bin/niri-floating-toggle.sh"; }
+    Mod+Shift+H { switch-focus-between-floating-and-tiling; }
+    Mod+G { toggle-column-tabbed-display; }
+
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Ctrl+Alt+Delete { quit; }
+    Mod+Shift+P { power-off-monitors; }
+    Mod+backspace { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+T { spawn-sh "~/.local/bin/niri-sidebar toggle-window"; }
+    // wlr_which_key
+    Mod+m { spawn-sh "wlr-which-key -k m niri"; }
+    Mod+n { spawn-sh "wlr-which-key -k n niri"; }
+    Mod+a { spawn-sh "wlr-which-key -k a niri"; }
+    Mod+C { spawn-sh "wlr-which-key -k c niri"; }
+    Mod+s { spawn-sh "wlr-which-key -k s niri"; }
+}

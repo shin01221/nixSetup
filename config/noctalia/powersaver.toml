@@ -1,0 +1,15 @@
+# [shell.animation]
+# enabled = false
+# 
+# [shell.panel]
+# transparency_mode = "solid"
+# 
+# [notifications]
+# background_opacity = 1.0
+# 
+# [dock]
+# background_opacity = 1.0
+# 
+# [bar.main]
+# background_opacity = 1.0
+# capsule_opacity = 1.0

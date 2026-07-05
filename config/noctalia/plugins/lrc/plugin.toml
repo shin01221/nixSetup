@@ -1,0 +1,12 @@
+id = "shin/lrc"
+name = "LRC"
+version = "1.0.0"
+min_noctalia = "5.0.0"
+author = "shin"
+license = "MIT"
+icon = "music"
+description = "Displays current song lyrics via lrc_tty."
+
+[[widget]]
+id = "lrc"
+entry = "widget.luau"

@@ -1,0 +1,88 @@
+prefer-no-csd
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
+}
+cursor {
+    xcursor-theme "Bibata-Modern-Classic"
+    xcursor-size 24
+    hide-when-typing
+    hide-after-inactive-ms 1000
+}
+
+xwayland-satellite {
+    path "xwayland-satellite"
+}
+
+input {
+    keyboard {
+        repeat-rate 50
+        repeat-delay 300
+        xkb {
+            layout "us,ara"
+            options "caps:super"
+        }
+    }
+    touchpad {
+        tap
+        accel-speed 0.3
+        disabled-on-external-mouse
+    }
+    mouse {
+    }
+    focus-follows-mouse max-scroll-amount="30%"
+    workspace-auto-back-and-forth
+}
+
+gestures {
+    hot-corners {
+        off
+    }
+}
+
+output "eDP-1" {
+    variable-refresh-rate on-demand=true
+}
+
+layout {
+    gaps 0
+    center-focused-column "never"
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    focus-ring {
+        off
+        width 2
+    }
+
+    border {
+        off
+        width 2
+    }
+    shadow {
+        on
+        softness 20
+        spread 3
+        draw-behind-window true
+        offset x=2 y=7
+    }
+    tab-indicator {
+        on
+        // hide-when-single-tab
+        place-within-column
+        gap 4
+        width 1
+        length total-proportion=1.0
+        position "right"
+        gaps-between-tabs 2
+        corner-radius 8
+    }
+    insert-hint {
+        on
+    }
+}
+hotkey-overlay {
+    skip-at-startup
+}

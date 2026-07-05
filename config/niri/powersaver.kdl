@@ -1,0 +1,16 @@
+include "transparency.kdl"
+
+animations {
+    workspace-switch {
+        duration-ms 0
+    }
+    horizontal-view-movement {
+        duration-ms 0
+    }
+    window-open {
+        duration-ms 0
+    }
+    window-close {
+        duration-ms 0
+    }
+}

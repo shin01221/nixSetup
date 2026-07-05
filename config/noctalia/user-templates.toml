@@ -1,0 +1,48 @@
+[theme.templates]
+enable_builtin_templates = true
+enable_community_templates = true
+builtin_ids = []
+community_ids = []
+
+[theme.templates.user.tmux]
+input_path = "~/.config/matugen/templates/tmux/tmux-colors.conf"
+output_path = "~/.config/tmux/theme.conf"
+post_hook = "~/.local/bin/tmux-hook.bash"
+
+[theme.templates.user.starship]
+input_path = "~/.config/matugen/templates/starship/starship-colors.toml"
+output_path = "~/.config/starship.toml"
+post_hook = "bash ~/.local/bin/theme-switch-hook.bash"
+
+[theme.templates.user.fzf]
+input_path = "~/.config/matugen/templates/fzf/fzf-colors.fish"
+output_path = "~/.config/fzf/fzf-colors.fish"
+post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
+
+# [templates.kitty]
+# input_path = "~/.config/matugen/templates/kitty/kitty-colors.conf"
+# output_path = "~/.config/kitty/current-theme.conf"
+# post_hook = "pkill -SIGUSR1 kitty"
+
+# [templates.foot]
+# input_path = "~/.config/matugen/templates/foot/foot"
+# output_path = "~/.config/foot/themes/noctalia"
+
+# [templates.kde_colors]
+# input_path = "~/.config/matugen/templates/kde/color.txt"
+# output_path = "~/.local/state/quickshell/user/generated/color.txt"
+# post_hook = "plasma-apply-colorscheme noctalia"
+
+# [templates.hyprland]
+# input_path = "~/.config/matugen/templates/hyprland/colors.conf"
+# output_path = "~/.config/hypr/hyprland/colors.conf"
+
+# [templates.nvim-base16]
+# input_path = "~/.config/nvim/lua/config/matugen-template.lua"
+# output_path = "~/.config/nvim/colors/matugen.lua"
+# post_hook = 'pkill -SIGUSR1 nvim'
+
+[theme.templates.user.which-key]
+input_path = "~/.config/matugen/templates/which-key/colors.json"
+output_path = "~/.config/wlr-which-key/colors.json"
+post_hook = "~/.local/bin/which-key.sh"

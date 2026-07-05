@@ -1,0 +1,18 @@
+window-rule {
+    opacity 1.00
+}
+
+window-rule {
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+layer-rule {
+    opacity 1.0
+    background-effect {
+        blur false
+        xray false
+    }
+}

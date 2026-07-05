@@ -1,0 +1,193 @@
+# Theming
+font: JetBrainsMono Nerd Font 12
+background: "#222222"
+color: "#c2c2b0"
+border: "#c9a554"
+separator: " ➜ "
+border_width: 1
+corner_r: 10
+padding: 15 # Defaults to corner_r
+rows_per_column: 5 # No limit by default
+column_padding: 25 # Defaults to padding
+
+# Anchor and margin
+anchor: bottom-left # One of center, left, right, top, bottom, bottom-left, top-left, etc.
+# Only relevant when anchor is not center
+margin_right: 0
+margin_bottom: 0
+margin_left: 0
+margin_top: 0
+
+# Permits key bindings that conflict with compositor key bindings.
+# Default is `false`.
+inhibit_compositor_keyboard_shortcuts: true
+
+# Try to guess the correct keyboard layout to use. Default is `false`.
+auto_kbd_layout: true
+
+menu:
+  - key: "m"
+    desc: Music&Volume
+    submenu:
+      - key: "."
+        desc: NextSong
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd next
+      - key: ","
+        desc: PreviousSong
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd previous
+      - key: "p"
+        desc: Toggle on/off
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd play-pause
+      - key: "m"
+        desc: Mute
+        cmd: noctalia msg volume-mute
+      - key: "r"
+        desc: RMPC
+        cmd: ~/.local/bin/music.sh rmpc
+      - key: "l"
+        desc: LRC
+        cmd: ~/.local/bin/music.sh lrc
+      - key: "P"
+        desc: MuteMicrophone
+        cmd: noctalia msg mic-mute
+  - key: "n"
+    desc: noctalia-shell
+    submenu:
+      - key: "k" # ControlCenter
+        desc: ShowKeys
+        cmd: qs -c noctalia-shell ipc call plugin:show-keys toggle
+      - key: "c"
+        desc: ControlCenter
+        cmd: noctalia msg panel-toggle control-center
+      - key: "v"
+        desc: Clipboard
+        cmd: noctalia msg panel-toggle clipboard
+      - key: "s"
+        desc: Settings
+        cmd: noctalia msg settings-toggle
+      - key: "b"
+        desc: ToggleBar
+        cmd: noctalia msg bar-toggle
+      - key: "d"
+        desc: Calender
+        cmd: qs -c noctalia-shell ipc call calendar toggle
+      - key: "w"
+        desc: Wallpapers
+        cmd: noctalia msg panel-toggle wallpaper
+      - key: "r"
+        desc: Record
+        cmd: noctalia msg scripted-widget 'screen_recorder' all:main toggle
+      - key: "R"
+        desc: Reload
+        cmd: killall noctalia ; sleep 0.3 && noctalia &
+      - key: "e"
+        desc: Emojis
+        cmd: qs -c noctalia-shell ipc call launcher emoji
+      - key: "t"
+        desc: "Toggle widgets"
+        cmd: qs -c noctalia-shell ipc call desktopWidgets toggle
+      - key: "l"
+        desc: "Toggle dark/light"
+        cmd: noctalia msg theme-mode-toggle
+  - key: "s"
+    desc: Scripts
+    submenu:
+      - key: "z"
+        desc: Zoom
+        cmd: sleep .5 && wooz --invert-scroll
+      - key: "k"
+        desc: ScreenToolkit
+        cmd: qs -c noctalia-shell ipc call plugin:screen-toolkit toggle
+      - key: "o"
+        desc: OCR
+        cmd: qs -c noctalia-shell ipc call plugin:screen-toolkit ocr
+      - key: "m"
+        desc: ToggleMPVAudio
+        cmd: mpv-audio.sh
+      - key: "w"
+        desc: RandomWallpaper
+        cmd: ~/.local/bin/random_wall.sh
+      - key: "d"
+        desc: DeleteCurrentWallpaper
+        cmd: ~/.local/bin/wallpaper-manager.sh --delete
+      - key: "t"
+        desc: ToggleTransparency
+        cmd: ~/.local/bin/niri-transparency-toggle.sh
+  - key: "a"
+    desc: Applaications
+    submenu:
+      - key: "e"
+        desc: Dolphin
+        cmd: dolphin
+      - key: "b"
+        desc: Browser
+        cmd: zen-browser
+      - key: "s"
+        desc: Spotify
+        cmd: spotify
+      - key: "d"
+        desc: Discord
+        cmd: vesktop
+      - key: "t"
+        desc: Telegram
+        cmd: Telegram
+      - key: "o"
+        desc: Obs
+        cmd: obs
+  - key: "c"
+    desc: "ColorSchemes"
+    submenu:
+      - key: "g"
+        desc: Gruvbox
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Gruvbox"
+      - key: "a"
+        desc: Ayu
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Ayu"
+      - key: "e"
+        desc: Everforest
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Everforest"
+      - key: "d"
+        desc: GruberDarker
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Gruber Darker"
+      - key: "o"
+        desc: GruvboxAlt
+        cmd: qs -c noctalia-shell ipc call colorScheme set "GruvboxAlt"
+      - key: "k"
+        desc: Kanagawa
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Kanagawa"
+      - key: "p"
+        desc: KanagawaPaper
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Kanagawa Paper"
+      - key: "l"
+        desc: LilacAmoled
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Lilac AMOLED"
+      - key: "m"
+        desc: Miasma
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Miasma"
+      - key: "b"
+        desc: MonoChrome
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Monochrome"
+      - key: "t"
+        desc: noctalia-shell
+        cmd: qs -c noctalia-shell ipc call colorScheme set "noctalia-shell (default)"
+      - key: "n"
+        desc: Nord
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Nord"
+      - key: "x"
+        desc: Oxide
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Oxide"
+      - key: "u"
+        desc: OccultUmbral
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Occult Umbral"
+      - key: "O"
+        desc: One
+        cmd: qs -c noctalia-shell ipc call colorScheme set "One"
+      - key: "r"
+        desc: Rosepine
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Rose Pine"
+      - key: "v"
+        desc: Vesper
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Vesper"
+      - key: "t"
+        desc: TokyouNight
+        cmd: qs -c noctalia-shell ipc call colorScheme set "Tokyou Night Moon"

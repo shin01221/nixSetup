@@ -1,0 +1,242 @@
+// workspaces
+
+workspace "Comm"
+workspace "Read"
+workspace "Net"
+workspace "Vms"
+
+window-rule {
+    match app-id=r#".*org\.kde\.okular.*"#
+    open-maximized true
+}
+
+window-rule {
+    match app-id=r#".*calibre-ebook-viewer.*|vlc"# title=r#".*E-book viewer.*"#
+    open-maximized true
+}
+
+window-rule {
+    match app-id=r#"org\.freedesktop\.impl\.portal\.desktop\.kde"#
+    open-floating true
+}
+
+window-rule {
+    match is-focused=true
+    focus-ring {
+            on
+            width 1
+    }
+}
+
+window-rule {
+    match app-id=r#"zen"#
+    open-on-workspace "Net"
+    open-maximized true
+}
+
+window-rule {
+    match app-id="^virt-manager$|^Vmware$|^Vmplayer$"
+    opacity 1.00
+    open-on-workspace "Vms"
+    background-effect {
+        blur true
+        xray false
+  }
+}
+
+// window-rule {
+//     match is-focused=true
+//     border {
+//         on
+//         width 2
+//     }
+// }
+
+window-rule {
+    match app-id=r#".*org\.kde\.okular.*"#
+    open-on-workspace "Read"
+}
+
+window-rule {
+    draw-border-with-background false
+}
+
+window-rule {
+    match app-id=r#"vesktop|org\.telegram\.desktop"#
+    open-on-workspace "Comm"
+    default-column-width { proportion 1.00; }
+}
+
+window-rule {
+    geometry-corner-radius 0
+    clip-to-geometry false
+}
+
+window-rule {
+    match is-floating=true
+    geometry-corner-radius 5
+    clip-to-geometry true
+    border {
+            on
+            width 0
+    }
+    default-column-width { fixed 800; }
+    default-window-height { fixed 800; }
+}
+
+// window-rule {
+//     match app-id=r#"org\.telegram\.desktop"#
+//     geometry-corner-radius 0
+//     clip-to-geometry false
+// }
+
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"zen"# title=r#"(?i)save image"#
+    open-floating true
+    default-column-width { fixed 900; }
+    default-window-height { fixed 700; }
+}
+
+window-rule {
+  match app-id=r#"xdg-desktop-portal-gtk"#
+  open-floating true
+  default-column-width { fixed 900; }
+  default-window-height { fixed 700; }
+}
+
+window-rule {
+  match title=r#"Choose\sFiles"#
+  open-floating true
+  default-column-width { fixed 900; }
+  default-window-height { fixed 700; }
+}
+
+window-rule {
+    match app-id=r#"dev.noctalia.Noctalia.Settings"#
+    match app-id=r#"org\.gnome\.Calculator"#
+    open-floating true
+    default-column-width { fixed 900; }
+    default-window-height { fixed 700; }
+}
+
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+    block-out-from "screen-capture"
+}
+
+window-rule {
+    match is-floating=true
+    min-width 100
+    min-height 100
+}
+
+window-rule {
+    match title=r#"calibre\s+-\s+Preferences"#
+    open-floating true
+    default-column-width { fixed 1100; }
+    default-window-height { fixed 800; }
+}
+
+window-rule {
+    match app-id="^foot-dropterm$|^kitty-dropterm$"
+    open-floating true
+    default-floating-position x=0 y=15 relative-to="bottom"
+    default-window-height { proportion 0.5; }
+    default-column-width { proportion 0.6; }
+}
+
+window-rule {
+    match app-id=r#"^com\.obsproject\.Studio$"#
+    min-width 876
+}
+
+window-rule {
+    match app-id=r#"^org\.kde\.ark$|hyprland-share-picker"#
+    open-floating true
+    default-column-width { fixed 780; }
+    default-window-height { fixed 500; }
+}
+
+window-rule {
+    match app-id=r#"^(mpv)$|^(snappergui)$|^(imv)$|^(org\.kde\.gwenview)$|^(org.gnome.Shotwell)$|org\.kde\.kdeconnect\.handler|org\.kde\.kdeconnect\.app|^(kvantummanager)$|^(qt6ct)$|^(qt5ct)$|^(org.gnome.ark)$|^(pavucontrol)$|^(pavucontrol-qt)$|^(org.gnome.FileRoller)$|^(com.gabm.satty)$|^(org\.kde\.partitionmanager)$|^(org\.qbittorrent\.qBittorrent)$"#
+    open-floating true
+    default-column-width { fixed 1200; }
+    default-window-height { fixed 800; }
+}
+
+// block-out
+window-rule {
+    match app-id=r#"(zen|^org\.kde\.dolphin|^mpv$)"# title=r#"(.*[wW]hats[aA]pp.*|.*[iI]nstagram.*|.*[Rr]eddit.*|.*[zZ]en\s*[bB]rowser\s*[pP]rivate\s*[Bb]rowsing.*|.*priv.*|.*\.p.*)"#
+    block-out-from "screencast"
+}
+
+// keep all dolphin window titles rules at the end to overide the main dolphin window rule behaviour on top
+
+window-rule {
+    match title=r#"^Deleting.*"#
+    open-floating true
+    default-column-width { proportion 0.30; }
+    default-window-height { proportion 0.20; }
+}
+
+window-rule {
+    match app-id=r#"^org\.kde\.dolphin$"#
+    open-maximized true
+}
+
+window-rule {
+    match app-id=r#"^deadcells"#
+    open-fullscreen true
+}
+
+window-rule {
+    match app-id=r#"^org\.kde\.dolphin$"# title=r#"^[Cc]ompressing.*[Dd]olphin"#
+    open-floating true
+}
+
+window-rule {
+    match app-id="com.github.niri-shot"
+    open-floating true
+}
+// layer-rule {
+//   match namespace="^noctalia-desktop-widget.*"
+//     background-effect {
+//         blur true
+//         xray false
+//   }
+// }
+layer-rule {
+    match namespace="(^noctalia-osd.*)|(noctalia-notification.*)"
+    opacity 0.9
+    background-effect {
+        xray false
+    }
+}
+
+layer-rule {
+    match namespace="^noctalia-dock.*"
+    background-effect {
+        xray false
+    }
+}
+
+layer-rule {
+  match namespace="^noctalia-wallpaper*"
+  place-within-backdrop true
+}
+
+layout {
+  background-color "transparent"
+}
+
+overview {
+  workspace-shadow {
+    off
+  }
+}

@@ -22,10 +22,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nix.settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    nix.settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      # REMOVED niri.cachix.org — we don't trust it
+    };
 
     nixpkgs.config.allowUnfree = true;
 

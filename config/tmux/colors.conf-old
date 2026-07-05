@@ -1,0 +1,44 @@
+# ─── Matugen TMUX Template (Transparent-Friendly) ───
+
+# Messages
+set -g message-style "fg=white,bg=default,bold"
+
+# Pane borders
+set-option -g pane-border-style "fg=#ffb4a7,bg=default"
+set-option -g pane-active-border-style "fg=#ddc48c,bg=default"
+
+# Status bar colors (transparent background)
+set-option -g status-fg "#f1dfdb"
+set-option -g status-bg default
+set-option -g status-style "fg=#f1dfdb,bg=default"
+
+# Selection mode
+set-option -g mode-style "fg=#1a1110,bg=#ffb4a7"
+
+# Clock
+set-window-option -g clock-mode-colour "#ffb4a7"
+
+# Windows
+set-window-option -g window-status-style "fg=#f1dfdb,bg=default"
+set-window-option -g window-status-activity-style "fg=#f1dfdb,bg=default"
+set-window-option -g window-status-current-style "fg=#ffb4a7,bg=default"
+
+# Formatting
+set-option -g status-left-style none
+set -g status-left-length 60
+set -g status-left ''
+
+set-option -g status-right-style none
+set -g status-right-length 120
+set -g status-right "#[fg=#ffb4a7]#[fg=#1a1110,bg=#ffb4a7] #[fg=#f1dfdb,bg=default] #W #[fg=#e7bdb6]#[fg=#1a1110,bg=#e7bdb6] #[fg=#f1dfdb,bg=default] #S "
+
+set -g window-status-separator "#[bg=default] "
+set -g window-status-current-format "#[fg=#f1dfdb,bg=default] #W #[fg=#1a1110,bg=#ffb4a7] #I#[fg=#ffb4a7,bg=default]"
+set -g window-status-format "#[fg=#f1dfdb,bg=default] #W #[fg=#1a1110,bg=#904b3f] #I#[fg=#904b3f,bg=default]"
+
+# Global window and pane transparency
+set -g window-style 'bg=default'
+set -g window-active-style 'bg=default'
+set -g pane-border-style "bg=default"
+set -g pane-active-border-style "bg=default"
+set -g message-style "bg=default"

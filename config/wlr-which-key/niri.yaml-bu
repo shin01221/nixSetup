@@ -1,0 +1,91 @@
+# Theming
+font: JetBrainsMono Nerd Font 12
+background: "#282828d0"
+color: "#fbf1c7"
+border: "#8ec07c"
+separator: " ➜ "
+border_width: 1
+corner_r: 10
+padding: 15 # Defaults to corner_r
+rows_per_column: 5 # No limit by default
+column_padding: 25 # Defaults to padding
+
+# Anchor and margin
+anchor: bottom-left # One of center, left, right, top, bottom, bottom-left, top-left, etc.
+# Only relevant when anchor is not center
+margin_right: 0
+margin_bottom: 0
+margin_left: 0
+margin_top: 0
+
+# Permits key bindings that conflict with compositor key bindings.
+# Default is `false`.
+inhibit_compositor_keyboard_shortcuts: true
+
+# Try to guess the correct keyboard layout to use. Default is `false`.
+auto_kbd_layout: true
+
+menu:
+  - key: "m"
+    desc: Music&Volume
+    submenu:
+      - key: "."
+        desc: NextSong
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd next
+      - key: ","
+        desc: PreviousSong
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd previous
+      - key: "p"
+        desc: Toggle on/off
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd play-pause
+      - key: "]"
+        desc: Seek+
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10+
+      - key: "["
+        desc: Seek-
+        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10-
+      - key: "="
+        desc: VolumeUp
+        cmd: wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ -l 1.5
+      - key: "-"
+        desc: VolumeDown
+        cmd: wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-
+  - key: "n"
+    desc: Noctalia
+    submenu:
+      - key: "c"
+        desc: ControlCenter
+        cmd: qs -c noctalia ipc call controlCenter toggle
+      - key: "v"
+        desc: Clipboard
+        cmd: qs -c noctalia ipc call launcher clipboard
+      - key: "s"
+        desc: Settings
+        cmd: qs -c noctalia ipc call settings toggle
+      - key: "b"
+        desc: ToggleBar
+        cmd: qs -c noctalia ipc call bar toggle
+      - key: "d"
+        desc: Calender
+        cmd: qs -c noctalia ipc call calendar toggle
+      - key: "w"
+        desc: Wallpapers
+        cmd: qs -c noctalia ipc call wallpaper toggle
+      - key: "i"
+        desc: SessionMenu
+        cmd: qs -c noctalia ipc call sessionMenu toggle
+      - key: "r"
+        desc: Record
+        cmd: qs -c noctalia ipc call plugin:screen-recorder toggle
+      - key: "R"
+        desc: Reload
+        cmd: killall qs quickshell; qs -c noctalia &
+  - key: "a"
+    desc: Applaications
+    submenu:
+      - key: "d"
+        desc: Dolphin
+        cmd: dolphin
+      - key: "b"
+        desc: Browser
+        cmd: zen-browser

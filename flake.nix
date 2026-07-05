@@ -94,26 +94,26 @@
             home-managerU.nixosModules.home-manager
             agenix.nixosModules.default
             {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                extraSpecialArgs = {
-                  inherit
-                    self
-                    inputs
-                    userName
-                    homeDir
-                    ;
-                };
-                sharedModules = [
-                  (
-                    { osConfig, ... }:
-                    {
-                      _module.args.hostName = osConfig.networking.hostName;
-                    }
-                  )
-                ];
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  backupFileExtension = "backup";
+                  extraSpecialArgs = {
+                    inherit
+                      self
+                      inputs
+                      userName
+                      homeDir
+                      ;
+                  };
+                  sharedModules = [
+                    (
+                      { osConfig, ... }:
+                      {
+                        _module.args.hostName = osConfig.networking.hostName;
+                      }
+                    )
+                  ];
                 users.${userName} = {
                   imports = hmImports;
                 };

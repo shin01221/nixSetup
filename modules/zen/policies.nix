@@ -80,7 +80,7 @@ in
     let
       pacContent = ''
         function FindProxyForURL(url, host) {
-          var proxied = ["nix.dev"];
+          var proxied = ["nix.dev", "protondb.com", "protonvpn.com", "proton.me", "protonmail.com", "protonstatus.com"];
           for (var i = 0; i < proxied.length; i++) {
             if (dnsDomainIs(host, proxied[i]) || host == proxied[i]) {
               return "SOCKS5 127.0.0.1:9050";
