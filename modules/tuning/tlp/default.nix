@@ -1,21 +1,26 @@
-{ ... }:
-{
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave"; # schedutil powersave, ondemand
+{ config, lib, ... }:
+let
+  cfg = config.workstation.tuning.tlp;
+in {
+  options.workstation.tuning.tlp.enable = lib.mkEnableOption "TLP power management";
 
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power"; # power, balance_power
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+  config = lib.mkIf cfg.enable {
+    services.tlp = {
+      enable = true;
+      settings = {
+        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
 
-      CPU_MIN_PERF_ON_AC = 0;
-      CPU_MAX_PERF_ON_AC = 100;
-      CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 50;
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
-      # Protect battery (Ideapad uses binary conservation mode 0/1)
-      STOP_CHARGE_THRESH_BAT0 = 0;
+        CPU_MIN_PERF_ON_AC = 0;
+        CPU_MAX_PERF_ON_AC = 100;
+        CPU_MIN_PERF_ON_BAT = 0;
+        CPU_MAX_PERF_ON_BAT = 50;
+
+        STOP_CHARGE_THRESH_BAT0 = 0;
+      };
     };
   };
 }

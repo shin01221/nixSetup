@@ -73,7 +73,6 @@
       mkWorkstation =
         {
           deviceModule,
-          hmImports,
           userName ? "shin",
         }:
         let
@@ -115,7 +114,7 @@
                     )
                   ];
                 users.${userName} = {
-                  imports = hmImports;
+                  imports = [ ./home ];
                 };
               };
             }
@@ -123,7 +122,7 @@
         };
 
       mkServer =
-        { deviceModule, hmImports }:
+        { deviceModule }:
         libS.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -149,7 +148,7 @@
                   )
                 ];
                 users.shin = {
-                  imports = hmImports;
+                  imports = [ ];
                 };
               };
             }
@@ -161,23 +160,6 @@
         shin = mkWorkstation {
           deviceModule = ./devices/laptop/shin/default.nix;
           userName = "shin";
-          hmImports = [
-            ./home/common.nix
-            ./home/fish.nix
-            ./home/scripts.nix
-            ./home/theming.nix
-            ./home/niri.nix
-            ./home/dolphin
-            ./home/audio.nix
-            ./home/obs-studio.nix
-            ./home/xdg.nix
-            ./home/spotify.nix
-            ./home/foot.nix
-            ./home/ghostty.nix
-            ./home/wlr-which-key.nix
-            ./home/tmux.nix
-            ./home/noctalia.nix
-          ];
         };
       };
     };

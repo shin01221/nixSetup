@@ -7,16 +7,7 @@
 }:
 let
   cfg = config.workstation.kde;
-  background-package = pkgs.stdenvNoCC.mkDerivation {
-    name = "background-image";
-    src = ../pics/nix2.png;
-    dontUnpack = true;
-    installPhase = ''
-      cp $src $out
-    '';
-  };
-in
-{
+in {
   options.workstation.kde.enable = lib.mkEnableOption "KDE Plasma-based workstation environment";
 
   config = lib.mkIf cfg.enable {
@@ -50,10 +41,6 @@ in
     environment.systemPackages = with pkgs; [
       tokyonight-gtk-theme
       rose-pine-cursor
-      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-        [General]
-        background = "${background-package}"
-      '')
     ];
   };
 }

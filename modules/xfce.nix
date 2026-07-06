@@ -23,7 +23,7 @@ in
       elementary-xfce-icon-theme
     ];
 
-    xserver = {
+    services.xserver = {
       enable = true;
       desktopManager.xfce.enable = true;
 
@@ -35,9 +35,6 @@ in
             name = "Graphite-Dark";
             package = pkgs.graphite-gtk-theme;
           };
-          extraConfig = ''
-            default-user-image=/usr/share/pixmaps/gumbo-face.png
-          '';
         };
       };
     };

@@ -2,7 +2,7 @@
 {
   force = true;
   default = "Brave";
-  privateDefault = "google";
+  privateDefault = "Brave";
   order = [
     "Searx"
     "Brave"

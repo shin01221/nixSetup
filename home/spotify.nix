@@ -66,6 +66,7 @@ in
       $SPICE config spotify_path "$SPOTIFY_MUTABLE"
       $SPICE config current_theme Comfy
       $SPICE config color_scheme Comfy
+      $SPICE restore backup 2>/dev/null || true
       $SPICE backup apply
     fi
 
@@ -84,6 +85,8 @@ in
     # Fix wrapper to launch mutable .spotify-wrapped instead of nix store one
     if [ -f "$SPOTIFY_MUTABLE/spotify" ]; then
       sed -i "s|/nix/store/[^/]*/share/spotify/\.spotify-wrapped|$SPOTIFY_MUTABLE/.spotify-wrapped|g" "$SPOTIFY_MUTABLE/spotify"
+      # Fix shebang — use env to avoid stale nix store paths after GC
+      sed -i '1s|#!/nix/store/[^/]*/bin/bash.*|#!/usr/bin/env bash|' "$SPOTIFY_MUTABLE/spotify"
     fi
 
     # Symlink the mutable spotify into ~/.local/bin so it's found first in PATH

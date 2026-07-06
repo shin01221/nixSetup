@@ -9,27 +9,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../../modules/baseline.nix
-    # ../../../modules/flatpak.nix
-    ../../../modules/niri.nix
-    ../../../modules/nixvim
-    ../../../modules/packages.nix
-    ../../../modules/yazi.nix
-    ../../../modules/virtualization.nix
-    ../../../modules/polkit.nix
-    ../../../modules/zen
-    ../../../modules/audio
-    ../../../modules/hardware/nvidia.nix
-    ../../../modules/hardware/touchpad.nix
-    ../../../modules/hardware/media/sound.nix
-    ../../../modules/games
-    ../../../modules/network
-    ../../../modules/security
-    ../../../modules/services
-    ../../../modules/system
-    ../../../modules/memory
-    ../../../modules/tuning/tlp
-    ../../../modules/media
+    ../../../modules
   ];
 
   # hostname
@@ -74,6 +54,32 @@
     system.enable = true; # enable nix-index-database, GPG agent
     memory.enable = true; # enable zRAM swap + oomd
     media.enable = true;
+    audio.enable = true;
+    touchpad.enable = true;
+    sound.enable = true;
+    zen.enable = true;
+    tuning.tlp.enable = true;
+
+    # Home-manager toggles (all opt-in)
+    home = {
+      fish = true;
+      scripts = true;
+      theming = true;
+      tmux = {
+        enable = true;
+        sessionx.enable = false;
+      };
+      spotify = true;
+      xdg = true;
+      obs-studio = true;
+      foot = true;
+      ghostty = true;
+      dolphin = true;
+      niri = true;
+      noctalia = true;
+      wlr-which-key = true;
+      audio = true;
+    };
 
     # flatpak = {
     #   enable = true;
@@ -83,7 +89,7 @@
   };
 
   # tmux: enable all plugins except sessionx on this host
-  home-manager.users.shin.programs.nix-tmux.plugins.sessionx.enable = false;
+  # (moved to tmux.nix until we add a proper workstation.tmux option)
 
   services.openssh.enable = false;
   services.fprintd.enable = false;

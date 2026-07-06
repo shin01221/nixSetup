@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.workstation.hypr;
+  userName = config.workstation.baseline.userName or "shin";
 in
 {
   options.workstation.hypr.enable = lib.mkEnableOption "Hyprland-based workstation environment";
@@ -27,7 +28,7 @@ in
         };
         initial_session = {
           command = "uwsm start hyprland-uwsm.desktop";
-          user = "shin";
+          user = userName;
         };
       };
     };

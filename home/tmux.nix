@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 let
   inherit (builtins) readFile;
@@ -516,7 +516,7 @@ in {
       sessionx = {
         enable = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = osConfig.workstation.home.tmux.sessionx.enable or true;
           description = "Enable tmux-sessionx (fuzzy session manager)";
         };
 

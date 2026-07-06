@@ -108,8 +108,7 @@ let
     neovide
     handbrake
   ];
-in
-{
+in {
   options.workstation.baseline.packages = {
     tools = lib.mkEnableOption "CLI tools and utilities";
     dev = lib.mkEnableOption "Development tools";
@@ -117,13 +116,13 @@ in
     apps = lib.mkEnableOption "Desktop applications";
   };
 
-  config = {
+  config = lib.mkIf (cfg.tools || cfg.dev || cfg.themes || cfg.apps) {
     environment.systemPackages =
-      (lib.optionals cfg.tools toolsPackages)
-      ++ (lib.optionals cfg.dev devPackages)
-      ++ (lib.optionals cfg.themes themePackages)
-      ++ (lib.optionals cfg.apps appsPackages);
+      lib.optionals cfg.tools toolsPackages
+      ++ lib.optionals cfg.dev devPackages
+      ++ lib.optionals cfg.themes themePackages
+      ++ lib.optionals cfg.apps appsPackages;
 
-    services.udev.packages = [ pkgs.libmtp ];
+    services.udev.packages = lib.optionals cfg.apps [ pkgs.libmtp ];
   };
 }
