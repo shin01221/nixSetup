@@ -37,7 +37,7 @@ in
 
   xdg.desktopEntries."spotify" = {
     name = "Spotify";
-    exec = "spotify %U";
+    exec = "${config.home.homeDirectory}/.local/bin/spotify %U";
     terminal = false;
     categories = [ "Audio" "Music" "Player" "AudioVideo" ];
     mimeType = [ "x-scheme-handler/spotify" ];
