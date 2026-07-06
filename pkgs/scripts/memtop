@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+count=${1:-5}
+ps aux --sort=-%mem | awk -v c="$count" 'NR>c+1 {exit} NR>1 {
+    pid=$2;
+    mem=$6;
+    cmd=$11;
+    for(i=12;i<=NF;i++) cmd=cmd" "$i;
+    split(cmd, arr, " ");
+    name=arr[1];
+    threads=0;
+    ppid=0;
+    while ((getline line < ("/proc/" pid "/status")) > 0) {
+        if (line ~ /^Threads:/) {
+            split(line, a, "\t");
+            threads = a[2];
+        }
+        if (line ~ /^PPid:/) {
+            split(line, a, "\t");
+            ppid = a[2];
+        }
+    }
+    close("/proc/" pid "/status");
+    printf "%s %s %7.1fMB\n", pid, name, mem/1024
+}'

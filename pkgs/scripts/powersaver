@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+noctaliaConf="$HOME/.config/noctalia"
+niriConf="$HOME/.config/niri/override.kdl"
+powersaverNoctalia="$noctaliaConf/powersaver.toml"
+
+# fallback: rg -> grep, sd -> sed
+if command -v rg &>/dev/null; then
+    GREP="rg"
+else
+    GREP="grep"
+fi
+
+if command -v sd &>/dev/null; then
+    SD="sd"
+else
+    SD="sed"
+fi
+
+inline_sub() {
+    local pattern="$1" replacement="$2" file="$3"
+    if [ "$SD" = "sd" ]; then
+        sd "$pattern" "$replacement" "$file"
+    else
+        sed -i "s|$pattern|$replacement|" "$file"
+    fi
+}
+
+inline_append() {
+    local after="$1" line="$2" file="$3"
+    if [ "$SD" = "sd" ]; then
+        sd "$after" "$after\n$line" "$file"
+    else
+        sed -i "/$after/a\\$line" "$file"
+    fi
+}
+
+has_line() {
+    local pattern="$1" file="$2"
+    if [ "$GREP" = "rg" ]; then
+        rg -q "$pattern" "$file"
+    else
+        grep -q "$pattern" "$file"
+    fi
+}
+
+noctalia_conf_write() {
+    mkdir -p "$noctaliaConf"
+    cat >"$powersaverNoctalia" <<'EOF'
+[shell.animation]
+enabled = false
+
+[shell.panel]
+transparency_mode = "solid"
+
+[notifications]
+background_opacity = 1.0
+
+[dock]
+background_opacity = 1.0
+
+[bar.main]
+background_opacity = 1.0
+capsule_opacity = 1.0
+EOF
+}
+
+noctalia_conf_on() {
+    if [ -f "$powersaverNoctalia" ]; then
+        inline_sub '^# ' '' "$powersaverNoctalia"
+    else
+        noctalia_conf_write
+    fi
+}
+
+noctalia_conf_off() {
+    [ -f "$powersaverNoctalia" ] && inline_sub '^' '# ' "$powersaverNoctalia"
+}
+
+set_brightness() {
+    if is_on_battery; then
+        brightnessctl --device amdgpu_bl1 s 30%
+    else
+        brightnessctl --device amdgpu_bl1 s 100%
+    fi
+}
+
+is_on_battery() {
+    local ac_online
+    ac_online=$(cat /sys/class/power_supply/AC*/online 2>/dev/null)
+    [ "$ac_online" != "1" ]
+}
+
+powersaver_on() {
+    if ! has_line 'powersaver\.kdl' "$niriConf"; then
+        inline_append 'include "noctalia.kdl"' 'include "powersaver.kdl"' "$niriConf"
+        noctalia_conf_write
+    elif has_line '//.*"powersaver\.kdl"' "$niriConf"; then
+        inline_sub '//.*"powersaver\.kdl".*' 'include "powersaver.kdl"' "$niriConf"
+        noctalia_conf_on
+    else
+        return # already on
+    fi
+    set_brightness
+    echo "powersaver ON"
+}
+
+powersaver_off() {
+    if has_line '//.*"powersaver\.kdl"' "$niriConf"; then
+        return # already off
+    elif has_line 'powersaver\.kdl' "$niriConf"; then
+        inline_sub 'include "powersaver\.kdl"' '// include "powersaver.kdl"' "$niriConf"
+        noctalia_conf_off
+        brightnessctl --device amdgpu_bl1 s 100%
+        echo "powersaver OFF"
+    fi
+}
+
+if [ ! -f "$niriConf" ]; then
+    echo "niri config not found: $niriConf" >&2
+    exit 1
+fi
+
+case "${1:-toggle}" in
+on | 1 | enable) powersaver_on ;;
+off | 0 | disable) powersaver_off ;;
+toggle | *)
+    if has_line '//.*"powersaver\.kdl"' "$niriConf"; then
+        powersaver_on
+    else
+        powersaver_off
+    fi
+    ;;
+esac

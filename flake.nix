@@ -164,6 +164,7 @@
           hmImports = [
             ./home/common.nix
             ./home/fish.nix
+            ./home/scripts.nix
             ./home/theming.nix
             ./home/niri.nix
             ./home/dolphin

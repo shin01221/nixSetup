@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Wrapper script for playerctl compatibility
+# Place this in ~/.local/bin/playerctl-mpv-wrapper or ~/.config/systemd/user/
+
+SCRIPT="${HOME}/.local/bin/mpv-audio.sh"
+
+case "${1:-}" in
+    play-pause)
+        "$SCRIPT" play-pause
+        ;;
+    play)
+        "$SCRIPT" play
+        ;;
+    pause)
+        "$SCRIPT" pause
+        ;;
+    stop)
+        "$SCRIPT" stop
+        ;;
+    status)
+        "$SCRIPT" status
+        ;;
+    *)
+        echo "Usage: $0 {play-pause|play|pause|stop|status}"
+        exit 1
+        ;;
+esac

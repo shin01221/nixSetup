@@ -39,10 +39,10 @@ menu:
         cmd: noctalia msg volume-mute
       - key: "r"
         desc: RMPC
-        cmd: ~/.local/bin/music.sh rmpc
+        cmd: music.sh rmpc
       - key: "l"
         desc: LRC
-        cmd: ~/.local/bin/music.sh lrc
+        cmd: music.sh lrc
       - key: "P"
         desc: MuteMicrophone
         cmd: noctalia msg mic-mute
@@ -102,13 +102,13 @@ menu:
         cmd: mpv-audio.sh
       - key: "w"
         desc: RandomWallpaper
-        cmd: ~/.local/bin/random_wall.sh
+        cmd: random_wall.sh
       - key: "d"
         desc: DeleteCurrentWallpaper
-        cmd: ~/.local/bin/wallpaper-manager.sh --delete
+        cmd: wallpaper-manager.sh --delete
       - key: "t"
         desc: ToggleTransparency
-        cmd: ~/.local/bin/niri-transparency-toggle.sh
+        cmd: niri-transparency-toggle.sh
   - key: "a"
     desc: Applaications
     submenu:
