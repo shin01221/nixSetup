@@ -19,6 +19,9 @@ in
   config = lib.mkIf cfg.enable {
     programs.niri.enable = true;
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdg.portal.config = {
+      common.default = "gtk";
+    };
 
     qt = {
       enable = true;

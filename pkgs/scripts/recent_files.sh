@@ -96,7 +96,7 @@ selected=$(printf '%s\n' "$files" |
     fzf --multi \
         --prompt="Recent files> " \
         --height=80% \
-        --preview="fzf_preview.sh $(printf '%q' "$search_dir")/{}" \
+        --preview="[ -d $(printf '%q' "$search_dir")/{} ] || fzf_preview.sh $(printf '%q' "$search_dir")/{}" \
         --preview-window='right:70%:border:wrap')
 
 [ -z "$selected" ] && exit 0

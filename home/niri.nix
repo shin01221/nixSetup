@@ -131,7 +131,7 @@ let
           Mod+Equal{ spawn-sh "noctalia msg volume-up 5"; }
           Mod+Minus{ spawn-sh "noctalia msg volume-down 5"; }
           Mod+U { switch-layout "next"; }
-          Mod+Alt+Return { spawn-sh "~/.local/bin/scratchpad.sh foot-dropterm"; }
+          Mod+Alt+Return { spawn-sh "scratchpad.sh foot-dropterm"; }
           Mod+BracketRight { spawn-sh "playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10+"; }
           Mod+BracketLeft { spawn-sh "playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10-"; }
 
@@ -143,16 +143,16 @@ let
           XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
           XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
           XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
-          XF86MonBrightnessUp allow-when-locked=true   { spawn-sh "~/.local/bin/brightnesscontrol.sh -i"; }
-          XF86MonBrightnessDown allow-when-locked=true { spawn-sh "~/.local/bin/brightnesscontrol.sh -d"; }
+          XF86MonBrightnessUp allow-when-locked=true   { spawn-sh "brightnesscontrol.sh -i"; }
+          XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnesscontrol.sh -d"; }
 
       // ── Window Management ──
           Mod+O repeat=false { toggle-overview; }
           Mod+Q repeat=false { close-window; }
-          Mod+Left  { spawn-sh "~/.local/bin/float-tile-niri-navigation.sh left"; }
+          Mod+Left  { spawn-sh "float-tile-niri-navigation.sh left"; }
           Mod+Down  { focus-window-down; }
           Mod+Up    { focus-window-up; }
-          Mod+Right { spawn-sh "~/.local/bin/float-tile-niri-navigation.sh right"; }
+          Mod+Right { spawn-sh "float-tile-niri-navigation.sh right"; }
           Mod+H     { focus-column-left; }
           Mod+L     { focus-column-right; }
 
@@ -236,7 +236,7 @@ let
           Mod+Alt+K { set-window-height "-6%"; }
           Mod+Alt+J { set-window-height "+6%"; }
 
-          Mod+space { spawn-sh "~/.local/bin/niri-floating-toggle.sh"; }
+          Mod+space { spawn-sh "niri-floating-toggle.sh"; }
           Mod+Shift+H { switch-focus-between-floating-and-tiling; }
           Mod+G { toggle-column-tabbed-display; }
 
@@ -244,7 +244,7 @@ let
           Ctrl+Alt+Delete { quit; }
           Mod+Shift+P { power-off-monitors; }
           Mod+backspace { spawn-sh "noctalia msg panel-toggle session"; }
-          Mod+T { spawn-sh "~/.local/bin/niri-sidebar toggle-window"; }
+          Mod+T { spawn-sh "niri-sidebar toggle-window"; }
 
       // ── WLR Which Key ──
           Mod+m { spawn-sh "wlr-which-key -k m niri"; }
@@ -700,6 +700,7 @@ in
     QT_QPA_PLATFORM = "wayland";
     XDG_MENU_PREFIX = "plasma-";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    GTK_USE_PORTAL = "1";
     GTK_IM_MODULE = "simple";
     XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "24";

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "$HOME/.local/bin/functions.sh"
+source "$(dirname "$0")/functions.sh"
 
 usage() {
 	cat <<EOF

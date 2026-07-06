@@ -148,6 +148,7 @@ in
   "permissions.default.xr" = 2; # Virtual Reality
 
   # General settings
+  "widget.use-xdg-desktop-portal" = 1; # Use portal file picker (access /Media etc.)
   "ui.key.accelKey" = 17; # Set CTRL as master key
   "browser.backspace_action" = 0; # Backspace goes back in history
   "intl.locale.requested" = "en-GB,en-US";
