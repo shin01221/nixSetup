@@ -88,17 +88,10 @@
     # };
   };
 
-  # tmux: enable all plugins except sessionx on this host
-  # (moved to tmux.nix until we add a proper workstation.tmux option)
-
   services.openssh.enable = false;
   services.fprintd.enable = false;
 
   age.identityPaths = [ "/home/shin/.ssh/agenix_shin" ];
-
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   "pnpm-10.29.2" # build-time dep for heroic, vesktop - revisit when nixpkgs updates pnpm
-  # ];
 
   # symlink agenix key so I can use it in cli
   # system.activationScripts.agenix-cli-identity = ''
