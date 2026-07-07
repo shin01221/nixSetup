@@ -162,7 +162,7 @@
                     }
                   )
                 ];
-                users.shin = {
+                users.${userName} = {
                   imports = [ ./home ];
                 };
               };
@@ -175,6 +175,10 @@
         shin = mkWorkstation {
           deviceModule = ./devices/laptop/shin/default.nix;
           userName = "shin";
+        };
+        node1 = mkServer {
+          deviceModule = ./devices/server/node1/default.nix;
+          userName = "node1";
         };
       };
     };

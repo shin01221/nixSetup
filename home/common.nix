@@ -9,8 +9,8 @@
 
 {
   home = {
-    username = userName;
-    homeDirectory = homeDir;
+    username = lib.mkDefault userName;
+    homeDirectory = lib.mkDefault homeDir;
     stateVersion = "25.05";
   };
 

@@ -52,18 +52,10 @@ in
       ];
     } // lib.optionalAttrs cfg.minimal {
       plugins = {
-        # Disable heavy UI
+        # Disable heavy UI (keep bufferline, lualine, noice, notify)
         alpha.enable = lib.mkForce false;
-        bufferline.enable = lib.mkForce false;
-        noice.enable = lib.mkForce false;
-        notify.enable = lib.mkForce false;
-        lualine.enable = lib.mkForce false;
         precognition.enable = lib.mkForce false;
         toggleterm.enable = lib.mkForce false;
-
-        # Disable completion
-        blink-cmp.enable = lib.mkForce false;
-        friendly-snippets.enable = lib.mkForce false;
 
         # Disable debug
         dap.enable = lib.mkForce false;
