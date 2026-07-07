@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  isServer ? false,
   ...
 }:
 let
@@ -148,13 +149,17 @@ in
       starship init fish | source
       direnv hook fish | source
       zoxide init fish | source
-      atuin init fish --disable-up-arrow | source
-      bind k _atuin_search
-      bind \cr _atuin_search
-      bind -M insert \cr _atuin_search
+      ${lib.optionalString (!isServer) ''
+        atuin init fish --disable-up-arrow | source
+        bind k _atuin_search
+        bind \cr _atuin_search
+        bind -M insert \cr _atuin_search
+      ''}
 
-      # Auto-start tmux
-      tmux-set
+      ${lib.optionalString (!isServer) ''
+        # Auto-start tmux
+        tmux-set
+      ''}
 
       # fzf colors from matugen
       function _reload_fzf_colors --on-variable _fzf_colors_reload

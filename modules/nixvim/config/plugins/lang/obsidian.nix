@@ -1,3 +1,7 @@
+{ config, lib, ... }:
+let
+  inherit (lib) mkIf;
+in
 {
   plugins.obsidian = {
     enable = true;
@@ -50,7 +54,7 @@
     };
   };
 
-  extraConfigLua = ''
+  extraConfigLua = mkIf config.plugins.obsidian.enable ''
     local keymap = vim.keymap
     keymap.set("n", "<leader>o", "", { desc = "+obsidian" })
     keymap.set("n", "<leader>of", "", { desc = "+formatting" })

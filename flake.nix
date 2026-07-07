@@ -109,7 +109,10 @@
                     (
                       { osConfig, ... }:
                       {
-                        _module.args.hostName = osConfig.networking.hostName;
+                        _module.args = {
+                          hostName = osConfig.networking.hostName;
+                          isServer = osConfig.server.baseline.enable or false;
+                        };
                       }
                     )
                   ];
@@ -122,15 +125,22 @@
         };
 
       mkServer =
-        { deviceModule }:
+        { deviceModule, userName ? "shin" }:
+        let
+          homeDir = "/home/${userName}";
+        in
         libS.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit self inputs;
+          };
           modules = [
             deviceModule
             disko.nixosModules.disko
             agenix.nixosModules.default
             ./modules/baseline.server.nix
+            ./modules/home-options.nix
+            ./modules/nixvim
             ./modules/ssh.nix
             home-managerS.nixosModules.home-manager
             {
@@ -138,17 +148,22 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "backup";
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = {
+                  inherit self inputs userName homeDir;
+                };
                 sharedModules = [
                   (
                     { osConfig, ... }:
                     {
-                      _module.args.hostName = osConfig.networking.hostName;
+                      _module.args = {
+                        hostName = osConfig.networking.hostName;
+                        isServer = osConfig.server.baseline.enable or false;
+                      };
                     }
                   )
                 ];
                 users.shin = {
-                  imports = [ ];
+                  imports = [ ./home ];
                 };
               };
             }

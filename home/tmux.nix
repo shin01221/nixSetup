@@ -1,4 +1,4 @@
-{ config, pkgs, lib, osConfig, ... }:
+{ config, pkgs, lib, osConfig, isServer ? false, ... }:
 
 let
   inherit (builtins) readFile;
@@ -111,8 +111,10 @@ let
     ++ [ "# ── Reset ──" ]
     ++ [ "source-file ~/.config/tmux/tmux.reset.conf" ]
     ++ [ "" ]
-    ++ [ "# ── Session tracking ──" ]
-    ++ [ ''set-hook -g client-session-changed "run-shell 'current=\$(tmux display-message -p \"#S\"); case \"\$current\" in scratch-*) ;; *) mkdir -p ~/.local/state; echo \"\$current\" > ~/.local/state/tmux_last_session;; esac'"'' ]
+    ++ optionals (!isServer) [
+      "# ── Session tracking ──"
+      ''set-hook -g client-session-changed "run-shell 'current=\$(tmux display-message -p \"#S\"); case \"\$current\" in scratch-*) ;; *) mkdir -p ~/.local/state; echo \"\$current\" > ~/.local/state/tmux_last_session;; esac'"''
+    ]
     ++ [ "" ]
     ++ [ "# ── Prefix ──" ]
     ++ [ "set-option -g prefix ${cfg.prefix}" ]
@@ -201,8 +203,10 @@ let
     ++ [ "# ── Plugins ──" ]
     ++ mapAttrsToList (name: pcfg: mkPluginLine name) enabledPlugins
     ++ [ "" ]
-    ++ [ "# ── Theme ──" ]
-    ++ [ "source-file ~/.config/tmux/theme.conf" ]
+    ++ optionals (!isServer) [
+      "# ── Theme ──"
+      "source-file ~/.config/tmux/theme.conf"
+    ]
     ++ [ "" ]
     ++ optionals (cfg.plugins.tpm.enable or false) [
       "# Initialize TPM"
@@ -365,7 +369,7 @@ in {
 
     enableSesh = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = !isServer;
       description = "Enable sesh session manager integration";
     };
 
@@ -492,7 +496,7 @@ in {
       fzf-url = {
         enable = lib.mkOption {
           type = lib.types.bool;
-          default = true;
+          default = !isServer;
           description = "Enable tmux-fzf-url (fzf URL opener)";
         };
 
@@ -558,11 +562,11 @@ in {
 
     # ── Activation: copy theme if absent ──────────────────────
 
-    home.activation.ensureTmuxTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    home.activation.ensureTmuxTheme = lib.mkIf (!isServer) (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if [ ! -f "$HOME/.config/tmux/theme.conf" ]; then
         install -Dm644 ${cfg.themeSource} "$HOME/.config/tmux/theme.conf"
       fi
-    '';
+    '');
 
     # ── Activation: symlink enabled plugins ──────────────────
 
