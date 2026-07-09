@@ -7,11 +7,24 @@
 }:
 let
   cfg = config.server.baseline;
+  userName = cfg.userName;
 in
 {
-  options.server.baseline.enable = lib.mkEnableOption "Baseline server configuration";
+  options.server.baseline = {
+    enable = lib.mkEnableOption "Baseline server configuration";
+
+    userName = lib.mkOption {
+      type = lib.types.str;
+      description = "Primary user account name";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
+    users.users.${userName} = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ];
+    };
+
     nix.settings.experimental-features = [
       "nix-command"
       "flakes"
@@ -69,10 +82,13 @@ in
       autojump
       compose2nix
       jq
-      screen
+      tmux
       eza
+      neovim
       vim
       python3
+      zoxide
+      fish
     ];
 
     services = {
@@ -80,6 +96,6 @@ in
       qemuGuest.enable = true;
     };
 
-     system.stateVersion = "25.05";
+    system.stateVersion = "25.05";
   };
 }

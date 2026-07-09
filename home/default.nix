@@ -22,7 +22,6 @@ in {
     ++ lib.optional (e "dolphin")    ./dolphin
     ++ lib.optional (e "bash")       ./bash.nix
     ++ lib.optional (e "zsh")        ./zsh.nix
-    ++ lib.optional (e "server")     ./server.nix
     ++ lib.optional (e "steam")      ./steam.nix
     ++ lib.optional (e "kde")        ./kde.nix
     ++ lib.optional (e "hypr")       ./hypr.nix

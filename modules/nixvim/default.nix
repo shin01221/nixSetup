@@ -51,6 +51,7 @@ in
         ./config
       ];
     } // lib.optionalAttrs cfg.minimal {
+      version.enableNixpkgsReleaseCheck = false;
       plugins = {
         # Disable heavy UI (keep bufferline, lualine, noice, notify)
         alpha.enable = lib.mkForce false;
@@ -60,6 +61,8 @@ in
         # Disable debug
         dap.enable = lib.mkForce false;
         dap-virtual-text.enable = lib.mkForce false;
+        dap-ui.enable = lib.mkForce false;
+        dap-python.enable = lib.mkForce false;
 
         # Disable editor extras
         yanky.enable = lib.mkForce false;

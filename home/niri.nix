@@ -317,15 +317,6 @@ let
           geometry-corner-radius 9
       }
     ''
-
-    # ── Floating Noctalia settings ──
-    ''
-      window-rule {
-        match app-id="dev.noctalia.noctalia-qs"
-        open-floating true
-      }
-    ''
-
     # ── No blur/opacity on media viewers ──
     ''
       window-rule {
@@ -482,7 +473,7 @@ let
     # Settings apps → floating
     ''
       window-rule {
-          match app-id=r#"dev.noctalia.Noctalia.Settings"#
+          match app-id=r#"dev.noctalia.Noctalia"#
           match app-id=r#"org\.gnome\.Calculator"#
           open-floating true
           default-column-width { fixed 900; }
@@ -688,6 +679,7 @@ in
   );
 
   home.pointerCursor = {
+    enable = true;
     gtk.enable = true;
     x11.enable = true;
     package = pkgs.bibata-cursors;

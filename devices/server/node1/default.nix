@@ -6,14 +6,10 @@
 
   networking.hostName = "node1";
 
-  users.users.node1 = {
-    isNormalUser = true;
-    group = "node1";
-    extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = [ ];
+  server.baseline = {
+    enable = true;
+    userName = "node1";
   };
-
-  users.groups.node1 = { };
 
   workstation = {
     home = {

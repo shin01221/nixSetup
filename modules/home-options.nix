@@ -28,7 +28,6 @@
     noctalia = lib.mkEnableOption "Noctalia shell config";
     wlr-which-key = lib.mkEnableOption "WLR which key config";
     audio = lib.mkEnableOption "MPD/audio config";
-    server = lib.mkEnableOption "Server HM config";
     steam = lib.mkEnableOption "Steam Big Picture HM";
     kde = lib.mkEnableOption "KDE Plasma HM";
     hypr = lib.mkEnableOption "Hyprland HM";
