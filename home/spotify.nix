@@ -49,70 +49,42 @@ in
     SPOTIFY_MUTABLE="$HOME/.local/share/spicetify/Spotify"
     EXTENSIONS_DIR="$HOME/.config/spicetify/Extensions"
     SPICE_CONFIG="$HOME/.config/spicetify/config-xpui.ini"
+    STAMP="$HOME/.config/spicetify/.stamp"
 
-    # Symlink extension files from nix store (only if missing)
+    NEW_STAMP="$(md5sum "$SPOTIFY_STORE/spotify" 2>/dev/null | cut -d' ' -f1)-$(echo ${lib.concatStringsSep "-" (builtins.attrValues spicetifyExtensions)})"
+    if [ -f "$STAMP" ] && [ "$(cat "$STAMP")" = "$NEW_STAMP" ]; then
+      exit 0
+    fi
+
+    # Symlink extension files from nix store
     mkdir -p "$EXTENSIONS_DIR"
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: path: ''
-      if [ ! -f "$EXTENSIONS_DIR/${name}" ]; then
-        ln -sf "${path}" "$EXTENSIONS_DIR/${name}"
-      fi
+      ln -sf "${path}" "$EXTENSIONS_DIR/${name}"
     '') spicetifyExtensions)}
 
-    # Check if the mutable copy is stale or missing (use md5sum since nix store mtime=1)
-    NEEDS_COPY=0
-    if [ ! -f "$SPOTIFY_MUTABLE/spotify" ]; then
-      NEEDS_COPY=1
-    else
-      STORE_HASH=$(md5sum "$SPOTIFY_STORE/spotify" 2>/dev/null | cut -d' ' -f1)
-      MUTABLE_HASH=$(md5sum "$SPOTIFY_MUTABLE/spotify" 2>/dev/null | cut -d' ' -f1)
-      if [ "$STORE_HASH" != "$MUTABLE_HASH" ]; then
-        NEEDS_COPY=1
-      fi
-    fi
-    if [ "$NEEDS_COPY" = 1 ]; then
-      rm -rf "$SPOTIFY_MUTABLE"
-      cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
-      chmod -R u+w "$SPOTIFY_MUTABLE"
-      $SPICE config spotify_path "$SPOTIFY_MUTABLE"
-      $SPICE config current_theme Comfy
-      $SPICE config color_scheme Comfy
-    fi
+    rm -rf "$SPOTIFY_MUTABLE"
+    cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
+    chmod -R u+w "$SPOTIFY_MUTABLE"
+    $SPICE config spotify_path "$SPOTIFY_MUTABLE"
+    $SPICE config current_theme Comfy
+    $SPICE config color_scheme Comfy
 
-    # Always try to restore + backup apply (handles stale/corrupted backups)
-    $SPICE restore backup 2>/dev/null || true
-    $SPICE backup apply 2>/dev/null || {
-      # If backup apply failed, do a fresh copy and try again
-      rm -rf "$SPOTIFY_MUTABLE"
-      cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
-      chmod -R u+w "$SPOTIFY_MUTABLE"
-      $SPICE config spotify_path "$SPOTIFY_MUTABLE"
-      $SPICE config current_theme Comfy
-      $SPICE config color_scheme Comfy
-      $SPICE backup apply
-    }
+    $SPICE backup apply 2>/dev/null || true
 
-    # Configure extensions and apply (only if not already set)
-    CHANGED=0
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: _: ''
-      if ! grep -q "${name}" "$SPICE_CONFIG" 2>/dev/null; then
-        $SPICE config extensions "${name}"
-        CHANGED=1
-      fi
+      $SPICE config extensions "${name}" 2>/dev/null || true
     '') spicetifyExtensions)}
-    if [ "$CHANGED" = 1 ]; then
-      $SPICE apply
-    fi
+    $SPICE apply
 
     # Fix wrapper to launch mutable .spotify-wrapped instead of nix store one
-    # (spicetify backup apply regenerates the wrapper with store paths)
     if [ -f "$SPOTIFY_MUTABLE/spotify" ]; then
       sed -i "s|/nix/store/[^/]*/share/spotify/\.spotify-wrapped|$SPOTIFY_MUTABLE/.spotify-wrapped|g" "$SPOTIFY_MUTABLE/spotify"
-      # Fix shebang — handle both "#!/nix" and "#! /nix" formats
       sed -i '1s|#! */nix/store/[^/]*/bin/bash.*|#!/usr/bin/env bash|' "$SPOTIFY_MUTABLE/spotify"
     fi
 
-    # Symlink the mutable spotify into ~/.local/bin so it's found first in PATH
     mkdir -p "$HOME/.local/bin"
     ln -sf "$SPOTIFY_MUTABLE/spotify" "$HOME/.local/bin/spotify"
+
+    echo "$NEW_STAMP" > "$STAMP"
   '';
 }

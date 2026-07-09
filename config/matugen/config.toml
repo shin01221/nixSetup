@@ -1,0 +1,67 @@
+# [config]
+# version_check = false
+#
+# [templates.foot]
+# input_path = "~/.config/matugen/templates/foot/foot"
+# output_path = "~/.config/foot/themes/noctalia"
+# post_hook = "pkill -SIGUSR1 foot"
+#
+# [templates.rmpc]
+# input_path = "~/.config/matugen/templates/rmpc/colors.ron"
+# output_path = "~/.config/rmpc/themes/colors.ron"
+#
+# [templates.starship]
+# input_path = "~/.config/matugen/templates/starship/starship-colors.toml"
+# output_path = "~/.config/starship.toml"
+# # post_hook = "~/.local/bin/fix-illogical-tmux.bash"
+#
+# [templates.Telegram]
+# input_path = "~/.config/matugen/templates/telegram/telegram-colors.tdesktop-theme"
+# output_path = "~/.config/telegram-desktop/themes/material-you.tdesktop-theme"
+#
+# [templates.m3colors]
+# input_path = "~/.config/matugen/templates/colors.json"
+# output_path = "~/.local/state/quickshell/user/generated/colors.json"
+#
+# [templates.hyprland]
+# input_path = "~/.config/matugen/templates/hyprland/colors.conf"
+# output_path = "~/.config/hypr/hyprland/colors.conf"
+#
+# [templates.hyprlock]
+# input_path = "~/.config/matugen/templates/hyprland/hyprlock-colors.conf"
+# output_path = "~/.config/hypr/hyprlock/colors.conf"
+#
+# [templates.fuzzel]
+# input_path = "~/.config/matugen/templates/fuzzel/fuzzel_theme.ini"
+# output_path = "~/.config/fuzzel/fuzzel_theme.ini"
+#
+[templates.fzf]
+input_path = "~/.config/matugen/templates/fzf/fzf-colors.fish"
+output_path = "~/.config/fzf/fzf-colors.fish"
+post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
+
+
+# [templates.gtk3]
+# input_path = "~/.config/matugen/templates/gtk-3.0/gtk.css"
+# output_path = "~/.config/gtk-3.0/gtk.css"
+#
+# [templates.vesktop]
+# input_path = "/etc/xdg/quickshell/noctalia/Assets/Templates/vesktop.css"
+# output_path = "~/.config/vesktop/themes/noctalia.theme.css"
+#
+# [templates.cava]
+# input_path = "/etc/xdg/quickshell/noctalia/Assets/Templates/cava.ini"
+# output_path = "~/.config/cava/themes/noctalia"
+# post_hook = "pkill -USR1 cava"
+#
+# [templates.gtk4]
+# input_path = "~/.config/matugen/templates/gtk-4.0/gtk.css"
+# output_path = "~/.config/gtk-4.0/gtk.css"
+#
+# [templates.kde_colors]
+# input_path = "~/.config/matugen/templates/kde/color.txt"
+# output_path = "~/.local/state/quickshell/user/generated/color.txt"
+#
+# [templates.wallpaper]
+# input_path = "~/.config/matugen/templates/wallpaper.txt"
+# output_path = "~/.local/state/quickshell/user/generated/wallpaper/path.txt"

@@ -9,6 +9,7 @@ in {
     ++ lib.optional (e "fish")       ./fish.nix
     ++ lib.optional (e "scripts")    ./scripts.nix
     ++ lib.optional (e "niri")       ./niri.nix
+    ++ lib.optional (e "matugen")    ./matugen.nix
     ++ lib.optional (e "noctalia")   ./noctalia.nix
     ++ lib.optional (e "wlr-which-key") ./wlr-which-key.nix
     ++ lib.optional (e "theming")    ./theming.nix

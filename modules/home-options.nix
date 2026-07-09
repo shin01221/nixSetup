@@ -25,6 +25,7 @@
 
     # Coupled to system options — defaults set below via mkDefault
     niri = lib.mkEnableOption "Niri WM config";
+    matugen = lib.mkEnableOption "Matugen config";
     noctalia = lib.mkEnableOption "Noctalia shell config";
     wlr-which-key = lib.mkEnableOption "WLR which key config";
     audio = lib.mkEnableOption "MPD/audio config";

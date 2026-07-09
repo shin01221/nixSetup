@@ -76,6 +76,7 @@
       ghostty = true;
       dolphin = true;
       niri = true;
+      matugen = true;
       noctalia = true;
       wlr-which-key = true;
       audio = true;
