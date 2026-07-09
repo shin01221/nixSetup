@@ -236,13 +236,13 @@ in {
 
     defaultTerminal = lib.mkOption {
       type = lib.types.str;
-      default = "xterm-kitty";
+      default = "tmux-256color";
       description = "Default terminal type for tmux";
     };
 
     terminalOverrides = lib.mkOption {
       type = lib.types.str;
-      default = ",xterm-kitty:RGB";
+      default = ",tmux-256color:RGB";
       description = "Terminal overrides for tmux";
     };
 
