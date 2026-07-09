@@ -7,12 +7,12 @@ community_ids = []
 [theme.templates.user.tmux]
 input_path = "~/.config/matugen/templates/tmux/tmux-colors.conf"
 output_path = "~/.config/tmux/theme.conf"
-post_hook = "~/.local/bin/tmux-hook.bash"
+post_hook = "tmux-hook.bash"
 
 [theme.templates.user.starship]
 input_path = "~/.config/matugen/templates/starship/starship-colors.toml"
 output_path = "~/.config/starship.toml"
-post_hook = "bash ~/.local/bin/theme-switch-hook.bash"
+post_hook = "theme-switch-hook.bash"
 
 [theme.templates.user.fzf]
 input_path = "~/.config/matugen/templates/fzf/fzf-colors.fish"
@@ -45,4 +45,4 @@ post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
 [theme.templates.user.which-key]
 input_path = "~/.config/matugen/templates/which-key/colors.json"
 output_path = "~/.config/wlr-which-key/colors.json"
-post_hook = "~/.local/bin/which-key.sh"
+post_hook = "which-key.sh"

@@ -58,17 +58,38 @@ in
       fi
     '') spicetifyExtensions)}
 
-    # Check if the mutable copy is stale or missing
-    if [ ! -f "$SPOTIFY_MUTABLE/spotify" ] || [ "$SPOTIFY_STORE/spotify" -nt "$SPOTIFY_MUTABLE/spotify" ] 2>/dev/null; then
+    # Check if the mutable copy is stale or missing (use md5sum since nix store mtime=1)
+    NEEDS_COPY=0
+    if [ ! -f "$SPOTIFY_MUTABLE/spotify" ]; then
+      NEEDS_COPY=1
+    else
+      STORE_HASH=$(md5sum "$SPOTIFY_STORE/spotify" 2>/dev/null | cut -d' ' -f1)
+      MUTABLE_HASH=$(md5sum "$SPOTIFY_MUTABLE/spotify" 2>/dev/null | cut -d' ' -f1)
+      if [ "$STORE_HASH" != "$MUTABLE_HASH" ]; then
+        NEEDS_COPY=1
+      fi
+    fi
+    if [ "$NEEDS_COPY" = 1 ]; then
       rm -rf "$SPOTIFY_MUTABLE"
       cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
       chmod -R u+w "$SPOTIFY_MUTABLE"
       $SPICE config spotify_path "$SPOTIFY_MUTABLE"
       $SPICE config current_theme Comfy
       $SPICE config color_scheme Comfy
-      $SPICE restore backup 2>/dev/null || true
-      $SPICE backup apply
     fi
+
+    # Always try to restore + backup apply (handles stale/corrupted backups)
+    $SPICE restore backup 2>/dev/null || true
+    $SPICE backup apply 2>/dev/null || {
+      # If backup apply failed, do a fresh copy and try again
+      rm -rf "$SPOTIFY_MUTABLE"
+      cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
+      chmod -R u+w "$SPOTIFY_MUTABLE"
+      $SPICE config spotify_path "$SPOTIFY_MUTABLE"
+      $SPICE config current_theme Comfy
+      $SPICE config color_scheme Comfy
+      $SPICE backup apply
+    }
 
     # Configure extensions and apply (only if not already set)
     CHANGED=0
@@ -83,10 +104,11 @@ in
     fi
 
     # Fix wrapper to launch mutable .spotify-wrapped instead of nix store one
+    # (spicetify backup apply regenerates the wrapper with store paths)
     if [ -f "$SPOTIFY_MUTABLE/spotify" ]; then
       sed -i "s|/nix/store/[^/]*/share/spotify/\.spotify-wrapped|$SPOTIFY_MUTABLE/.spotify-wrapped|g" "$SPOTIFY_MUTABLE/spotify"
-      # Fix shebang — use env to avoid stale nix store paths after GC
-      sed -i '1s|#!/nix/store/[^/]*/bin/bash.*|#!/usr/bin/env bash|' "$SPOTIFY_MUTABLE/spotify"
+      # Fix shebang — handle both "#!/nix" and "#! /nix" formats
+      sed -i '1s|#! */nix/store/[^/]*/bin/bash.*|#!/usr/bin/env bash|' "$SPOTIFY_MUTABLE/spotify"
     fi
 
     # Symlink the mutable spotify into ~/.local/bin so it's found first in PATH
