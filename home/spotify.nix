@@ -1,6 +1,7 @@
 { pkgs, config, lib, ... }:
 
 let
+  spicetify-bin = pkgs.callPackage ../pkgs/spicetify-bin { };
   spicetifyExtensions = {
     "shuffle+.js" = pkgs.fetchurl {
       name = "shuffle+.js";
@@ -32,7 +33,7 @@ in
 {
   home.packages = with pkgs; [
     spotify
-    spicetify-cli
+    spicetify-bin
   ];
 
   xdg.desktopEntries."spotify" = {
@@ -44,7 +45,7 @@ in
   };
 
   home.activation.setup-spicetify = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    SPICE="${pkgs.spicetify-cli}/bin/spicetify"
+    SPICE="${spicetify-bin}/bin/spicetify"
     SPOTIFY_STORE="${pkgs.spotify}/share/spotify"
     SPOTIFY_MUTABLE="$HOME/.local/share/spicetify/Spotify"
     EXTENSIONS_DIR="$HOME/.config/spicetify/Extensions"
