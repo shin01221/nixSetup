@@ -1,4 +1,4 @@
-{ self, lib, config, pkgs, ... }:
+{ lib, config, ... }:
 let
   extensions = import ./extensions.nix { inherit lib config; };
 in
@@ -76,29 +76,27 @@ in
     ExtensionRecommendations = false;
     SkipOnboarding = true;
   };
-  Proxy =
-    let
-      pacContent = ''
-        function FindProxyForURL(url, host) {
-          var proxied = ["nix.dev", "protondb.com", "protonvpn.com", "proton.me", "protonmail.com", "protonstatus.com"];
-          for (var i = 0; i < proxied.length; i++) {
-            if (dnsDomainIs(host, proxied[i]) || host == proxied[i]) {
-              return "SOCKS5 127.0.0.1:9050";
-            }
+  Proxy = let
+    pacContent = ''
+      function FindProxyForURL(url, host) {
+        var proxied = ["nix.dev", "protondb.com", "protonvpn.com", "proton.me", "protonmail.com", "protonstatus.com"];
+        for (var i = 0; i < proxied.length; i++) {
+          if (dnsDomainIs(host, proxied[i]) || host == proxied[i]) {
+            return "SOCKS5 127.0.0.1:9050";
           }
-          return "DIRECT";
         }
-      '';
-      pacFile = pkgs.writeText "proxy.pac" pacContent;
-      pacDataUri = pkgs.runCommandLocal "pac-data-uri" { } ''
-        base64 -w0 < ${pacFile} > $out
-      '';
-    in
-    {
-      Mode = "autoConfig";
-      AutoConfigURL = "data:application/x-ns-proxy-autoconfig;base64,${builtins.readFile pacDataUri}";
-      Locked = false;
-    };
+        return "DIRECT";
+      }
+    '';
+    urlEncoded = builtins.replaceStrings
+      ["%" "\n" "\r" " " "\""]
+      ["%25" "%0A" "%0D" "%20" "%22"]
+      pacContent;
+  in {
+    Mode = "autoConfig";
+    AutoConfigURL = "data:application/x-ns-proxy-autoconfig,${urlEncoded}";
+    Locked = false;
+  };
   ExtensionSettings = extensions.extensionSettings;
   "3rdparty".Extensions = extensions.extensionConfig;
 }

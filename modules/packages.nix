@@ -106,9 +106,10 @@ let
     kdePackages.kio-extras
     libmtp
     neovide
-    handbrake
+    # handbrake
   ];
-in {
+in
+{
   options.workstation.baseline.packages = {
     tools = lib.mkEnableOption "CLI tools and utilities";
     dev = lib.mkEnableOption "Development tools";
