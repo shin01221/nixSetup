@@ -75,7 +75,7 @@ menu:
         cmd: noctalia msg scripted-widget 'screen_recorder' all:main toggle
       - key: "R"
         desc: Reload
-        cmd: killall noctalia ; sleep 0.3 && noctalia &
+        cmd: killall .noctalia-wrapp ; sleep 0.3 && noctalia &
       - key: "e"
         desc: Emojis
         cmd: qs -c noctalia-shell ipc call launcher emoji

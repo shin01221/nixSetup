@@ -11,6 +11,7 @@ let
   toolsPackages = with pkgs; [
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     # yubikey-manager
+    hyprpicker
     nh
     wget
     sesh
