@@ -13,7 +13,7 @@
   ];
 
   # hostname
-  networking.hostName = "shin";
+  networking.hostName = "nixos";
   hardware.cpu.amd.updateMicrocode = true;
 
   boot.kernelModules = [

@@ -72,7 +72,7 @@ menu:
         cmd: noctalia msg panel-toggle wallpaper
       - key: "r"
         desc: Record
-        cmd: noctalia msg scripted-widget 'screen_recorder' all:main toggle
+        cmd: noctalia msg plugin noctalia/screen_recorder:service all toggle
       - key: "R"
         desc: Reload
         cmd: killall .noctalia-wrapp ; sleep 0.3 && noctalia &
