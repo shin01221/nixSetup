@@ -1,4 +1,15 @@
 { pkgs, ... }:
+let
+  cendre = pkgs.vimUtils.buildVimPlugin {
+    name = "cendre";
+    src = pkgs.fetchFromGitHub {
+      owner = "Aejkatappaja";
+      repo = "cendre";
+      rev = "f62d04d09e126cbac944d87f852908303172654e";
+      sha256 = "sha256-eW4lHrN2mRl/4omxZBqicFajMU/Vwwvc/7UhNBr5fg0=";
+    };
+  };
+in
 {
   colorschemes.catppuccin = {
     enable = true;
@@ -49,6 +60,7 @@
   };
 
   extraPlugins = with pkgs.vimPlugins; [
+    cendre
     gruvbox-nvim
     rose-pine
     tokyonight-nvim
