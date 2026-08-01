@@ -16,11 +16,12 @@ in
       ghosttyConfig = pkgs.writeText "ghostty-config" (
         ''
           font-family = DejaVu Sans Mono
-          font-size = 10
-          window-padding-x = 14
-          window-padding-y = 14
+          font-size = 11
+          window-padding-x = 3
+          window-padding-y = 3
           confirm-close-surface = false
-        '' + lib.optionalString (osConfig.workstation.niri.enable or false) "\ntheme = noctalia\n"
+        ''
+        + lib.optionalString (osConfig.workstation.niri.enable or false) "\ntheme = noctalia\n"
       );
     in
     ''

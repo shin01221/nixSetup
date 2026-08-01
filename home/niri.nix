@@ -121,7 +121,7 @@ let
     # ── Keybinds ─────────────────────────────────────────────────
     ''
       binds {
-          Mod+Return { spawn "foot"; }
+          Mod+Return { spawn "ghostty"; }
           Mod+Alt+D { spawn-sh "qs -c noctalia-shell ipc call launcher windows"; }
           Mod+Shift+Return { spawn "env" "NO_TMUX=1" "foot"; }
           Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }

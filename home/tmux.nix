@@ -214,6 +214,7 @@ let
     ]
     ++ [ "" ]
     ++ [ "set -g allow-passthrough ${if cfg.allowPassthrough then "on" else "off"}" ]
+    ++ optionals (cfg.allowPassthrough) [ "set-environment -g SNACKS_GHOSTTY true" ]
     ++ optionals (cfg.extraConfig != "") [ "" cfg.extraConfig ]
     ;
 

@@ -82,6 +82,7 @@ in
         devdocs.enable = lib.mkForce false;
         glance.enable = lib.mkForce false;
         img-clip.enable = lib.mkForce false;
+        image.enable = lib.mkForce false;
         overseer.enable = lib.mkForce false;
         refactoring.enable = lib.mkForce false;
         package-info.enable = lib.mkForce false;
