@@ -1,16 +1,16 @@
-{ config
-, lib
-, pkgs
-, inputs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
 }:
 let
   cfg = config.workstation.yazi;
 in
 {
 
-  options.workstation.yazi.enable =
-    lib.mkEnableOption "Yazi configuration";
+  options.workstation.yazi.enable = lib.mkEnableOption "Yazi configuration";
 
   config = lib.mkIf cfg.enable {
     programs.yazi = {
@@ -22,13 +22,13 @@ in
             4
             3
           ];
-          sort_by = "natural";
-          sort_sensitive = true;
-          sort_reverse = false;
-          sort_dir_first = true;
+          sort-by = "natural";
+          sort-sensitive = true;
+          sort-reverse = false;
+          sort-dir-first = true;
           linemode = "none";
-          show_hidden = "show";
-          show_symlink = "show";
+          show-hidden = "show";
+          show-symlink = "show";
         };
       };
     };

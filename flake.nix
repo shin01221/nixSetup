@@ -50,6 +50,8 @@
       flake = false;
     };
 
+    wayscrollshot.url = "github:jswysnemc/wayscrollshot";
+
   };
 
   outputs =

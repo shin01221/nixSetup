@@ -13,6 +13,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      (pkgs.callPackage ../../pkgs/nvidia-offload { })
       heroic
       lutris
       steam-run

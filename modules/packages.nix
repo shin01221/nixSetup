@@ -62,9 +62,11 @@ let
     slurp
     screen
     gh
-    speedtest
     unzip
     parallel
+    man-pages
+    swappy
+    inputs.wayscrollshot.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   devPackages = with pkgs; [
@@ -97,6 +99,7 @@ let
     kdePackages.okular
     kdePackages.gwenview
     kdePackages.ark
+    p7zip
     opencode
     wayscriber
     gparted-full

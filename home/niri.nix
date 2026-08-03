@@ -127,6 +127,8 @@ let
           Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }
           Mod+Print { spawn-sh "noctalia msg screenshot-region"; }
           Mod+Alt+Print { spawn-sh "noctalia msg screenshot-fullscreen all"; }
+          Ctrl+Print { spawn-sh "mkdir -p /home/shin/Pictures/Screenshots && wayscrollshot -o /home/shin/Pictures/Screenshots/wayscrollshot-$(date +%Y-%m-%d_%H-%M-%S).png"; }
+          Ctrl+Shift+Print { spawn-sh "mkdir -p /home/shin/Pictures/Screenshots && wayscrollshot -o /tmp/wss.png && swappy -f /tmp/wss.png -o /home/shin/Pictures/Screenshots/wayscrollshot-$(date +%Y-%m-%d_%H-%M-%S).png; rm -f /tmp/wss.png"; }
           Mod+F1 { spawn-sh "pkill -SIGUSR1 wayscriber"; }
           Mod+Equal{ spawn-sh "noctalia msg volume-up 5"; }
           Mod+Minus{ spawn-sh "noctalia msg volume-down 5"; }

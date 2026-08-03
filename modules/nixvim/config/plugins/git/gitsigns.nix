@@ -1,4 +1,9 @@
 {
+  config,
+  lib,
+  ...
+}:
+{
   plugins = {
     gitsigns = {
       enable = true;
@@ -6,7 +11,7 @@
       lazyLoad.settings.event = "DeferredUIEnter";
 
       settings = {
-        trouble = true;
+        trouble = lib.mkIf config.plugins.trouble.enable true;
         current_line_blame = false;
       };
     };
