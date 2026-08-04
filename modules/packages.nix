@@ -70,12 +70,16 @@ let
   ];
 
   devPackages = with pkgs; [
-    rustup
-    cargo
-    gcc
-    rustlings
-    terraform
-    distrobox
+    # rustup
+    # cargo
+    # gcc
+    # rustlings
+    # terraform
+    # distrobox
+    python3
+    devenv
+    minikube
+    kubectl
   ];
 
   themePackages = with pkgs; [

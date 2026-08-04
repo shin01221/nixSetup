@@ -27,7 +27,7 @@
       userName = "shin";
       packages = {
         tools = true; # enable common suite of CLI tools
-        dev = false; # enable common langs/lang related tools
+        dev = true; # enable common langs/lang related tools
         apps = true; # enable common desktop applications
         themes = true;
       };
@@ -116,6 +116,8 @@
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
+    dockerSocket.enable = true;
+    defaultNetwork.settings.dns_enabled = true;
   };
 
   environment.systemPackages = with pkgs; [
