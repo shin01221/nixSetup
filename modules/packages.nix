@@ -78,6 +78,7 @@ let
     # distrobox
     python3
     devenv
+    ansible
     minikube
     kubectl
   ];

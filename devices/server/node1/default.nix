@@ -16,7 +16,10 @@
       tmux.enable = true;
       fish = true;
     };
-    nixvim.enable = true;
+    nixvim = {
+      enable = true;
+      servers.ansiblels = true;
+    };
   };
 
   system.stateVersion = "25.05";

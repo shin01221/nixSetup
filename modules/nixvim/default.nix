@@ -20,6 +20,9 @@ in
       default = false;
       description = "Minimal nvim without heavy UI, most LSPs, and non-essential plugins";
     };
+    servers = {
+      ansiblels = lib.mkEnableOption "ansiblels language server";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -49,6 +52,8 @@ in
 
       imports = [
         ./config
+      ] ++ lib.optionals cfg.servers.ansiblels [
+        ./config/plugins/lang/ansible.nix
       ];
     } // lib.optionalAttrs cfg.minimal {
       version.enableNixpkgsReleaseCheck = false;
