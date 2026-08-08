@@ -17,6 +17,7 @@
     spotify = lib.mkEnableOption "Spotify/spicetify";
     xdg = lib.mkEnableOption "XDG MIME and user-dirs";
     obs-studio = lib.mkEnableOption "OBS Studio config";
+    obsidian = lib.mkEnableOption "Obsidian config";
     foot = lib.mkEnableOption "Foot terminal config";
     ghostty = lib.mkEnableOption "Ghostty terminal config";
     dolphin = lib.mkEnableOption "Dolphin file manager";

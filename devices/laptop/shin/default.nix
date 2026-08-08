@@ -72,6 +72,7 @@
       spotify = true;
       xdg = true;
       obs-studio = true;
+      obsidian = true;
       foot = true;
       ghostty = true;
       dolphin = true;

@@ -90,7 +90,6 @@ let
 
   appsPackages = with pkgs; [
     telegram-desktop
-    yubioath-flutter
     vesktop
     evtest
     kdePackages.dolphin.out

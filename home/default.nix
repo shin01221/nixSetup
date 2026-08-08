@@ -18,6 +18,7 @@ in {
     ++ lib.optional (e "spotify")    ./spotify.nix
     ++ lib.optional (e "xdg")        ./xdg.nix
     ++ lib.optional (e "obs-studio") ./obs-studio.nix
+    ++ lib.optional (e "obsidian") ./obsidian.nix
     ++ lib.optional (e "foot")       ./foot.nix
     ++ lib.optional (e "ghostty")    ./ghostty.nix
     ++ lib.optional (e "dolphin")    ./dolphin

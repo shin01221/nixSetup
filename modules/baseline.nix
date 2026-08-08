@@ -124,7 +124,7 @@ in
 
     services = {
       tailscale.enable = false;
-      pcscd.enable = true; # yubikey dep
+      # pcscd.enable = true; # yubikey dep
       libinput.enable = true;
       upower.enable = true;
       # power-profiles-daemon.enable = true;
