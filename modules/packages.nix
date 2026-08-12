@@ -66,6 +66,7 @@ let
     parallel
     man-pages
     swappy
+    psmisc
     inputs.wayscrollshot.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
@@ -114,7 +115,9 @@ let
     kdePackages.kio-extras
     libmtp
     neovide
-    # handbrake
+    tesseract
+    wl-screenrec
+    handbrake
   ];
 in
 {
