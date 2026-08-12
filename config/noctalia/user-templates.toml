@@ -19,6 +19,10 @@ input_path = "~/.config/matugen/templates/fzf/fzf-colors.fish"
 output_path = "~/.config/fzf/fzf-colors.fish"
 post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
 
+[theme.templates.user.obsidian_extra]
+input_path = "~/.config/noctalia/templates/obsidian.css"
+output_path = "/Media/Docs/notes/.obsidian/snippets/noctalia.css"
+
 # [templates.kitty]
 # input_path = "~/.config/matugen/templates/kitty/kitty-colors.conf"
 # output_path = "~/.config/kitty/current-theme.conf"
