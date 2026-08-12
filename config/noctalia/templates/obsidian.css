@@ -295,3 +295,8 @@
   /* List markers */
   --list-marker-color:          {{colors.primary.light.hex | set_alpha 0.7}};
 }
+
+/* Hide the window control buttons (close/minimize/maximize) */
+.titlebar-button-container.mod-right {
+  display: none;
+}

@@ -52,6 +52,8 @@ in
 
       imports = [
         ./config
+      ] ++ lib.optionals (!cfg.minimal) [
+        ./config/plugins/lsp/devenv.nix
       ] ++ lib.optionals cfg.servers.ansiblels [
         ./config/plugins/lang/ansible.nix
       ];
