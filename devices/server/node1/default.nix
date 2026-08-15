@@ -19,6 +19,7 @@
     nixvim = {
       enable = true;
       servers.ansiblels = true;
+      minimal = true;
     };
   };
 

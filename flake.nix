@@ -95,29 +95,29 @@
             home-managerU.nixosModules.home-manager
             agenix.nixosModules.default
             {
-                home-manager = {
-                  useGlobalPkgs = true;
-                  useUserPackages = true;
-                  backupFileExtension = "backup";
-                  extraSpecialArgs = {
-                    inherit
-                      self
-                      inputs
-                      userName
-                      homeDir
-                      ;
-                  };
-                  sharedModules = [
-                    (
-                      { osConfig, ... }:
-                      {
-                        _module.args = {
-                          hostName = osConfig.networking.hostName;
-                          isServer = osConfig.server.baseline.enable or false;
-                        };
-                      }
-                    )
-                  ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "backup";
+                extraSpecialArgs = {
+                  inherit
+                    self
+                    inputs
+                    userName
+                    homeDir
+                    ;
+                };
+                sharedModules = [
+                  (
+                    { osConfig, ... }:
+                    {
+                      _module.args = {
+                        hostName = osConfig.networking.hostName;
+                        isServer = osConfig.server.baseline.enable or false;
+                      };
+                    }
+                  )
+                ];
                 users.${userName} = {
                   imports = [ ./home ];
                 };
@@ -127,7 +127,10 @@
         };
 
       mkServer =
-        { deviceModule, userName ? "shin" }:
+        {
+          deviceModule,
+          userName ? "shin",
+        }:
         let
           homeDir = "/home/${userName}";
         in
@@ -151,7 +154,12 @@
                 useUserPackages = true;
                 backupFileExtension = "backup";
                 extraSpecialArgs = {
-                  inherit self inputs userName homeDir;
+                  inherit
+                    self
+                    inputs
+                    userName
+                    homeDir
+                    ;
                 };
                 sharedModules = [
                   (
