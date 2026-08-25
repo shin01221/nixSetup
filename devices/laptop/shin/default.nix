@@ -123,5 +123,9 @@
 
   environment.systemPackages = with pkgs; [
     v4l-utils
+    podman-compose
+    (writeShellScriptBin "docker-compose" ''
+      exec ${pkgs.podman-compose}/bin/podman-compose "$@"
+    '')
   ];
 }
