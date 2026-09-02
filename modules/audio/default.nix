@@ -1,7 +1,13 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   cfg = config.workstation.audio;
-in {
+in
+{
   options.workstation.audio.enable = lib.mkEnableOption "Audio packages (MPD, cava, playerctl)";
 
   config = lib.mkIf cfg.enable {
@@ -13,6 +19,7 @@ in {
       playerctl
       rmpc
       lrcget
+      easyeffects
     ];
   };
 }
