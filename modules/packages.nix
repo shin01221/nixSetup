@@ -12,6 +12,7 @@ let
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     # yubikey-manager
     hyprpicker
+    miru
     nh
     wget
     sesh

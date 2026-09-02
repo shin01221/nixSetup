@@ -28,15 +28,25 @@ has_sixel() {
 display_image_kitty() {
     local img="$1"
     [ ! -f "$img" ] && return 1
-    chafa -f kitty --scale=max \
-        --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+    if in_tmux; then
+        chafa -f kitty --passthrough tmux --scale=max \
+            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+    else
+        chafa -f kitty --scale=max \
+            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+    fi
 }
 
 display_image_sixel() {
     local img="$1"
     [ ! -f "$img" ] && return 1
-    chafa -f sixels --scale=max \
-        --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+    if in_tmux; then
+        chafa -f sixels --passthrough tmux --scale=max \
+            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+    else
+        chafa -f sixels --scale=max \
+            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+    fi
 }
 
 display_image_chafa() {
@@ -70,7 +80,10 @@ convert_image() {
 
 image_allowed_in_tmux() {
     in_tmux || return 0
-    [ "$(tmux show -g allow-passthrough 2>/dev/null)" = "on" ]
+    # tmux 3.7: `show -g` prints "allow-passthrough on", `show -gv` prints "on" only
+    local val
+    val=$(tmux show -gv allow-passthrough 2>/dev/null) || val=$(tmux show -g allow-passthrough 2>/dev/null | awk '{print $2}')
+    [ "$val" = "on" ]
 }
 
 display_image() {
@@ -78,16 +91,26 @@ display_image() {
     local converted
     converted=$(convert_image "$img") || { echo "Cannot display: $(basename "$img")"; return; }
 
-    if image_allowed_in_tmux && has_cmd chafa; then
-        if has_sixel; then
-            display_image_sixel "$converted" || display_image_kitty "$converted" || display_image_chafa "$converted"
-        elif is_kitty_protocol; then
-            display_image_kitty "$converted" || display_image_chafa "$converted"
+    if has_cmd chafa; then
+        if image_allowed_in_tmux; then
+            # try pixel protocols first; chafa probe via passthrough will succeed
+            # when underlying terminal supports kitty/sixel (ghostty/kitty/foot)
+            # even though TERM=tmux-256color inside tmux. Mirrors fifc's `chafa`
+            # auto-probe which gives high-res in _fifc_preview_file.fish:19
+            if in_tmux; then
+                display_image_kitty "$converted" || display_image_sixel "$converted" || display_image_chafa "$converted"
+            elif has_sixel; then
+                display_image_sixel "$converted" || display_image_kitty "$converted" || display_image_chafa "$converted"
+            elif is_kitty_protocol; then
+                display_image_kitty "$converted" || display_image_chafa "$converted"
+            else
+                # unknown TERM outside tmux: try pixel protocols anyway, fallback to symbols
+                display_image_kitty "$converted" || display_image_sixel "$converted" || display_image_chafa "$converted"
+            fi
         else
+            # tmux without allow-passthrough: only symbols can render
             display_image_chafa "$converted"
         fi
-    elif has_cmd chafa; then
-        display_image_chafa "$converted"
     else
         echo "Image: $(basename "$img")"
     fi
