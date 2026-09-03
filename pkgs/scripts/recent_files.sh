@@ -79,7 +79,7 @@ files=$(find "$search_dir" -mindepth 1 -maxdepth 1 \
 if $no_picker; then
     while IFS= read -r f; do
         printf '"%s"\n' "$f"
-    done <<< "$files"
+    done <<<"$files"
     exit 0
 fi
 
@@ -104,6 +104,6 @@ if $save_mode; then
     printf '%s' "$paths" | wl-copy
 else
     while IFS= read -r sel; do
-        gio open "$search_dir/$sel"
+        gio open "$search_dir/$sel" >/dev/null 2>/dev/null
     done <<<"$selected"
 fi

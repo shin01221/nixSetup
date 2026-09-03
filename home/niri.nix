@@ -134,8 +134,8 @@ let
           Mod+Minus{ spawn-sh "noctalia msg volume-down 5"; }
           Mod+U { switch-layout "next"; }
           Mod+Alt+Return { spawn-sh "scratchpad.sh foot-dropterm"; }
-          Mod+BracketRight { spawn-sh "playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10+"; }
-          Mod+BracketLeft { spawn-sh "playerctl --ignore-player=firefox --player=tauon,spotify,mpd position 10-"; }
+          Mod+BracketRight { spawn-sh "playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd position 10+"; }
+          Mod+BracketLeft { spawn-sh "playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd position 10-"; }
 
           XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
           XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }

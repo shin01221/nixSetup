@@ -42,7 +42,34 @@ in
         default_tags = [ "dailies" ];
         template = null;
       };
-      attachments.folder = "assets/imgs";
+      attachments = {
+        folder = "assets/imgs";
+        img_name_func.__raw = ''
+          function()
+            return string.format("Pasted-image-%s", os.date("%Y%m%d%H%M%S"))
+          end
+        '';
+        img_text_func.__raw = ''
+          function(path)
+            local p = tostring(path)
+            if p:match("^https?://") then return string.format("![](%s)", p) end
+            local vault = tostring(Obsidian.dir)
+            -- make vault-relative (handles /Media/Docs/notes/assets/imgs/... -> assets/imgs/...)
+            local rel = p
+            if vault ~= "" and p:sub(1, #vault) == vault then
+              rel = p:sub(#vault + 2)
+            else
+              rel = vim.fs.basename(p)
+              rel = "assets/imgs/" .. rel
+            end
+            -- ensure we don't have bare basename (the broken case)
+            if not rel:match("assets/imgs/") and not rel:match("/") then
+              rel = "assets/imgs/" .. rel
+            end
+            return string.format("![](%s)", rel)
+          end
+        '';
+      };
       templates = {
         subdir = "templates";
         date_format = "%Y-%m-%d";
@@ -51,6 +78,8 @@ in
       ui.enable = false;
       completion.min_chars = 2;
       footer.enabled = false;
+      picker.name = "snacks.pick";
+      link.style = "markdown";
     };
   };
 

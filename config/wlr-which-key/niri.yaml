@@ -27,13 +27,13 @@ menu:
     submenu:
       - key: "."
         desc: NextSong
-        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd next
+        cmd: playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd next
       - key: ","
         desc: PreviousSong
-        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd previous
+        cmd: playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd previous
       - key: "p"
         desc: Toggle on/off
-        cmd: playerctl --ignore-player=firefox --player=tauon,spotify,mpd play-pause
+        cmd: playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd play-pause
       - key: "m"
         desc: Mute
         cmd: noctalia msg volume-mute
