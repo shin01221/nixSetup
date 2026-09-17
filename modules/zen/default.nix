@@ -13,7 +13,7 @@ in {
 
           programs.zen-browser = {
             enable = true;
-            policies = import ./policies.nix { inherit lib config; };
+            policies = import ./policies.nix { inherit lib config pkgs; };
             languagePacks = [
               "en-GB"
               "en-US"

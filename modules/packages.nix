@@ -96,7 +96,7 @@ let
     evtest
     kdePackages.dolphin.out
     kdePackages.qtsvg
-    xfce.thunar
+    thunar
     vlc
     upscayl
     wlr-which-key
@@ -108,7 +108,7 @@ let
     p7zip
     _7zz
     unrar
-    opencode
+    unstable.opencode
     wayscriber
     gparted
     mpv

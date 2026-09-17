@@ -49,7 +49,8 @@ in
         efi.efiSysMountPoint = "/boot";
         timeout = 10;
       };
-      kernelPackages = pkgs.linuxPackages_latest;
+      # kernel + nvidia must come from same nixpkgs to avoid vermagic mismatch; both pinned to unstable when nvidia is pulled from unstable (see hardware/nvidia.nix:10)
+      kernelPackages = pkgs.unstable.linuxPackages_latest;
       kernelModules = [ "uvcvideo" ];
     };
 

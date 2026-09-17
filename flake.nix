@@ -133,7 +133,14 @@
         }:
         let
           homeDir = "/home/${userName}";
-          pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${system};
+          pkgsUnstable = import inputs.nixpkgs-unstable {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              nvidia.acceptLicense = true;
+              permittedInsecurePackages = [ "electron-39.8.10" ];
+            };
+          };
         in
         libS.nixosSystem {
           inherit system;

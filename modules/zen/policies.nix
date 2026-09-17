@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 let
   extensions = import ./extensions.nix { inherit lib config; };
 in
@@ -82,19 +82,19 @@ in
         var proxied = ["nix.dev", "protondb.com", "protonvpn.com", "proton.me", "protonmail.com", "protonstatus.com"];
         for (var i = 0; i < proxied.length; i++) {
           if (dnsDomainIs(host, proxied[i]) || host == proxied[i]) {
-            return "SOCKS5 127.0.0.1:9050";
+            return "SOCKS 127.0.0.1:9050";
           }
         }
         return "DIRECT";
       }
     '';
-    urlEncoded = builtins.replaceStrings
-      ["%" "\n" "\r" " " "\""]
-      ["%25" "%0A" "%0D" "%20" "%22"]
-      pacContent;
+    pacFile = pkgs.writeText "proxy.pac" pacContent;
+    pacDataUri = pkgs.runCommandLocal "pac-data-uri" { } ''
+      base64 -w0 < ${pacFile} > $out
+    '';
   in {
     Mode = "autoConfig";
-    AutoConfigURL = "data:application/x-ns-proxy-autoconfig,${urlEncoded}";
+    AutoConfigURL = "data:application/x-ns-proxy-autoconfig;base64,${builtins.readFile pacDataUri}";
     Locked = false;
   };
   ExtensionSettings = extensions.extensionSettings;

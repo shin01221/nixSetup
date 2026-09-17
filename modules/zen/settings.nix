@@ -147,6 +147,9 @@ in
   "permissions.default.desktop-notification" = 2;
   "permissions.default.xr" = 2; # Virtual Reality
 
+  # Tor SOCKS - ensure DNS via Tor (SOCKS remote DNS for PAC SOCKS)
+  "network.proxy.socks_remote_dns" = lock-true;
+
   # General settings
   "widget.use-xdg-desktop-portal" = 1; # Use portal file picker (access /Media etc.)
   "ui.key.accelKey" = 17; # Set CTRL as master key

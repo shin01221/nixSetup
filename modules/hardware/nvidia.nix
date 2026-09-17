@@ -6,7 +6,9 @@
 }:
 let
   cfg = config.workstation.nvidia;
-  nvidiaDriverChannel = config.boot.kernelPackages.nvidiaPackages.latest;
+  # 595.71.05 on stable fails to build against 7.2.6 (missing string.h, see p0d7jd7l...); pull 610.57.04 from unstable via overlay (flake.nix:152)
+  # Must match boot.kernelPackages kernel (stable 7.2.6 vs unstable 7.2.6 have different store hashes → vermagic mismatch), so keep kernel also from unstable when using unstable nvidia
+  nvidiaDriverChannel = pkgs.unstable.linuxPackages_latest.nvidiaPackages.latest;
 in
 {
   options.workstation.nvidia = {
