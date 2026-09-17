@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
 
     home-managerU = {
       url = "github:nix-community/home-manager";
@@ -11,7 +11,7 @@
     };
 
     home-managerS = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -126,6 +126,70 @@
           ];
         };
 
+      mkWorkstationStable =
+        {
+          deviceModule,
+          userName ? "shin",
+        }:
+        let
+          homeDir = "/home/${userName}";
+          pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${system};
+        in
+        libS.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit
+              self
+              inputs
+              userName
+              homeDir
+              pkgsUnstable
+              ;
+          };
+          modules = [
+            deviceModule
+            {
+              nixpkgs.overlays = [
+                (final: prev: {
+                  unstable = pkgsUnstable;
+                })
+              ];
+            }
+            home-managerS.nixosModules.home-manager
+            agenix.nixosModules.default
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "backup";
+                extraSpecialArgs = {
+                  inherit
+                    self
+                    inputs
+                    userName
+                    homeDir
+                    pkgsUnstable
+                    ;
+                };
+                sharedModules = [
+                  (
+                    { osConfig, ... }:
+                    {
+                      _module.args = {
+                        hostName = osConfig.networking.hostName;
+                        isServer = osConfig.server.baseline.enable or false;
+                      };
+                    }
+                  )
+                ];
+                users.${userName} = {
+                  imports = [ ./home ];
+                };
+              };
+            }
+          ];
+        };
+
       mkServer =
         {
           deviceModule,
@@ -182,7 +246,7 @@
     in
     {
       nixosConfigurations = {
-        shin = mkWorkstation {
+        shin = mkWorkstationStable {
           deviceModule = ./devices/laptop/shin/default.nix;
           userName = "shin";
         };

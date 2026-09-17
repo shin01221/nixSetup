@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  options,
   ...
 }:
 let
@@ -191,7 +192,10 @@ in
     userDirs = {
       enable = true;
       createDirectories = true;
+    } // lib.optionalAttrs (options.xdg.userDirs ? setSessionVariables) {
       setSessionVariables = true;
+    } // {
+      # placeholder to merge remaining attrs
 
       documents = "${config.home.homeDirectory}/Documents";
       download = "${config.home.homeDirectory}/Downloads";

@@ -20,7 +20,7 @@ in
       rmpc
       lrcget
       easyeffects
-      kopuz
+      unstable.kopuz
     ];
   };
 }

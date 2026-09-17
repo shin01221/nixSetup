@@ -79,7 +79,7 @@ in
       completion.min_chars = 2;
       footer.enabled = false;
       picker.name = "snacks.pick";
-      link.style = "markdown";
+      # link.style = "markdown";
     };
   };
 

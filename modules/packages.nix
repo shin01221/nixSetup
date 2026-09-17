@@ -12,7 +12,7 @@ let
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     # yubikey-manager
     hyprpicker
-    miru
+    unstable.miru
     nh
     wget
     sesh
@@ -96,7 +96,7 @@ let
     evtest
     kdePackages.dolphin.out
     kdePackages.qtsvg
-    thunar
+    xfce.thunar
     vlc
     upscayl
     wlr-which-key
@@ -106,9 +106,11 @@ let
     kdePackages.gwenview
     kdePackages.ark
     p7zip
+    _7zz
+    unrar
     opencode
     wayscriber
-    gparted-full
+    gparted
     mpv
     calibre
     obs-studio
