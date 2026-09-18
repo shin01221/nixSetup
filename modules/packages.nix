@@ -24,7 +24,7 @@ let
     curl
     ffmpegthumbnailer
     fzf
-    tmux
+    # tmux now via home/tmux.nix (programs.nix-tmux) - deduplicated
     direnv
     atuin
     trash-cli
@@ -37,8 +37,8 @@ let
     curl
     tree
     eza
-    ghostty
-    foot
+    # ghostty now via home/ghostty.nix - deduplicated
+    # foot now via home/foot.nix programs.foot - deduplicated
     fastfetch
     starship
     lazyssh
@@ -111,9 +111,9 @@ let
     unstable.opencode
     wayscriber
     gparted
-    mpv
+    # mpv now via modules/media home-manager.sharedModules programs.mpv - deduplicated
     calibre
-    obs-studio
+    # obs-studio now via home/obs-studio.nix programs.obs-studio - deduplicated
     qbittorrent
     kdePackages.kio-extras
     libmtp

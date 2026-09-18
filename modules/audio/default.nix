@@ -12,12 +12,8 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      mpd
+      # mpd, mpd-mpris, mpc, playerctl, rmpc now via home/audio.nix (home.packages) - deduplicated
       cava
-      mpd-mpris
-      mpc
-      playerctl
-      rmpc
       lrcget
       easyeffects
       unstable.kopuz

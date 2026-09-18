@@ -133,11 +133,11 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      mpv
+      # mpv now via home-manager.sharedModules programs.mpv (mpvConfig) - deduplicated
+      # playerctl now via home/audio.nix - deduplicated
       yt-dlp
       ff2mpv-rust
       ffmpeg
-      playerctl
     ];
 
     home-manager.sharedModules = [ mpvConfig ];
