@@ -9,6 +9,26 @@ let
       sha256 = "sha256-eW4lHrN2mRl/4omxZBqicFajMU/Vwwvc/7UhNBr5fg0=";
     };
   };
+  github-monochrome = pkgs.vimUtils.buildVimPlugin {
+    pname = "github-monochrome.nvim";
+    version = "2026-09-26";
+    src = pkgs.fetchFromGitHub {
+      owner = "idr4n";
+      repo = "github-monochrome.nvim";
+      rev = "e77321ecd5a68f020d9c543592e222d7786169bf";
+      hash = "sha256-2+ie8X+ssWuDzkW4QztsROA5eDiCIkQIGvTxUsibEK4=";
+    };
+  };
+  monochrome = pkgs.vimUtils.buildVimPlugin {
+    pname = "monochrome.nvim";
+    version = "2026-09-26";
+    src = pkgs.fetchFromGitHub {
+      owner = "kdheepak";
+      repo = "monochrome.nvim";
+      rev = "2de78d9688ea4a177bcd9be554ab9192337d35ff";
+      hash = "sha256-TgilR5jnos2YZeaJUuej35bQ9yE825MQk0s6gxwkAbA=";
+    };
+  };
 in
 {
   colorschemes.catppuccin = {
@@ -61,6 +81,8 @@ in
 
   extraPlugins = with pkgs.vimPlugins; [
     cendre
+    github-monochrome
+    monochrome
     gruvbox-nvim
     rose-pine
     tokyonight-nvim
