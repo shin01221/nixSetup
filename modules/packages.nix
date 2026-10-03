@@ -40,6 +40,7 @@ let
     # ghostty now via home/ghostty.nix - deduplicated
     # foot now via home/foot.nix programs.foot - deduplicated
     fastfetch
+    nitch
     starship
     lazyssh
     nixfmt
