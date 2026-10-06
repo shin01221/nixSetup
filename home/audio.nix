@@ -64,6 +64,16 @@
   xdg.configFile."rmpc/themes".source = ../config/rmpc/themes;
   xdg.configFile."rmpc/notify".source = ../config/rmpc/notify;
 
+  # mpd-mpris package ships etc/xdg/autostart/mpd-mpris.desktop which
+  # systemd-xdg-autostart-generator turns into app-mpd-mpris@autostart.service.
+  # We already run our own systemd.user.services.mpd-mpris (BindsTo mpd,
+  # Restart=on-failure), so mask the vendor autostart entry per XDG spec
+  # to avoid a second daemon.
+  xdg.configFile."autostart/mpd-mpris.desktop".text = ''
+    [Desktop Entry]
+    Hidden=true
+  '';
+
   home.activation.mpd-dirs = config.lib.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p ${config.xdg.configHome}/mpd/playlists
     mkdir -p /Media/Music/playlists
