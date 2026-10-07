@@ -55,6 +55,13 @@ search_dir="$(realpath -m "$search_dir" 2>/dev/null || realpath "$search_dir" 2>
 
 [ -d "$search_dir" ] || die "'$search_dir' is not a directory"
 
+# Resolve the preview helper next to this script, not via PATH.
+# That way a direct run (./pkgs/scripts/recent_files.sh) uses the matching
+# fzf_preview.sh even when the installed copy on PATH is stale.
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+preview_helper="$(printf '%q' "$script_dir")/fzf_preview.sh"
+search_dir_q="$(printf '%q' "$search_dir")"
+
 if ! $save_mode && ! $no_picker; then
     command -v gio >/dev/null 2>&1 || die "gio not found (required for default open mode)"
 fi
@@ -94,7 +101,7 @@ selected=$(printf '%s\n' "$files" |
     fzf --multi \
         --prompt="Recent files> " \
         --height=80% \
-        --preview="[ -d $(printf '%q' "$search_dir")/{} ] || fzf_preview.sh $(printf '%q' "$search_dir")/{}" \
+        --preview="[ -d $search_dir_q/{} ] || $preview_helper $search_dir_q/{}" \
         --preview-window='right:70%:border:wrap')
 
 [ -z "$selected" ] && exit 0

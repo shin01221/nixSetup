@@ -50,6 +50,11 @@
       flake = false;
     };
 
+    tuios = {
+      url = "github:Gaurav-Gosain/tuios";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     wayscrollshot.url = "github:jswysnemc/wayscrollshot";
 
   };
@@ -65,6 +70,7 @@
       agenix,
       nixvim,
       disko,
+      tuios,
       ...
     }@inputs:
     let

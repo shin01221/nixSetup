@@ -157,8 +157,8 @@ in
       ''}
 
       ${lib.optionalString (!isServer) ''
-        # Auto-start tmux
-        tmux-set
+        # Auto-start tmux (disabled)
+        # tmux-set
       ''}
 
       # fzf colors from matugen

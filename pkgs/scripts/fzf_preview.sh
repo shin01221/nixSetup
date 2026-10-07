@@ -25,27 +25,56 @@ has_sixel() {
     return 1
 }
 
+# Kitty graphics persist in the terminal's graphics layer even after the
+# text cells scroll. Without an explicit delete, each new preview draws
+# OVER the previous one -> stacked/overlapping images.
+clear_graphics() {
+    if in_tmux; then
+        # tmux passthrough wrapper: ESC P tmux ; ESC <seq> ESC \\
+        printf '\ePtmux;\e\e_G a=d,d=A\e\e\\\e\\'
+    else
+        printf '\e_G a=d,d=A\x1b\\'
+    fi
+}
+
+# fzf sets FZF_PREVIEW_COLUMNS/LINES. Subtract 1 row so a kitty/sixel
+# image touching the bottom of the preview pane doesn't force a scroll,
+# which leaves the old image behind. Mirrors upstream fzf-preview.sh
+# workaround for https://github.com/junegunn/fzf/issues/2544
+preview_size() {
+    local cols="${FZF_PREVIEW_COLUMNS:-80}"
+    local lines="${FZF_PREVIEW_LINES:-40}"
+    ((lines > 1)) && ((lines--))
+    printf '%sx%s' "$cols" "$lines"
+}
+
 display_image_kitty() {
     local img="$1"
     [ ! -f "$img" ] && return 1
+    # Delete the previous overlay first (same tmux wrapping as chafa below).
+    # Kitty images persist in the graphics layer; without this each preview
+    # draws OVER the last one -> stacked/overlapping images.
+    clear_graphics
     if in_tmux; then
         chafa -f kitty --passthrough tmux --scale=max \
-            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+            --size="$(preview_size)" "$img" 2>/dev/null
     else
         chafa -f kitty --scale=max \
-            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+            --size="$(preview_size)" "$img" 2>/dev/null
     fi
 }
 
 display_image_sixel() {
     local img="$1"
     [ ! -f "$img" ] && return 1
+    # A previous kitty overlay would still show through sixel cells.
+    clear_graphics
     if in_tmux; then
         chafa -f sixels --passthrough tmux --scale=max \
-            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+            --size="$(preview_size)" "$img" 2>/dev/null
     else
         chafa -f sixels --scale=max \
-            --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+            --size="$(preview_size)" "$img" 2>/dev/null
     fi
 }
 
@@ -53,7 +82,7 @@ display_image_chafa() {
     local img="$1"
     [ ! -f "$img" ] && return 1
     chafa -f symbols --symbols=all --scale=max --work=9 \
-        --size="${FZF_PREVIEW_COLUMNS:-80}x${FZF_PREVIEW_LINES:-40}" "$img" 2>/dev/null
+        --size="$(preview_size)" "$img" 2>/dev/null
 }
 
 convert_image() {
@@ -116,6 +145,7 @@ display_image() {
     fi
 
     [ "$converted" != "$img" ] && rm -f "$converted" 2>/dev/null
+    return 0
 }
 
 [ "${BASH_SOURCE[0]}" = "$0" ] || return 0

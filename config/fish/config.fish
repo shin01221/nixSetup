@@ -58,7 +58,7 @@ set fish_color_redirection yellow
 set fish_color_error blue
 set fish_color_valid_path white --bold
 
-tmux-set
+# tmux-set
 
 # fzf colors from matugen
 function _reload_fzf_colors --on-variable _fzf_colors_reload

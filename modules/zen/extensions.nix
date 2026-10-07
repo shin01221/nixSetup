@@ -5,9 +5,10 @@
   unified-extensions-area = [
     "ublock0_raymondhill_net-browser-action"
     "addon_darkreader_org-browser-action"
-    "_91aa3897-2634-4a8a-9092-279db23a7689_-browser-action"
-    "sponsorblock_ajay_app-browser-action"
+    # "_91aa3897-2634-4a8a-9092-279db23a7689_-browser-action" # zen-internet (disabled)
+    # "sponsorblock_ajay_app-browser-action" # sponsorblock (disabled)
     "_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action"
+    "_d867162c-4c38-4c5f-aca4-db6a6592d7da_-browser-action"
   ];
 
   extensionSettings = {
@@ -26,23 +27,29 @@
       installation_mode = "force_installed";
       install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
     };
-    "{91aa3897-2634-4a8a-9092-279db23a7689}" = {
-      private_browsing = true;
-      default_area = "menupanel";
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/zen-internet/latest.xpi";
-    };
-    "sponsorBlocker@ajay.app" = {
-      private_browsing = true;
-      default_area = "menupanel";
-      installation_mode = "force_installed";
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/sponsorblock/latest.xpi";
-    };
+    # "{91aa3897-2634-4a8a-9092-279db23a7689}" = { # zen-internet (disabled)
+    #   private_browsing = true;
+    #   default_area = "menupanel";
+    #   installation_mode = "force_installed";
+    #   install_url = "https://addons.mozilla.org/firefox/downloads/latest/zen-internet/latest.xpi";
+    # };
+    # "sponsorBlocker@ajay.app" = { # sponsorblock (disabled)
+    #   private_browsing = true;
+    #   default_area = "menupanel";
+    #   installation_mode = "force_installed";
+    #   install_url = "https://addons.mozilla.org/firefox/downloads/latest/sponsorblock/latest.xpi";
+    # };
     "{d7742d87-e61d-4b78-b8a1-b469842139fa}" = {
       private_browsing = true;
       default_area = "menupanel";
       installation_mode = "force_installed";
       install_url = "https://addons.mozilla.org/firefox/downloads/latest/vimium-ff/latest.xpi";
+    };
+    "{d867162c-4c38-4c5f-aca4-db6a6592d7da}" = {
+      private_browsing = true;
+      default_area = "menupanel";
+      installation_mode = "force_installed";
+      install_url = "https://addons.mozilla.org/firefox/downloads/latest/youtube-tweaks/latest.xpi";
     };
   };
 
