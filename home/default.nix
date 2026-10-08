@@ -15,6 +15,7 @@ in {
     ++ lib.optional (e "theming")    ./theming.nix
     ++ lib.optional (e "audio")      ./audio.nix
     ++ lib.optional (e "tmux")       ./tmux.nix
+    ++ lib.optional (e "tuios")      ./tuios.nix
     ++ lib.optional (e "spotify")    ./spotify.nix
     ++ lib.optional (e "xdg")        ./xdg.nix
     ++ lib.optional (e "obs-studio") ./obs-studio.nix

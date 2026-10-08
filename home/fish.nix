@@ -90,6 +90,24 @@ in
               end
           end
       end
+      function tuios-set
+          if set -q NO_TMUX
+              return
+          end
+          if test "$TUIOS_ENV" = 1
+              return
+          end
+          if set -q TMUX
+              return
+          end
+          if test "$XDG_SESSION_TYPE" = tty
+              return
+          end
+          if not command -q tuios
+              return
+          end
+          tuios attach main -c
+      end
       function help
           if test (count $argv) -eq 0
               echo "Usage: helpv <command> [arguments...]"
@@ -159,6 +177,7 @@ in
       ${lib.optionalString (!isServer) ''
         # Auto-start tmux (disabled)
         # tmux-set
+        tuios-set
       ''}
 
       # fzf colors from matugen
@@ -201,25 +220,25 @@ in
       );
     in
     ''
-      ${hashUpdate "fish/completions/magick.sh.fish" magickSh}
-      ${hashUpdate "fish/completions/recent_files.sh.fish" recentFilesSh}
+            ${hashUpdate "fish/completions/magick.sh.fish" magickSh}
+            ${hashUpdate "fish/completions/recent_files.sh.fish" recentFilesSh}
 
-      # Write fish_plugins (plugin manifest for fisher)
-      mkdir -p "$HOME/.config/fish"
-      cat > "$HOME/.config/fish/fish_plugins" << 'EOF'
-gazorby/fifc
-asim-tahir/opencode.fish
-EOF
+            # Write fish_plugins (plugin manifest for fisher)
+            mkdir -p "$HOME/.config/fish"
+            cat > "$HOME/.config/fish/fish_plugins" << 'EOF'
+      gazorby/fifc
+      asim-tahir/opencode.fish
+      EOF
 
-      # Bootstrap fisher + install all plugins
-      if [ ! -f "$HOME/.config/fish/functions/fisher.fish" ]; then
-        ${pkgs.fish}/bin/fish -c "
-          source (${pkgs.curl}/bin/curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | psub)
-          fisher install jorgebucaran/fisher
-        "
-      fi
+            # Bootstrap fisher + install all plugins
+            if [ ! -f "$HOME/.config/fish/functions/fisher.fish" ]; then
+              ${pkgs.fish}/bin/fish -c "
+                source (${pkgs.curl}/bin/curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | psub)
+                fisher install jorgebucaran/fisher
+              "
+            fi
 
-      ${pkgs.fish}/bin/fish -c "fisher update" 2>/dev/null || true
+            ${pkgs.fish}/bin/fish -c "fisher update" 2>/dev/null || true
     ''
   );
 }

@@ -14,6 +14,7 @@
         };
       };
     };
+    tuios = lib.mkEnableOption "Tuios config";
     spotify = lib.mkEnableOption "Spotify/spicetify";
     xdg = lib.mkEnableOption "XDG MIME and user-dirs";
     obs-studio = lib.mkEnableOption "OBS Studio config";

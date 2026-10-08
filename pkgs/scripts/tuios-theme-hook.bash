@@ -51,6 +51,15 @@ except Exception:
     tuios set-config appearance.theme "$NEW_ID" -s "$s" >/dev/null 2>&1 || true
   done
   tuios set-config appearance.theme "$NEW_ID" >/dev/null 2>&1 || true
+  # Re-run dock components now. Custom cells bake truecolor escapes when
+  # they render, and a theme switch fires none of their refresh events,
+  # so without this they keep the previous theme's colors until the next
+  # focus/workspace/window event.
+  # shellcheck disable=SC2086
+  for s in $SESSIONS; do
+    tuios refresh-dock -s "$s" >/dev/null 2>&1 || true
+  done
+  tuios refresh-dock >/dev/null 2>&1 || true
 fi
 
 # Persist the new id in config.toml as well. set-config already writes it

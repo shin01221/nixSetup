@@ -69,6 +69,7 @@
         enable = true;
         sessionx.enable = false;
       };
+      tuios = true;
       spotify = true;
       xdg = true;
       obs-studio = true;
