@@ -25,8 +25,8 @@ let
     ffmpegthumbnailer
     fzf
     # tmux now via home/tmux.nix (programs.nix-tmux) - deduplicated
-    # inputs.tuios.packages.${pkgs.stdenv.hostPlatform.system}.default
-    unstable.tuios
+    inputs.tuios.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # unstable.tuios
     direnv
     atuin
     trash-cli

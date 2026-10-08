@@ -17,8 +17,8 @@ in
         ''
           font-family = DejaVu Sans Mono
           font-size = 11
-          window-padding-x = 3
-          window-padding-y = 3
+          window-padding-x = 0
+          window-padding-y = 0
           confirm-close-surface = false
         ''
         + lib.optionalString (osConfig.workstation.niri.enable or false) "\ntheme = noctalia\n"
