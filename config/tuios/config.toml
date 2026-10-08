@@ -114,8 +114,9 @@
 # ============================================================================
 
 [appearance]
-border_style = 'normal'
-zen_mode = 'enabled'
+border_style = 'rounded'
+new_window_follow_ssh = true
+zen_mode = 'disabled'
 links = 'all'
 link_click = 'both'
 link_opener = ''
@@ -125,8 +126,8 @@ window_button_position = 'left'
 hide_scrollbar = false
 scrollback_lines = 10000
 scroll_lines = 3
-kitty_placeholders = 'on'
-auto_enter_terminal_on_focus = 'off'
+kitty_placeholders = 'auto'
+auto_enter_terminal_on_focus = 'true'
 click_to_type = 'double'
 dockbar_position = 'bottom'
 preferred_shell = ''
@@ -134,7 +135,6 @@ motion = 'full'
 modal_dim = 30
 whichkey_position = ''
 window_title_position = 'hidden'
-hide_clock = true
 show_clock = false
 show_cpu = false
 show_ram = false
@@ -159,7 +159,7 @@ master_ratio = 50
 scroll_column_width = 55
 scroll_column_max = 90
 zoom_size = 95
-panel_padding = 2
+panel_padding = 1
 clock_format = '15:04:05'
 dim_unfocused = 0
 dim_multifocus = false
@@ -197,7 +197,6 @@ folder_click = 'navigate'
 editor = ''
 file_delete = 'trash'
 background = ''
-agent_rest_fold = ''
 
 [appearance.sidebar.custom]
 [notifications]
@@ -633,8 +632,6 @@ copy_mode_line_start = ['home']
 [daemon]
 log_level = 'off'
 agent_detect_seconds = 0
-agent_binaries = []
-respond_from_shell = false
 resume_agents = 'ask'
 persist_scrollback_lines = 0
 persist_scrollback_kb = 0
@@ -644,7 +641,7 @@ window_size = 'smallest'
 open_default_window = true
 tiled = true
 start_in_terminal_mode = true
-layout = 'master-stack'
+layout = 'bsp'
 daemon = false
 
 [tape]
@@ -683,7 +680,6 @@ shake = false
 
 [hints]
 builtins = 'all'
-patterns = []
 alphabet = 'asdfghjkl'
 dim = 60
 all_panes = false
@@ -716,7 +712,7 @@ right = ['custom/window_title']
 [dock.custom]
 [dock.custom.session]
 command = "tuios session-info | awk '/^session/{print $2}'"
-refresh = 'event:after-focus-change'
+refresh = 'event:after-focus-change,after-attach,after-detach'
 
 [dock.custom.window_title]
 command = '~/.config/tuios/dock/window-title.sh'
