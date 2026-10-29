@@ -164,7 +164,7 @@ format = "[$time]($style)"
 
 [git_branch]
 symbol = "[](bg:{{colors.inverse_primary.default.hex}})"
-style = "bg:{{colors.inverse_primary.default.hex}} fg:{{colors.on_secondary_container.default.hex}}"
+style = "bg:{{colors.inverse_primary.default.hex}} fg:{{colors.on_primary_container.default.hex}}"
 format = "[](fg:{{colors.primary_container.default.hex}} bg:{{colors.inverse_primary.default.hex}})[ $symbol](bg:{{colors.inverse_primary.default.hex}} fg:{{colors.primary.default.hex}})[ $branch ]($style)"
 
 [git_state]

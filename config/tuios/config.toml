@@ -114,7 +114,7 @@
 # ============================================================================
 
 [appearance]
-border_style = 'rounded'
+border_style = 'hidden'
 new_window_follow_ssh = true
 zen_mode = 'disabled'
 links = 'all'
