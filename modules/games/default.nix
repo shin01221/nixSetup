@@ -66,10 +66,7 @@ in
             font_size = 12;
             fps_limit = [
               60
-              0
-              144
-              165
-              240
+              120
             ];
             fps_limit_method = "late";
             vsync = 2;
@@ -79,8 +76,10 @@ in
             fps = true;
             cpu_stats = true;
             cpu_temp = true;
+            cpu_mhz = true;
             gpu_stats = true;
             gpu_temp = true;
+            vram = true;
             throttling_status = true;
             ram = true;
           };
