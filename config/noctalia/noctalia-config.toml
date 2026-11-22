@@ -657,6 +657,16 @@ wallpaper_scheme = "m3-monochrome"
         post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
         pre_hook = ""
 
+        [theme.templates.user.kopuz]
+        compare_to = ""
+        enabled = true
+        index = 0
+        input_path = "~/.config/matugen/templates/kopuz.json"
+        output_path = "~/.config/kopuz/matugen.json"
+        output_path_dynamic = ""
+        post_hook = ""
+        pre_hook = ""
+
         [theme.templates.user.obsidian_extra]
         input_path = "~/.config/noctalia/templates/obsidian.css"
         output_path = "/Media/Docs/notes/.obsidian/snippets/noctalia.css"
