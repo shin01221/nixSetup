@@ -31,9 +31,9 @@ has_sixel() {
 clear_graphics() {
     if in_tmux; then
         # tmux passthrough wrapper: ESC P tmux ; ESC <seq> ESC \\
-        printf '\ePtmux;\e\e_G a=d,d=A\e\e\\\e\\'
+        printf '\ePtmux;\e\e_Ga=d,d=A\e\e\\\e\\'
     else
-        printf '\e_G a=d,d=A\x1b\\'
+        printf '\e_Ga=d,d=A\x1b\\'
     fi
 }
 
@@ -154,6 +154,12 @@ file="$1"
 [ -z "$file" ] && { echo "Usage: fzf_preview.sh <file>" >&2; exit 1; }
 
 mime_type=$(file -b --mime-type "$file" 2>/dev/null)
+
+# Delete any image left by a previous preview before drawing anything.
+# Kitty-protocol terminals (ghostty/kitty) keep images in a graphics layer
+# that outlives the text cells, so switching to a text/video preview would
+# otherwise leave the old image on screen.
+is_kitty_protocol && clear_graphics
 
 case "$mime_type" in
     image/*)

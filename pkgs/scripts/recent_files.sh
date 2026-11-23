@@ -110,9 +110,9 @@ needs_graphics_cleanup() {
 
 clear_graphics() {
     if [ -n "${TMUX:-}" ]; then
-        printf '\ePtmux;\e\e_G a=d,d=A\e\e\\\e\\'
+        printf '\ePtmux;\e\e_Ga=d,d=A\e\e\\\e\\'
     else
-        printf '\e_G a=d,d=A\x1b\\'
+        printf '\e_Ga=d,d=A\x1b\\'
     fi
 }
 
