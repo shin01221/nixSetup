@@ -28,12 +28,12 @@ order = [ "main", "bottom" ]
 
     [bar.main]
     auto_hide = false
-    background_opacity = 0.92000000000000004
+    background_opacity = 1.00
     border = "outline_variant"
     border_width = 0.30000001192092896
     capsule = true
     capsule_fill = "surface_container"
-    capsule_opacity = 0.5
+    capsule_opacity = 1.00
     capsule_padding = 6.0
     capsule_thickness = 0.75999999046325684
     center = [ "group:g3" ]
@@ -181,7 +181,7 @@ widget_order = [ "desktop-widget-0000000000000003", "desktop-widget-000000000000
 
         [desktop_widgets.widget.desktop-widget-0000000000000005.settings]
         background = false
-        background_opacity = 1.0
+        background_opacity = 1.00
         bloom_intensity = 0.5
         inner_diameter = 0.70000000000000007
         primary_color = "primary"
@@ -205,7 +205,7 @@ widget_order = [ "desktop-widget-0000000000000003", "desktop-widget-000000000000
         [desktop_widgets.widget.desktop-widget-0000000000000006.settings]
         background = true
         background_color = "surface"
-        background_opacity = 0.92000000000000004
+        background_opacity = 1.00
         background_padding = 10
         background_radius = 12
         color = "on_surface"
@@ -219,7 +219,7 @@ active_monitor_only = false
 active_opacity = 1.0
 active_scale = 1.0
 auto_hide = true
-background_opacity = 0.92000000000000004
+background_opacity = 1.00
 cross_axis_padding = 8
 enabled = true
 icon_size = 30
@@ -341,7 +341,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
 
         [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
         background_color = "surface_variant"
-        background_opacity = 1.0
+        background_opacity = 1.00
         background_radius = 12.0
         center_password_text = false
         input_opacity = 1.0
@@ -362,7 +362,7 @@ temperature_day = 6500
 temperature_night = 4000
 
 [notification]
-background_opacity = 0.92000000000000004
+background_opacity = 1.00
 collapse_on_dismiss = true
 enable_daemon = true
 layer = "top"
@@ -375,7 +375,7 @@ show_actions = true
 show_app_name = true
 
 [osd]
-background_opacity = 0.92000000000000004
+background_opacity = 1.00
 monitors = []
 offset_x = 20
 offset_y = 8
@@ -401,22 +401,15 @@ scale = 1.0
     wifi = true
 
 [plugin_settings."alexander/screen-toolkit"]
-panel-legacy_placement = "attached"
 panel-mode = "legacy"
 record-audio-out = true
 video-path = "/Media/Records/screencast"
-
-[plugin_settings."noctalia/notes"]
-notes_dir = "/Media/Docs/notes/dailies/"
 
 [plugin_settings."noctalia/screen_recorder"]
 audio_codec = "aac"
 color_range = "full"
 directory = "/Media/Records/screencast"
 video_codec = "hevc"
-
-[plugin_settings."weinguyen/procmon"]
-sort_by = "mem"
 
 [plugins]
 enabled = [
@@ -450,7 +443,6 @@ enabled = [
     name = "community"
 
 [shell]
-app_icon_colorize = true
 avatar_path = "/home/shin/Pictures/homework/norm/147089826_p25.png"
 clipboard_auto_paste = "off"
 clipboard_confirm_clear_history = true
@@ -657,16 +649,6 @@ wallpaper_scheme = "m3-monochrome"
         post_hook = "fish -c 'set -U _fzf_colors_reload (date +%s)'"
         pre_hook = ""
 
-        [theme.templates.user.kopuz]
-        compare_to = ""
-        enabled = true
-        index = 0
-        input_path = "~/.config/matugen/templates/kopuz.json"
-        output_path = "~/.config/kopuz/matugen.json"
-        output_path_dynamic = ""
-        post_hook = ""
-        pre_hook = ""
-
         [theme.templates.user.obsidian_extra]
         input_path = "~/.config/noctalia/templates/obsidian.css"
         output_path = "/Media/Docs/notes/.obsidian/snippets/noctalia.css"
@@ -738,7 +720,7 @@ unit = "metric"
 [widget.Shin]
 anchor = true
 capsule = true
-capsule_opacity = 0.5
+capsule_opacity = 1.00
 font_weight = 700
 glyph = ""
 label = "死Shin  "
@@ -786,7 +768,7 @@ vertical_format = """{:%H
 
 [widget.clock-12h]
 capsule = true
-capsule_opacity = 0.5
+capsule_opacity = 1.00
 format = "{:%-I:%M %p} {:%d/%m}"
 tooltip_format = "{:%A, %B %d, %Y}"
 type = "clock"
@@ -897,7 +879,7 @@ type = "nightwatch75/todo:todo"
 
 [widget.tray]
 capsule = true
-capsule_opacity = 0.5
+capsule_opacity = 1.00
 drawer = true
 hidden = [ "wayscriber", "blueman", "network" ]
 match_adjacent_spacing = true
@@ -907,9 +889,6 @@ type = "tray"
 capsule = true
 show_label = false
 type = "volume"
-
-[widget.widget]
-type = "weinguyen/procmon:widget"
 
 [widget.widget_2]
 type = "thepunkoff/pomodoro:widget"

@@ -16,9 +16,14 @@
     };
 
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell/";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:noctalia-dev/noctalia-shell/cachix";
     };
+
+    luciole = {
+      url = "github:noctalia-dev/luciole/cachix";
+    };
+
+    kopuz.url = "github:Kopuz-org/kopuz";
 
     agenix = {
       url = "github:ryantm/agenix";
@@ -67,6 +72,7 @@
       home-managerU,
       home-managerS,
       noctalia,
+      kopuz,
       agenix,
       nixvim,
       disko,

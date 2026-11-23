@@ -23,6 +23,7 @@ in {
     ++ lib.optional (e "foot")       ./foot.nix
     ++ lib.optional (e "ghostty")    ./ghostty.nix
     ++ lib.optional (e "dolphin")    ./dolphin
+    ++ lib.optional (e "luciole")    ./luciole.nix
     ++ lib.optional (e "bash")       ./bash.nix
     ++ lib.optional (e "zsh")        ./zsh.nix
     ++ lib.optional (e "steam")      ./steam.nix

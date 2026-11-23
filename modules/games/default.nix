@@ -60,7 +60,6 @@ in
       (_: {
         programs.mangohud = {
           enable = true;
-          enableSessionWide = true;
           settings = {
             position = "bottom-right";
             font_size = 12;

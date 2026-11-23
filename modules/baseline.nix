@@ -27,6 +27,14 @@ in
         "nix-command"
         "flakes"
       ];
+      extra-substituters = [
+        "https://kopuz.cachix.org"
+        "https://noctalia.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "kopuz.cachix.org-1:J2X3AnAYhKTJW5S3aCLoA1ckonQXVNZMQvhZA0YAufw="
+        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      ];
       # REMOVED niri.cachix.org — we don't trust it
     };
 

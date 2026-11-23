@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  inputs,
   ...
 }:
 let
@@ -16,7 +17,7 @@ in
       cava
       lrcget
       easyeffects
-      unstable.kopuz
+      inputs.kopuz.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 }

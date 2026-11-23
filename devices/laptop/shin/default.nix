@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   modulesPath,
   ...
 }:
@@ -77,6 +78,7 @@
       foot = true;
       ghostty = true;
       dolphin = true;
+      luciole = true;
       niri = true;
       matugen = true;
       noctalia = true;
@@ -89,6 +91,13 @@
     #   onCalendar = "weekly";
     #   packages = [ ];
     # };
+  };
+
+  xdg.portal = {
+    extraPortals = [
+      inputs.luciole.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ];
+    config.common."org.freedesktop.impl.portal.FileChooser" = [ "luciole" "gtk" ];
   };
 
   services.openssh.enable = false;

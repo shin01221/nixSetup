@@ -22,6 +22,7 @@
     foot = lib.mkEnableOption "Foot terminal config";
     ghostty = lib.mkEnableOption "Ghostty terminal config";
     dolphin = lib.mkEnableOption "Dolphin file manager";
+    luciole = lib.mkEnableOption "Luciole file manager";
     bash = lib.mkEnableOption "Bash config";
     zsh = lib.mkEnableOption "Zsh config";
 

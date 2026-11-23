@@ -92,7 +92,36 @@ fi
 
 command -v fzf >/dev/null 2>&1 || die "fzf not found (required for interactive picker)"
 
-[ -t 1 ] && clear
+# Kitty-protocol terminals (ghostty, kitty) keep preview images in a
+# graphics layer that outlives the text fzf draws. Delete it on exit so
+# images don't linger after the picker closes; sixel terminals like foot
+# clear with the text and need no cleanup.
+needs_graphics_cleanup() {
+    [ -n "${KITTY_WINDOW_ID:-}" ] && return 0
+    [ -n "${GHOSTTY_RESOURCES_DIR:-}" ] && return 0
+    case "${TERM_PROGRAM:-}" in
+    ghostty | kitty) return 0 ;;
+    esac
+    case "${TERM:-}" in
+    xterm-kitty | xterm-ghostty | *-ghostty) return 0 ;;
+    esac
+    return 1
+}
+
+clear_graphics() {
+    if [ -n "${TMUX:-}" ]; then
+        printf '\ePtmux;\e\e_G a=d,d=A\e\e\\\e\\'
+    else
+        printf '\e_G a=d,d=A\x1b\\'
+    fi
+}
+
+if [ -t 1 ]; then
+    clear
+    if needs_graphics_cleanup; then
+        trap clear_graphics EXIT
+    fi
+fi
 
 selected=$(printf '%s\n' "$files" |
     while IFS= read -r fullpath; do
