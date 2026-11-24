@@ -14,6 +14,8 @@
         pad = "0x0";
       } // lib.optionalAttrs (osConfig.workstation.niri.enable or false) {
         include = "~/.config/foot/themes/noctalia";
+      } // lib.optionalAttrs (osConfig.workstation.umbriel.enable or false) {
+        include = "~/.config/foot/themes/noctalia";
       };
     };
   };

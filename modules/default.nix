@@ -3,7 +3,7 @@
   imports = [
     ./baseline.nix
     ./packages.nix
-    ./niri.nix
+    ./umbriel.nix
     ./nixvim
     ./yazi.nix
     ./polkit.nix

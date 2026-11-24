@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-config="$HOME/.config/wlr-which-key/niri.yaml"
+config="$HOME/.config/wlr-which-key/umbriel.yaml"
 json="$HOME/.config/wlr-which-key/colors.json"
 
 bg=$(jq -r '.background' "$json")

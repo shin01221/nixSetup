@@ -34,7 +34,7 @@
       };
     };
     nixvim.enable = true; # enable nixvim configuration
-    niri.enable = true; # change to a different profile if you want
+    umbriel.enable = true; # change to a different profile if you want
     polkit.enable = true;
     yazi.enable = true; # yazi
     virtualization.enable = true; # enable QEMU/KVM virtualization
@@ -80,6 +80,7 @@
       dolphin = true;
       luciole = true;
       niri = true;
+      umbriel = true;
       matugen = true;
       noctalia = true;
       wlr-which-key = true;

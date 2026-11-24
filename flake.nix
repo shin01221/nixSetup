@@ -23,6 +23,10 @@
       url = "github:noctalia-dev/luciole/cachix";
     };
 
+    umbriel = {
+      url = "github:noctalia-dev/umbriel/cachix";
+    };
+
     kopuz.url = "github:Kopuz-org/kopuz";
 
     agenix = {

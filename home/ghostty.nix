@@ -22,6 +22,7 @@ in
           confirm-close-surface = false
         ''
         + lib.optionalString (osConfig.workstation.niri.enable or false) "\ntheme = noctalia\n"
+        + lib.optionalString (osConfig.workstation.umbriel.enable or false) "\ntheme = noctalia\n"
       );
     in
     ''

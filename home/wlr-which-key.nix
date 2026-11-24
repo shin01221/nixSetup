@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  osConfig,
   ...
 }:
 let
@@ -16,5 +17,16 @@ in
     ''
       ${hashUpdate "wlr-which-key/niri.yaml" niriYaml}
     ''
+  );
+
+  home.activation.ensureWlrWhichKeyUmbrielConfig = lib.mkIf (osConfig.workstation.umbriel.enable or false) (
+    lib.hm.dag.entryAfter [ "writeBoundary" ] (
+      let
+        umbrielYaml = pkgs.writeText "wlr-which-key-umbriel-yaml" (readFile ../config/wlr-which-key/umbriel.yaml);
+      in
+      ''
+        ${hashUpdate "wlr-which-key/umbriel.yaml" umbrielYaml}
+      ''
+    )
   );
 }
