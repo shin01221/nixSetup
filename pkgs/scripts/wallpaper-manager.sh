@@ -6,7 +6,9 @@ mode=$1
 case $mode in
 
 --delete)
-    wall_delete
+    if wall_delete; then
+        notify-send "Wallpaper deleted 🗑️" "Removed $(basename "$path")"
+    fi
     ;;
 --help)
     echo "--fav-manage to remove or add a current wallpaper to favourites"
