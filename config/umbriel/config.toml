@@ -130,7 +130,8 @@ default_display = "normal"
 "Mod+F1" = { action = "spawn pkill -SIGUSR1 wayscriber", repeat = false }
 "Mod+Equal" = { action = "spawn noctalia msg volume-up 5" }
 "Mod+Minus" = { action = "spawn noctalia msg volume-down 5" }
-"Mod+U" = { action = "workspace-set-layout toggle", repeat = false,allow_when_locked = true }
+"Mod+U" = { action = "keyboard-layout-next", repeat = false,allow_when_locked = true }
+"Mod+Alt+U" = { action = "workspace-set-layout toggle", repeat = false }
 "Mod+Alt+Return" = { action = "spawn scratchpad.sh foot-dropterm", repeat = false }
 "Mod+BracketRight" = { action = "spawn playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd position 10+" }
 "Mod+BracketLeft" = { action = "spawn playerctl --ignore-player=firefox --player=kopuz,tauon,spotify,mpd position 10-" }
@@ -266,6 +267,7 @@ default_display = "normal"
 "submap[scratchpad],G" = { action = "scratchpad-toggle gaming", submap = "reset" }
 "submap[scratchpad],V" = { action = "scratchpad-toggle vms", submap = "reset" }
 "submap[scratchpad],S" = { action = "scratchpad-toggle study", submap = "reset" }
+"submap[scratchpad],C" = { action = "scratchpad-toggle comm", submap = "reset" }
 "submap[scratchpad],Escape" = "submap reset"
 
 # ==============================================================================
@@ -298,48 +300,11 @@ default_floating = true
 match.app_id = 'org\.freedesktop\.impl\.portal\.desktop\.kde'
 default_floating = true
 
-# [[window_rule]]
-# match.is_maximized_to_edges = true
-# border_width = 0
-# outer_border_width = 0
-
-# [animation.windows_opacity]
-# enabled = true
-# curve = "spring:1,900"
-#
-# [[window_rule]]
-# match.is_focused = false
-# opacity = 0.85
-# blur = true
-#
-# [[window_rule]]
-# match.is_focused = true
-# opacity = 0.90
-# blur = true
-
 # Workspace assignments.
 [[window_rule]]
 match.app_id = 'zen'
 default_workspace = "Net"
 default_maximize = true
-
-[[window_rule]]
-match.app_id = '.*[Vv]irt-manager.*|.*[Vv]irt-viewer.*|.*[Rr]emote-viewer.*|.*[Bb]oxes.*|.*[Vv]irtual[Bb]ox.*|.*[Vv]mware.*|.*[Vv]mplayer.*|.*[Qq][Ee][Mm][Uu].*'
-allow_shortcuts_inhibit = false
-opacity = 1.0
-default_scratchpad = "vms"
-default_focused = true
-blur = true
-blur_optimized = false
-
-# [[window_rule]]
-# match.app_id = '.*org\.kde\.okular.*'
-# default_workspace = "Read"
-
-[[window_rule]]
-match.app_id = 'vesktop|org\.telegram\.desktop'
-default_workspace = "Comm"
-default_scrolling_extent = 1.0
 
 # Floating windows: rounded corners, niri's fixed 800x800 default size.
 [[window_rule]]
@@ -496,6 +461,9 @@ name = "web"
 [[workspace]]
 name = "dev"
 
+[[workspace]]
+name = "gen"
+
 # =================================================================================
 # overview
 # =================================================================================
@@ -568,6 +536,27 @@ name = "vms"
 layout.mode = "scrolling"
 layout.scrolling.default_extent_fraction = 1.0
 hide_when_empty = true
+
+[[window_rule]]
+match.app_id = '.*[Vv]irt-manager.*|.*[Vv]irt-viewer.*|.*[Rr]emote-viewer.*|.*[Bb]oxes.*|.*[Vv]irtual[Bb]ox.*|.*[Vv]mware.*|.*[Vv]mplayer.*|.*[Qq][Ee][Mm][Uu].*'
+allow_shortcuts_inhibit = false
+opacity = 1.0
+default_scratchpad = "vms"
+default_focused = true
+blur = false
+blur_optimized = false
+
+[[scratchpad]]
+name = "comm"
+layout.mode = "scrolling"
+layout.scrolling.default_extent_fraction = 1.0
+hide_when_empty = true
+
+[[window_rule]]
+match.app_id = 'vesktop|org\.telegram\.desktop'
+default_workspace = "comm"
+default_scrolling_extent = 1.0
+default_focused = true
 
 # =================================================================================
 # =================================================================================
