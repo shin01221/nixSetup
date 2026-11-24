@@ -1,8 +1,8 @@
 # Theming
 font: JetBrainsMono Nerd Font 12
-background: "#222222"
-color: "#c2c2b0"
-border: "#c9a554"
+background: "#1f1f28"
+color: "#dcd7ba"
+border: "#c4b28a"
 separator: " ➜ "
 border_width: 1
 corner_r: 10
@@ -87,7 +87,7 @@ menu:
         cmd: wallpaper-manager.sh --delete
       - key: "t"
         desc: ToggleTransparency
-        cmd: niri-transparency-toggle.sh
+        cmd: transparency-toggle.sh umbriel
   - key: "f"
     desc: Scratchpads
     submenu:
@@ -98,8 +98,8 @@ menu:
     desc: Applaications
     submenu:
       - key: "e"
-        desc: luciole
-        cmd: dolphin
+        desc: File manager
+        cmd: luciole
       - key: "b"
         desc: Browser
         cmd: zen-beta

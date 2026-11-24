@@ -108,7 +108,7 @@ menu:
         cmd: wallpaper-manager.sh --delete
       - key: "t"
         desc: ToggleTransparency
-        cmd: niri-transparency-toggle.sh
+        cmd: transparency-toggle.sh niri
   - key: "a"
     desc: Applaications
     submenu:

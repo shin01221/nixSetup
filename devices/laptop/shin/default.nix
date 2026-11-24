@@ -79,7 +79,7 @@
       ghostty = true;
       dolphin = true;
       luciole = true;
-      niri = true;
+      niri = false;
       umbriel = true;
       matugen = true;
       noctalia = true;

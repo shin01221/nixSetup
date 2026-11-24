@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, wm ? "auto" }:
 pkgs.stdenv.mkDerivation {
   name = "my-scripts";
   src = ./.;
@@ -9,5 +9,9 @@ pkgs.stdenv.mkDerivation {
       [ "$(basename "$f")" = "default.nix" ] && continue
       cp -a "$f" $out/bin/
     done
+
+    substituteInPlace $out/bin/transparency-toggle.sh \
+      --replace-fail 'DEFAULT_WM="auto"' 'DEFAULT_WM="${wm}"'
+    chmod +x $out/bin/transparency-toggle.sh
   '';
 }
