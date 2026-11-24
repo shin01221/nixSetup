@@ -304,7 +304,11 @@ default_floating = true
 [[window_rule]]
 match.app_id = 'zen'
 default_workspace = "Net"
-default_maximize = true
+default_maximize_to_edges = true
+
+[[window_rule]]
+match.is_alone = true
+default_maximize_to_edges = true
 
 # Floating windows: rounded corners, niri's fixed 800x800 default size.
 [[window_rule]]
@@ -455,14 +459,8 @@ blur_popups = true
 [[workspace]]
 name = "web"
 
-# [[workspace]]
-# name = "general"
-
 [[workspace]]
 name = "dev"
-
-[[workspace]]
-name = "gen"
 
 # =================================================================================
 # overview

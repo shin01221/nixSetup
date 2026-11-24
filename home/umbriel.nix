@@ -10,6 +10,20 @@
 
   programs.umbriel.enable = true;
 
+  home.pointerCursor = lib.mkDefault {
+    enable = true;
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 24;
+  };
+
+  home.sessionVariables = lib.mkDefault {
+    XCURSOR_THEME = "Bibata-Modern-Classic";
+    XCURSOR_SIZE = "24";
+  };
+
   xdg.configFile."umbriel/config.toml" = {
     source = ../config/umbriel/config.toml;
     force = true;
