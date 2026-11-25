@@ -92,6 +92,14 @@ window-rule {
     block-out-from "screen-capture"
 }
 
+window-rule {
+    match app-id="^wallpaper-dir-picker$"
+    open-floating true
+    default-column-width { fixed 700; }
+    default-window-height { fixed 500; }
+    block-out-from "screen-capture"
+}
+
 // window-rule {
 //     match app-id=r#"org\.telegram\.desktop"#
 //     geometry-corner-radius 0

@@ -448,6 +448,17 @@ let
       }
     ''
 
+    # Wallpaper directory picker → centered floating 700x500
+    ''
+      window-rule {
+          match app-id="^wallpaper-dir-picker$"
+          open-floating true
+          default-column-width { fixed 700; }
+          default-window-height { fixed 500; }
+          block-out-from "screen-capture"
+      }
+    ''
+
     # Firefox PiP → floating
     ''
       window-rule {

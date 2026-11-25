@@ -109,6 +109,9 @@ menu:
       - key: "p"
         desc: WallpaperPicker
         cmd: foot --app-id=wallpaper-picker --title=Wallpapers -w 800x800 wallpaper-history.sh --pick
+      - key: "s"
+        desc: SetWallpaperDir
+        cmd: foot --app-id=wallpaper-dir-picker --title=WallpaperDir -w 700x500 wallpaper_dir_set.sh
       - key: "d"
         desc: DeleteCurrentWallpaper
         cmd: wallpaper-manager.sh --delete

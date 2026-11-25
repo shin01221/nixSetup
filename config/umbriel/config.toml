@@ -321,8 +321,18 @@ default_floating_size_px = { width = 800, height = 800 }
 [[window_rule]]
 match.app_id = '^wallpaper-picker$'
 default_floating = true
+default_pinned = true
 default_position = { x = 0, y = 0, anchor = "center" }
 default_floating_size_px = { width = 800, height = 800 }
+block_capture = true
+
+# Wallpaper directory picker: centered 700x500 floating terminal.
+[[window_rule]]
+match.app_id = '^wallpaper-dir-picker$'
+default_floating = true
+default_pinned = true
+default_position = { x = 0, y = 0, anchor = "center" }
+default_floating_size_px = { width = 700, height = 500 }
 block_capture = true
 
 # Picture-in-picture and utility dialogs.
