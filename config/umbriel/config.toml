@@ -493,14 +493,14 @@ background_blur = false
 [[scratchpad]]
 name = "music"
 layout.mode = "dwindle"
-layout.struts = { left = 50, right = 50, top = 50, bottom = 50 }
+layout.struts = { left = 20, right = 20, top = 20, bottom = 20 }
 hide_when_empty = true
 
 [[window_rule]]
 match.app_id = "^kopuz$"
 default_scratchpad = "music"
 default_focused = true
-dim_behind = 1.0
+dim_behind = 0.4
 
 [[scratchpad]]
 name = "read"
@@ -570,7 +570,7 @@ hide_when_empty = true
 
 [[window_rule]]
 match.app_id = 'vesktop|org\.telegram\.desktop'
-default_workspace = "comm"
+default_scratchpad = "comm"
 default_scrolling_extent = 1.0
 default_focused = true
 
