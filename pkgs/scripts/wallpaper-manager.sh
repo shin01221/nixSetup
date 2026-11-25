@@ -8,6 +8,7 @@ case $mode in
 --delete)
     if wall_delete; then
         notify-send "Wallpaper deleted 🗑️" "Removed $(basename "$path")"
+        "$(dirname "$0")/random_wall.sh"
     fi
     ;;
 --help)

@@ -145,6 +145,17 @@ toggle_umbriel() {
     fi
 }
 
+refresh_which_key() {
+    local script
+    script="$(dirname "$0")/which-key.sh"
+    if [ ! -x "$script" ]; then
+        script="$(command -v which-key.sh || true)"
+    fi
+    if [ -n "$script" ]; then
+        "$script" "$wm" >/dev/null 2>&1 || true
+    fi
+}
+
 wm="${1:-$DEFAULT_WM}"
 if [ "$wm" = "auto" ]; then
     wm="$(detect_wm)"
@@ -158,3 +169,5 @@ umbriel) toggle_umbriel ;;
     exit 1
     ;;
 esac
+
+refresh_which_key

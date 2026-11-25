@@ -414,8 +414,8 @@ default_floating = true
 [[layer_rule]]
 match.namespace = '^wlr_which_key$'
 blur = true
-blur_ignore_alpha = 0.9
-blur_optimized = true
+blur_ignore_alpha = 0.5
+blur_optimized = false
 
 [[layer_rule]]
 match.namespace = 'noctalia-desktop-widget-media_player.*'
