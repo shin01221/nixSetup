@@ -317,6 +317,14 @@ corner_radius = 5
 border_width = 1
 default_floating_size_px = { width = 800, height = 800 }
 
+# Wallpaper history picker: centered 800x800 floating terminal.
+[[window_rule]]
+match.app_id = '^wallpaper-picker$'
+default_floating = true
+default_position = { x = 0, y = 0, anchor = "center" }
+default_floating_size_px = { width = 800, height = 800 }
+block_capture = true
+
 # Picture-in-picture and utility dialogs.
 [[window_rule]]
 match.app_id = 'firefox$'

@@ -437,6 +437,17 @@ let
       }
     ''
 
+    # Wallpaper history picker → centered floating 800x800
+    ''
+      window-rule {
+          match app-id="^wallpaper-picker$"
+          open-floating true
+          default-column-width { fixed 800; }
+          default-window-height { fixed 800; }
+          block-out-from "screen-capture"
+      }
+    ''
+
     # Firefox PiP → floating
     ''
       window-rule {

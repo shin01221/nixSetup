@@ -115,6 +115,19 @@ menu:
       - key: "w"
         desc: RandomWallpaper
         cmd: random_wall.sh
+      - key: ","
+        desc: PreviousWallpaper
+        cmd: wallpaper-history.sh --prev
+        keep_open: true
+        repeat: true
+      - key: "."
+        desc: NextWallpaper
+        cmd: wallpaper-history.sh --next
+        keep_open: true
+        repeat: true
+      - key: "p"
+        desc: WallpaperPicker
+        cmd: foot --app-id=wallpaper-picker --title=Wallpapers -w 800x800 wallpaper-history.sh --pick
       - key: "d"
         desc: DeleteCurrentWallpaper
         cmd: wallpaper-manager.sh --delete

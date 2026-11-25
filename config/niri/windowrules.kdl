@@ -84,6 +84,14 @@ window-rule {
     default-window-height { fixed 800; }
 }
 
+window-rule {
+    match app-id="^wallpaper-picker$"
+    open-floating true
+    default-column-width { fixed 800; }
+    default-window-height { fixed 800; }
+    block-out-from "screen-capture"
+}
+
 // window-rule {
 //     match app-id=r#"org\.telegram\.desktop"#
 //     geometry-corner-radius 0

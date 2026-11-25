@@ -19,3 +19,6 @@ fi
 random_image="$(printf "%s\n" "${images[@]}" | shuf -n 1)"
 
 noctalia msg wallpaper-set "$random_image"
+
+history_script="$(dirname "${BASH_SOURCE[0]:-$0}")/wallpaper-history.sh"
+[[ -x $history_script ]] && "$history_script" --record "$wallpaper_path" "$random_image"
