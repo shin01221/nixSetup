@@ -39,7 +39,7 @@ menu:
       - key: "m"
         desc: Mute
         cmd: noctalia msg volume-mute
-      - key: "+"
+      - key: "="
         desc: VolumeUp
         cmd: noctalia msg volume-up 5
         keep_open: true

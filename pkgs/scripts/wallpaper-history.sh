@@ -125,9 +125,20 @@ trim_history() {
              SELECT id FROM history ORDER BY id DESC LIMIT $max_entries
          );
          UPDATE meta
-         SET value = (SELECT MAX(id) FROM history)
+         SET value = COALESCE((SELECT MAX(id) FROM history), 0)
          WHERE key = 'cursor_id'
            AND CAST(value AS INTEGER) NOT IN (SELECT id FROM history);"
+}
+
+prune_history() {
+    local path esc_path
+    while IFS= read -r path; do
+        [[ -n $path ]] || continue
+        [[ -e $path ]] && continue
+        esc_path=$(sql_escape "$path")
+        sql "DELETE FROM history WHERE path = '$esc_path';"
+    done < <(sql "SELECT DISTINCT path FROM history;")
+    trim_history
 }
 
 record() {
@@ -157,6 +168,7 @@ record() {
 
 prev() {
     init_db
+    prune_history
 
     local cursor prev_id path esc_path
     cursor=$(get_cursor)
@@ -179,6 +191,7 @@ prev() {
 
 next() {
     init_db
+    prune_history
 
     local cursor next_id path esc_path
     cursor=$(get_cursor)
@@ -201,6 +214,7 @@ next() {
 
 list() {
     init_db
+    prune_history
 
     local cursor id path
     cursor=$(get_cursor)
@@ -214,12 +228,60 @@ list() {
     done < <(sql "SELECT id, path FROM history ORDER BY id ASC;")
 }
 
+print_pick_listing() {
+    local current_dir="$1" current="${2:-}"
+    local esc_dir esc_current path marker
+
+    esc_dir=$(sql_escape "$current_dir")
+    esc_current=$(sql_escape "$current")
+
+    while IFS= read -r path; do
+        marker=" "
+        [[ $path == "$current" ]] && marker="*"
+        printf '%s\t%s %s\n' "$path" "$marker" "$(basename -- "$path")"
+    done < <(sql "SELECT path FROM images
+                  WHERE dir = '$esc_dir'
+                  ORDER BY (path = '$esc_current') DESC,
+                           last_used DESC,
+                           use_count DESC,
+                           path ASC
+                  LIMIT $pick_limit;")
+}
+
+pick_delete() {
+    local path="${1:-}" esc_path
+    [[ -n $path ]] || exit 1
+
+    init_db
+
+    path="$(realpath -m -- "$path")"
+    esc_path=$(sql_escape "$path")
+
+    if [[ -e $path || -L $path ]]; then
+        if command -v trash-put >/dev/null 2>&1; then
+            trash-put -- "$path"
+        elif command -v gio >/dev/null 2>&1; then
+            gio trash -- "$path"
+        else
+            rm -f -- "$path"
+        fi || {
+            notify-send "Wallpaper history" "Failed to delete: $path"
+            exit 1
+        }
+    fi
+
+    sql "DELETE FROM images WHERE path = '$esc_path';
+         DELETE FROM history WHERE path = '$esc_path';"
+    trim_history
+}
+
 scan_dir() {
     local dir="$1"
-    local esc_dir path esc_path
+    local esc_dir path esc_path stale
 
     dir="$(realpath -m -- "$dir")"
     esc_dir=$(sql_escape "$dir")
+    stale=$(sql "SELECT path FROM images WHERE dir = '$esc_dir';")
 
     {
         printf 'BEGIN;\n'
@@ -230,12 +292,19 @@ scan_dir() {
         done < <(find "$dir" -maxdepth 1 -type f \
             \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
             -print0 2>/dev/null)
+        while IFS= read -r path; do
+            [[ -n $path ]] || continue
+            [[ -e $path ]] && continue
+            esc_path=$(sql_escape "$path")
+            printf "DELETE FROM images WHERE path = '%s';\n" "$esc_path"
+        done <<<"$stale"
         printf 'COMMIT;\n'
     } | sql
 }
 
 pick() {
     init_db
+    prune_history
 
     command -v fzf >/dev/null 2>&1 || {
         notify-send "Wallpaper history" "fzf not found"
@@ -263,14 +332,13 @@ pick() {
 
     esc_dir=$(sql_escape "$current_dir")
     esc_current=$(sql_escape "$current")
-    sql "INSERT INTO images(path, dir, last_used, use_count)
-         VALUES ('$esc_current', '$esc_dir', 0, 0)
-         ON CONFLICT(path) DO NOTHING;"
+    if [[ -e $current ]]; then
+        sql "INSERT INTO images(path, dir, last_used, use_count)
+             VALUES ('$esc_current', '$esc_dir', 0, 0)
+             ON CONFLICT(path) DO NOTHING;"
+    fi
 
-    listing=$(sql "SELECT path FROM images
-                   WHERE dir = '$esc_dir'
-                   ORDER BY (path = '$esc_current') DESC, RANDOM()
-                   LIMIT $pick_limit;")
+    listing=$(print_pick_listing "$current_dir" "$current")
     if [[ -z $listing ]]; then
         notify-send "Wallpaper history" "No images found in $current_dir"
         exit 1
@@ -283,16 +351,18 @@ pick() {
         preview_args=(--preview "$preview_helper {1}" --preview-window='right:60%:border:wrap')
     fi
 
-    local selection path marker
+    WPH_PICK_SELF="$script_dir/$(basename "${BASH_SOURCE[0]:-$0}")"
+    WPH_PICK_DIR="$current_dir"
+    WPH_PICK_CURRENT="$current"
+    export WPH_PICK_SELF WPH_PICK_DIR WPH_PICK_CURRENT
+
+    local selection path
     selection=$(
-        while IFS= read -r path; do
-            marker=" "
-            [[ $path == "$current" ]] && marker="*"
-            printf '%s\t%s %s\n' "$path" "$marker" "$(basename -- "$path")"
-        done <<<"$listing" |
+        printf '%s\n' "$listing" |
             fzf --delimiter=$'\t' --with-nth=2 \
                 --prompt='Wallpapers> ' \
-                --header="Dir: $current_dir  |  Enter: set wallpaper  |  Esc: cancel" \
+                --header="Dir: $current_dir  |  Enter: set wallpaper  |  Ctrl-D: delete  |  Esc: cancel" \
+                --bind 'ctrl-d:execute-silent("$WPH_PICK_SELF" --pick-delete {1})+reload-sync("$WPH_PICK_SELF" --pick-list "$WPH_PICK_DIR" "$WPH_PICK_CURRENT")' \
                 "${preview_args[@]}"
     ) || exit 0
 
@@ -317,6 +387,15 @@ case ${1:-} in
     ;;
 --pick)
     pick
+    ;;
+--pick-list)
+    shift
+    init_db
+    print_pick_listing "$@"
+    ;;
+--pick-delete)
+    shift
+    pick_delete "$@"
     ;;
 --list)
     list
