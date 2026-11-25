@@ -577,6 +577,7 @@
         "tuios": "tuios",
         "umbriel": "umbriel",
         "wayscrollshot": "wayscrollshot",
+        "wlr-which-key-patched": "wlr-which-key-patched",
         "zen-browser": "zen-browser"
       }
     },
@@ -739,6 +740,27 @@
       "original": {
         "owner": "jswysnemc",
         "repo": "wayscrollshot",
+        "type": "github"
+      }
+    },
+    "wlr-which-key-patched": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795606525,
+        "narHash": "sha256-HWtaFcG87H779CwcwLF3nvXkWW+yetTRgP6qrj0qFSs=",
+        "owner": "shin01221",
+        "repo": "wlr-which-key",
+        "rev": "232ce26becb29b3ebd5a076bc3291a2b87477fd3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shin01221",
+        "ref": "flake",
+        "repo": "wlr-which-key",
         "type": "github"
       }
     },

@@ -66,6 +66,11 @@
 
     wayscrollshot.url = "github:jswysnemc/wayscrollshot";
 
+    wlr-which-key-patched = {
+      url = "github:shin01221/wlr-which-key/flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
   };
 
   outputs =

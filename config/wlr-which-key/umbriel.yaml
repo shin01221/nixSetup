@@ -5,7 +5,9 @@ color: "#dcd7ba"
 border: "#c4b28a"
 separator: " ➜ "
 border_width: 1
-corner_r: 10
+corner_r: 3
+corner_r_top_left: 0
+corner_r_bottom_left: 0
 padding: 15 # Defaults to corner_r
 rows_per_column: 5 # No limit by default
 column_padding: 25 # Defaults to padding
@@ -16,9 +18,9 @@ margin_right: 0
 margin_bottom: 0
 margin_left: 0
 margin_top: 0
-# Permits key bindings that conflict with compositor key bindings.
-# Default is `false`.
-inhibit_compositor_keyboard_shortcuts: true
+# Keep Umbriel keybinds active while the menu is open.
+# Set to `true` to let menu keys override compositor bindings.
+inhibit_compositor_keyboard_shortcuts: false
 # Try to guess the correct keyboard layout to use. Default is `false`.
 auto_kbd_layout: true
 menu:
@@ -37,6 +39,16 @@ menu:
       - key: "m"
         desc: Mute
         cmd: noctalia msg volume-mute
+      - key: "+"
+        desc: VolumeUp
+        cmd: noctalia msg volume-up 5
+        keep_open: true
+        repeat: true
+      - key: "-"
+        desc: VolumeDown
+        cmd: noctalia msg volume-down 5
+        keep_open: true
+        repeat: true
       - key: "r"
         desc: RMPC
         cmd: music.sh rmpc
@@ -82,9 +94,13 @@ menu:
       - key: "w"
         desc: RandomWallpaper
         cmd: random_wall.sh
+        keep_open: true
+        repeat: true
       - key: "d"
         desc: DeleteCurrentWallpaper
         cmd: wallpaper-manager.sh --delete
+        keep_open: true
+        repeat: true
       - key: "t"
         desc: ToggleTransparency
         cmd: transparency-toggle.sh umbriel

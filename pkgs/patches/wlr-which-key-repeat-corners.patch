@@ -1,0 +1,266 @@
+diff --git a/README.md b/README.md
+index b354073..7ddf3bb 100644
+--- a/README.md
++++ b/README.md
+@@ -28,6 +28,8 @@ Keybindings may be single characters (e.g. `a`, `B`) or [xkb key labels](https:/
+ When executed a command will normally end the `wlr_which_key` process. If you want certain commands to keep the UI open after they execute then
+ configure those specific commands with (`keep_open: true`).
+ 
++If you want a command to repeat while its key is held down, set `repeat: true` on that entry. This is only useful together with `keep_open: true`.
++
+ Example config:
+ 
+ ```yaml
+@@ -39,6 +41,11 @@ border: "#8ec07c"
+ separator: " ➜ "
+ border_width: 2
+ corner_r: 10
++# Override individual corner radii. Defaults to corner_r.
++corner_r_top_left: 0
++corner_r_top_right: 10
++corner_r_bottom_right: 10
++corner_r_bottom_left: 0
+ padding: 15 # Defaults to corner_r
+ rows_per_column: 5 # No limit by default
+ column_padding: 25 # Defaults to padding
+diff --git a/src/config.rs b/src/config.rs
+index 2dff8a0..9e0f22c 100644
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -40,6 +40,10 @@ pub struct Config {
+     pub border_width: f64,
+     #[default(20.0)]
+     pub corner_r: f64,
++    pub corner_r_top_left: Option<f64>,
++    pub corner_r_top_right: Option<f64>,
++    pub corner_r_bottom_right: Option<f64>,
++    pub corner_r_bottom_left: Option<f64>,
+     pub padding: Option<f64>,
+     pub rows_per_column: Option<usize>,
+     pub column_padding: Option<f64>,
+@@ -83,6 +87,15 @@ impl Config {
+         self.padding.unwrap_or(self.corner_r)
+     }
+ 
++    pub fn corner_radii(&self) -> [f64; 4] {
++        [
++            self.corner_r_top_left.unwrap_or(self.corner_r),
++            self.corner_r_top_right.unwrap_or(self.corner_r),
++            self.corner_r_bottom_right.unwrap_or(self.corner_r),
++            self.corner_r_bottom_left.unwrap_or(self.corner_r),
++        ]
++    }
++
+     pub fn column_padding(&self) -> f64 {
+         self.column_padding.unwrap_or_else(|| self.padding())
+     }
+diff --git a/src/config/compat.rs b/src/config/compat.rs
+index ec151ce..782f6f5 100644
+--- a/src/config/compat.rs
++++ b/src/config/compat.rs
+@@ -72,6 +72,7 @@ impl From<Config> for super::Config {
+                         cmd,
+                         desc,
+                         keep_open,
++                        repeat: false,
+                     },
+                     Entry::Recursive { submenu, desc } => super::Entry::Recursive {
+                         key: key.into(),
+@@ -95,6 +96,10 @@ impl From<Config> for super::Config {
+             separator: value.separator,
+             border_width: value.border_width,
+             corner_r: value.corner_r,
++            corner_r_top_left: None,
++            corner_r_top_right: None,
++            corner_r_bottom_right: None,
++            corner_r_bottom_left: None,
+             padding: value.padding,
+             rows_per_column: None,
+             column_padding: None,
+diff --git a/src/config/entry.rs b/src/config/entry.rs
+index 1873437..5c929f3 100644
+--- a/src/config/entry.rs
++++ b/src/config/entry.rs
+@@ -11,6 +11,7 @@ pub enum Entry {
+         cmd: String,
+         desc: String,
+         keep_open: bool,
++        repeat: bool,
+     },
+     Recursive {
+         key: Key,
+@@ -26,6 +27,7 @@ struct RawEntry {
+     desc: String,
+     cmd: Option<String>,
+     keep_open: Option<bool>,
++    repeat: Option<bool>,
+     submenu: Option<Vec<Entry>>,
+ }
+ 
+@@ -40,6 +42,9 @@ impl TryFrom<RawEntry> for Entry {
+             if value.keep_open.is_some() {
+                 bail!("cannot have both 'submenu' and 'keep_open'");
+             }
++            if value.repeat.is_some() {
++                bail!("cannot have both 'submenu' and 'repeat'");
++            }
+             Ok(Self::Recursive {
+                 key: value.key,
+                 submenu,
+@@ -53,6 +58,7 @@ impl TryFrom<RawEntry> for Entry {
+                     .context("either or 'submenu' or 'cmd' is required")?,
+                 desc: value.desc,
+                 keep_open: value.keep_open.unwrap_or(false),
++                repeat: value.repeat.unwrap_or(false),
+             })
+         }
+     }
+diff --git a/src/main.rs b/src/main.rs
+index f40c411..ef1ca5f 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -66,7 +66,9 @@ fn main() -> anyhow::Result<()> {
+         match initial_action {
+             menu::Action::Submenu(_) => unreachable!(),
+             menu::Action::Quit => return Ok(()),
+-            menu::Action::Exec { cmd, keep_open } => {
++            menu::Action::Exec {
++                cmd, keep_open, ..
++            } => {
+                 if keep_open {
+                     bail!("Initial key sequence cannot trigger an action with keep_open=true");
+                 }
+@@ -268,26 +270,36 @@ impl State {
+ 
+         cairo_ctx.new_sub_path();
+         let half_border = self.config.border_width * 0.5;
+-        let r = self.config.corner_r;
+-        cairo_ctx.arc(r + half_border, r + half_border, r, PI, 3.0 * FRAC_PI_2);
+-        cairo_ctx.arc(
+-            width_f - r - half_border,
+-            r + half_border,
+-            r,
++        let [tl, tr, br, bl] = self.config.corner_radii();
++        rounded_corner(
++            &cairo_ctx,
++            tl + half_border,
++            tl + half_border,
++            tl,
++            PI,
++            3.0 * FRAC_PI_2,
++        );
++        rounded_corner(
++            &cairo_ctx,
++            width_f - tr - half_border,
++            tr + half_border,
++            tr,
+             3.0 * FRAC_PI_2,
+             TAU,
+         );
+-        cairo_ctx.arc(
+-            width_f - r - half_border,
+-            height_f - r - half_border,
+-            r,
++        rounded_corner(
++            &cairo_ctx,
++            width_f - br - half_border,
++            height_f - br - half_border,
++            br,
+             0.0,
+             FRAC_PI_2,
+         );
+-        cairo_ctx.arc(
+-            r + half_border,
+-            height_f - r - half_border,
+-            r,
++        rounded_corner(
++            &cairo_ctx,
++            bl + half_border,
++            height_f - bl - half_border,
++            bl,
+             FRAC_PI_2,
+             PI,
+         );
+@@ -322,7 +334,9 @@ impl State {
+                 self.exit = true;
+                 conn.break_dispatch_loop();
+             }
+-            menu::Action::Exec { cmd, keep_open } => {
++            menu::Action::Exec {
++                cmd, keep_open, ..
++            } => {
+                 exec(&cmd);
+                 if !keep_open {
+                     self.exit = true;
+@@ -408,7 +422,9 @@ impl KeyboardHandler for State {
+             None
+         };
+         if let Some(action) = action {
+-            if let Some(repeat) = event.repeat_info {
++            if let Some(repeat) = event.repeat_info
++                && action.repeats()
++            {
+                 self.kbd_repeat = Some((Timer::new(repeat.delay, repeat.interval), action.clone()));
+             }
+             self.handle_action(conn, action);
+@@ -521,6 +537,21 @@ fn poll(fd: RawFd, timeout: Option<Duration>) -> io::Result<()> {
+     }
+ }
+ 
++fn rounded_corner(
++    cairo_ctx: &cairo::Context,
++    center_x: f64,
++    center_y: f64,
++    radius: f64,
++    angle1: f64,
++    angle2: f64,
++) {
++    if radius > 0.0 {
++        cairo_ctx.arc(center_x, center_y, radius, angle1, angle2);
++    } else {
++        cairo_ctx.line_to(center_x, center_y);
++    }
++}
++
+ fn exec(cmd: &str) {
+     let mut proc = Command::new("sh");
+     proc.args(["-c", cmd]);
+diff --git a/src/menu.rs b/src/menu.rs
+index 9ccc0a9..e988c05 100644
+--- a/src/menu.rs
++++ b/src/menu.rs
+@@ -38,10 +38,20 @@ struct MenuItem {
+ #[derive(Clone)]
+ pub enum Action {
+     Quit,
+-    Exec { cmd: String, keep_open: bool },
++    Exec {
++        cmd: String,
++        keep_open: bool,
++        repeat: bool,
++    },
+     Submenu(usize),
+ }
+ 
++impl Action {
++    pub fn repeats(&self) -> bool {
++        matches!(self, Action::Exec { repeat: true, .. })
++    }
++}
++
+ impl Menu {
+     pub fn new(config: &Config) -> Result<Self> {
+         let context = pango::Context::new();
+@@ -85,10 +95,12 @@ impl Menu {
+                     cmd,
+                     desc,
+                     keep_open,
++                    repeat,
+                 } => MenuItem {
+                     action: Action::Exec {
+                         cmd: cmd.into(),
+                         keep_open: *keep_open,
++                        repeat: *repeat,
+                     },
+                     key_comp: ComputedText::new(key.to_string(), context, &config.font.0),
+                     val_comp: ComputedText::new(desc, context, &config.font.0),

@@ -93,6 +93,9 @@ let
     nwg-look
   ];
 
+  wlr-which-key-patched =
+    inputs.wlr-which-key-patched.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
   appsPackages = with pkgs; [
     telegram-desktop
     vesktop
@@ -102,7 +105,7 @@ let
     thunar
     vlc
     upscayl
-    wlr-which-key
+    wlr-which-key-patched
     libreoffice
     gnome-calculator
     kdePackages.okular
