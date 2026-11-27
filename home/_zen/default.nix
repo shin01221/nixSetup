@@ -1,12 +1,8 @@
-{ self, inputs, lib, pkgs, ... }:
+{ self, inputs, lib, pkgs, config, ... }:
 {
-    home-manager.sharedModules = [
-      (
-        { config, ... }:
-        {
-          imports = [ inputs.zen-browser.homeModules.beta ];
+  imports = [ inputs.zen-browser.homeModules.beta ];
 
-          programs.zen-browser = {
+  programs.zen-browser = {
             enable = true;
             policies = import ./policies.nix { inherit lib config pkgs; };
             languagePacks = [
@@ -64,7 +60,4 @@
               };
             };
           };
-        }
-      )
-    ];
 }

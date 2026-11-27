@@ -1,10 +1,14 @@
 { ... }:
 {
   flake.modules.homeManager.audio =
-    { config, pkgs, lib, ... }:
+    { config, inputs, pkgs, lib, ... }:
 
     {
       home.packages = with pkgs; [
+        cava
+        easyeffects
+        lrcget
+        inputs.kopuz.packages.${pkgs.stdenv.hostPlatform.system}.default
         mpd-mpris
         mpd
         mpc

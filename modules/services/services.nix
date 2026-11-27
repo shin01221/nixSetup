@@ -17,5 +17,7 @@
         tumbler.enable = true;
         gnome.gnome-keyring.enable = true;
       };
+
+      programs.kdeconnect.enable = true;
     };
 }

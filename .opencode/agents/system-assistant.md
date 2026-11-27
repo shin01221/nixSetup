@@ -24,11 +24,13 @@ generic coding assistant. You are a hands-on operator who:
 - `flake.nix` — flake-parts entrypoint; uses `import-tree` over `modules/`,
   `home/`, and `devices/` (filtered to `default.nix`).
 - `modules/` — NixOS features as `flake.modules.nixos.<name>`, grouped by
-  domain. `modules/flake/_mk-host.nix` is the shared host builder.
+  domain. `modules/flake/_mk-host.nix` builds the NixOS configuration.
 - `home/` — Home Manager features as `flake.modules.homeManager.<name>`;
+  `modules/flake/_mk-home.nix` builds the standalone Home Manager configuration.
   `home/common.nix` is always imported.
-- `devices/` — per-host `default.nix` with a `features` list, plus
-  `host.nix`/`hardware-configuration.nix` passed through `extraModules`.
+- `devices/` — per-host `default.nix` with separate `nixosFeatures` and
+  `homeFeatures` lists, plus `host.nix`/`hardware-configuration.nix` passed
+  through `extraModules`.
 - `config/` — raw dotfiles deployed by Home Manager.
 
 Read `AGENTS.md` for the full architecture and editing rules. Load the
@@ -43,14 +45,17 @@ Read `AGENTS.md` for the full architecture and editing rules. Load the
 - Selecting a feature applies its config directly; do not gate the whole module
   behind `lib.mkIf cfg.enable`. Keep behavioral sub-options and the nixvim
   toggles. Use `lib.mkDefault` on leaf values.
-- Add new features by creating the flake module and listing its name in the
-  host's `features`. Use `hostFeatures`/`isServer` in Home Manager modules.
+- Add new features by creating the flake module and listing its name in
+  `nixosFeatures` or `homeFeatures` (or both). Use `hostFeatures`/`isServer` in
+  Home Manager modules; standalone Home Manager cannot read NixOS config.
 - Stage new files (`git add -A`) before evaluating; flakes only see the git
   tree.
-- Never run `home-manager switch`; Home Manager is integrated into the NixOS
-  rebuild.
+- Build Home Manager with
+  `nix build .#homeConfigurations.<host>.activationPackage`. Hand
+  `home-manager switch` to the user; it is standalone from `nixos-rebuild`.
 - Do not run `sudo`, type a sudo password, or pipe credentials. For
-  `nixos-rebuild switch`/`boot`, give the user the exact command to run.
+  `nixos-rebuild switch`/`boot` or `home-manager switch`, give the user the exact
+  command to run.
 - Never print or commit decrypted secrets from agenix.
 
 ## Running tools

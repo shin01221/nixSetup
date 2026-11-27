@@ -2,12 +2,11 @@
 {
   hostName,
   userName,
-  features,
+  nixosFeatures,
+  hostFeatures ? nixosFeatures,
   nixosModules,
-  homeModules,
   withUnstable ? false,
   extraModules ? [ ],
-  extraHomeModules ? [ ],
 }:
 let
   lib = inputs.nixpkgs-stable.lib;
@@ -27,41 +26,24 @@ let
       null;
 
   halves = ns:
-    lib.concatMap (name: lib.optional (ns ? ${name}) ns.${name}) features;
+    lib.concatMap (name: lib.optional (ns ? ${name}) ns.${name}) nixosFeatures;
 
-  isServer = builtins.elem "server-baseline" features;
+  isServer = builtins.elem "server-baseline" hostFeatures;
 in
 inputs.nixpkgs-stable.lib.nixosSystem {
   system = "x86_64-linux";
   specialArgs = {
     inherit inputs userName homeDir hostName;
     self = inputs.self;
-    hostFeatures = features;
-    inherit isServer;
+    inherit hostFeatures isServer;
   };
   modules = [
-    inputs.home-managerS.nixosModules.home-manager
     inputs.agenix.nixosModules.default
     {
       networking.hostName = hostName;
       nixpkgs.overlays = lib.optional withUnstable (final: prev: {
         unstable = pkgsUnstable;
       });
-      home-manager = {
-        useGlobalPkgs = true;
-        useUserPackages = true;
-        backupFileExtension = "backup";
-        extraSpecialArgs = {
-          inherit inputs userName homeDir hostName;
-          self = inputs.self;
-          hostFeatures = features;
-          inherit isServer;
-        };
-        users.${userName}.imports =
-          lib.optional (homeModules ? common) homeModules.common
-          ++ halves homeModules
-          ++ extraHomeModules;
-      };
     }
   ]
   ++ halves nixosModules

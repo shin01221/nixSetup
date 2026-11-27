@@ -11,6 +11,7 @@
         kdePackages.qtsvg
         thunar
         vlc
+        ff2mpv-rust
         upscayl
         inputs.wlr-which-key-patched.packages.${pkgs.stdenv.hostPlatform.system}.default
         libreoffice

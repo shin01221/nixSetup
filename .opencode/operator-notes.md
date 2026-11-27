@@ -11,7 +11,7 @@ sections here; `/evolve` reviews them. Keep secrets out of this file.
   `flake.modules.homeManager.<name>`, and hosts select them by name.
 - **Why it matters:** There is no `modules/default.nix`, `home/default.nix`, or
   `modules/home-options.nix`; adding a file is not enough unless its feature name
-  is in the host's `features` list.
+  is in the host's `nixosFeatures`/`homeFeatures` list.
 - **Prescription:** Follow `.opencode/skills/nix-module-patterns/SKILL.md`. Use
   the `neolectron-nixfiles` reference for ideas, but this repo's paths and
   feature-list selection are authoritative.
@@ -26,9 +26,9 @@ sections here; `/evolve` reviews them. Keep secrets out of this file.
 
 ## 2026-11-27 — Two nixpkgs channels
 
-- **Finding:** Both hosts build on nixpkgs-stable 26.05 via `mkHost`. `shin`
-  sets `withUnstable = true` and receives an extra `pkgsUnstable` exposed as
-  `pkgs.unstable`; `node1` leaves it false.
+- **Finding:** Both hosts build on nixpkgs-stable 26.05 via `mkHost` and
+  `mkHome`. `shin` sets `withUnstable = true` and receives an extra
+  `pkgsUnstable` exposed as `pkgs.unstable`; `node1` leaves it false.
 - **Why it matters:** Referencing `pkgsUnstable` in a server module fails
   evaluation, and assuming `shin` uses unstable `pkgs` is wrong.
 - **Prescription:** Check `withUnstable` in the host's `default.nix` before using
@@ -37,17 +37,21 @@ sections here; `/evolve` reviews them. Keep secrets out of this file.
 
 ## 2026-11-27 — Features are selected by name
 
-- **Finding:** `devices/<type>/<host>/default.nix` passes a `features` list to
-  `mkHost`. The list selects both `flake.modules.nixos.<name>` and
-  `flake.modules.homeManager.<name>`; `homeModules.common` is always imported.
-  `mkHost` also passes `hostFeatures` and `isServer` to both module systems.
+- **Finding:** `devices/<type>/<host>/default.nix` defines separate
+  `nixosFeatures` and `homeFeatures` lists and passes them to `mkHost` and
+  `mkHome`. A name present in both namespaces is not enabled twice by accident;
+  add it to both lists only when both halves should apply. `hostFeatures` is the
+  union used for conditional checks. `homeModules.common` is always imported by
+  `mkHome`. Both builders pass `hostFeatures` and `isServer` to their module
+  systems.
 - **Why it matters:** Adding a feature file without listing its name does
   nothing. Feature modules apply their config directly, so there is no
   `featureEnablePaths` mapping to update. The nixvim wrapper
   (`modules/dev/nixvim.nix`) sets `workstation.nixvim.enable = true` when its
   feature is selected.
-- **Prescription:** Add the file and add the name to the host's `features`. Use
-  `hostFeatures` in Home Manager modules and `isServer` for server defaults.
+- **Prescription:** Add the file and add the name to `nixosFeatures` or
+  `homeFeatures` (or both). Use `hostFeatures` in Home Manager modules and
+  `isServer` for server defaults.
 
 ## 2026-11-27 — Stage new files before evaluating
 
@@ -62,23 +66,27 @@ sections here; `/evolve` reviews them. Keep secrets out of this file.
 ## 2026-11-27 — import-tree ignores underscore paths
 
 - **Finding:** `import-tree` skips any path containing a `_` component.
-  `modules/flake/_mk-host.nix`, `modules/dev/_nixvim/`, and
-  `modules/apps/_zen/` are therefore imported explicitly or via wrappers, not by
-  the tree walk.
+  `modules/flake/_mk-host.nix`, `modules/flake/_mk-home.nix`,
+  `modules/dev/_nixvim/`, and `home/_zen/` are therefore imported explicitly or
+  via wrappers, not by the tree walk.
 - **Why it matters:** Moving a file under a `_` directory silently removes it
   from the flake unless a wrapper imports it.
 - **Prescription:** Keep implementation details under `_`; expose them through a
-  non-underscore wrapper (`modules/dev/nixvim.nix`, `modules/apps/zen.nix`) or an
+  non-underscore wrapper (`modules/dev/nixvim.nix`, `home/zen.nix`) or an
   explicit import.
 
-## 2026-11-27 — Do not run home-manager switch
+## 2026-11-27 — Standalone Home Manager
 
-- **Finding:** This flake has no standalone `homeConfigurations`; Home Manager
-  is a NixOS module.
-- **Why it matters:** `home-manager switch` targets a different profile and
-  desynchronizes the user environment.
-- **Prescription:** Apply through `nixos-rebuild` or the integrated activation
-  package only.
+- **Finding:** Home Manager is no longer embedded in NixOS. `mkHome` builds
+  `flake.homeConfigurations.<host>`; `mkHost` builds NixOS only.
+- **Why it matters:** `nixos-rebuild switch` no longer updates the user
+  environment. Apply HM with `home-manager switch --flake .#<host>` after the
+  NixOS side, or build the standalone activation package for validation.
+- **Prescription:** Build with
+  `nix build .#homeConfigurations.<host>.activationPackage`. Hand
+  `home-manager switch` to the user. `useGlobalPkgs`, `useUserPackages`, and
+  `backupFileExtension` are NixOS-side options and no longer apply; use
+  `home-manager switch -b backup` if needed.
 
 ## 2026-11-27 — nixvim plugin groups and server preset
 
@@ -86,9 +94,9 @@ sections here; `/evolve` reviews them. Keep secrets out of this file.
   `workstation.nixvim.groups` (one toggle per
   `config/plugins/<group>/default.nix`), `workstation.nixvim.plugins`, and
   `workstation.nixvim.lspServers` for per-item overrides.
-  `workstation.nixvim.server` defaults to `server.baseline.enable` and makes
-  `minimal` default to true; `minimal` disables heavy groups, extra blink
-  sources, and non-essential LSPs.
+  `workstation.nixvim.server` defaults to `isServer` and makes `minimal` default
+  to true; `minimal` disables heavy groups, extra blink sources, and
+  non-essential LSPs.
 - **Why it matters:** Adding a plugin file does nothing unless its group index
   imports it, and adding a new group requires updating both `groupPaths` and
   `groupDefaults` in the main module.

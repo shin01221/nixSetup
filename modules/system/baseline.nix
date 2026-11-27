@@ -143,13 +143,7 @@
           libinput.enable = true;
           upower.enable = true;
           # power-profiles-daemon.enable = true;
-          pipewire = {
-            enable = true;
-            pulse.enable = true;
-            alsa.enable = true;
-          };
         };
-        security.rtkit.enable = true;
 
         xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 

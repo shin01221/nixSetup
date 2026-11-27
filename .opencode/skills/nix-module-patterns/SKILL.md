@@ -13,7 +13,7 @@ of adding central import lists or toggle files.
 
 Read at least one example of the kind of change you are making:
 
-- `modules/apps/audio.nix` — minimal NixOS feature; config applies when selected.
+- `modules/system/memory.nix` — minimal NixOS feature; config applies when selected.
 - `modules/dev/yazi.nix` — NixOS feature enabling a program.
 - `modules/system/baseline.nix` — large workstation baseline with sub-options.
 - `modules/server/baseline.nix` — server-side option tree.
@@ -21,7 +21,8 @@ Read at least one example of the kind of change you are making:
 - `home/scripts.nix` — Home Manager feature reading `hostFeatures`.
 - `home/common.nix` — always-imported Home Manager baseline.
 - `devices/laptop/shin/default.nix` — how a host selects features.
-- `modules/flake/_mk-host.nix` — host builder; passes `hostFeatures`/`isServer`.
+- `modules/flake/_mk-host.nix` — NixOS host builder; passes `hostFeatures`/`isServer`.
+- `modules/flake/_mk-home.nix` — standalone Home Manager builder.
 
 Also read `AGENTS.md` for the architecture and editing rules.
 
@@ -41,7 +42,7 @@ Also read `AGENTS.md` for the architecture and editing rules.
 }
 ```
 
-2. Add `"<name>"` to the `features` list in the host's
+2. Add `"<name>"` to `nixosFeatures` in the host's
    `devices/<type>/<host>/default.nix`. The module applies its config whenever
    the name is selected.
 
@@ -52,13 +53,13 @@ Also read `AGENTS.md` for the architecture and editing rules.
    `workstation.nixvim.enable = true` when its feature is selected.
 
 4. For server-only features, use `options.server.<name>` and add the feature
-   name to the server host's list. Use the `isServer` special arg for
+   name to the server host's `nixosFeatures`. Use the `isServer` special arg for
    server-specific defaults; `server-baseline` is selected by name, not by
    enabling `server.baseline.enable`.
 
 ## Add a Home Manager feature
 
-Home Manager features are selected by the same host `features` list. There is
+Home Manager features are selected by the separate `homeFeatures` list. There is
 no separate `workstation.home.*` toggle.
 
 1. Create `home/<name>.nix` and wrap the module in
@@ -75,13 +76,15 @@ no separate `workstation.home.*` toggle.
 }
 ```
 
-2. Add `"<name>"` to the host's `features` list. A name that exists in both
-   `flake.modules.nixos` and `flake.modules.homeManager` enables both sides.
+2. Add `"<name>"` to `homeFeatures` in the host's `default.nix`. If the same
+   name also has a NixOS half and both should apply, add it to `nixosFeatures`
+   too. `hostFeatures` is the union used for conditional checks.
 
 3. `homeModules.common` is always imported; do not add `"common"` to a host.
 
-Prefer `hostFeatures`/`isServer` over reading NixOS options through `osConfig`
-when selecting behavior. NixOS cannot read Home Manager config.
+Home Manager is standalone and cannot read NixOS config. Prefer
+`hostFeatures`/`isServer` when selecting behavior; NixOS cannot read Home
+Manager config either.
 
 ## Feature names and import-tree
 
@@ -90,16 +93,16 @@ when selecting behavior. NixOS cannot read Home Manager config.
 - `import-tree` recursively imports `./modules` and `./home`; no central
   `default.nix` list exists.
 - Paths containing a `_` component are ignored by `import-tree`. Use `_` for
-  implementation details (`modules/dev/_nixvim/`, `modules/apps/_zen/`,
-  `modules/flake/_mk-host.nix`).
+  implementation details (`modules/dev/_nixvim/`, `home/_zen/`,
+  `modules/flake/_mk-host.nix`, `modules/flake/_mk-home.nix`).
 - `devices/` is filtered to `default.nix`, so `host.nix` and
   `hardware-configuration.nix` are plain modules passed via `extraModules`.
 
 ## Accessing flake inputs
 
-`mkHost` passes `inputs`, `userName`, `homeDir`, `self`, `hostFeatures`, and
-`isServer` through `specialArgs`/`extraSpecialArgs`, so modules receive them as
-arguments:
+`mkHost` and `mkHome` pass `inputs`, `userName`, `homeDir`, `hostName`, `self`,
+`hostFeatures`, and `isServer` through `specialArgs`/`extraSpecialArgs`, so
+modules receive them as arguments:
 
 ```nix
 { pkgs, inputs, ... }:
@@ -134,8 +137,9 @@ layout.border.width = lib.mkDefault 2;
 layout = lib.mkDefault { gaps = 8; border.width = 2; };
 ```
 
-Never hardcode `/home/shin`. Use `userName`/`homeDir` from `specialArgs`, or
-`config.home.homeDirectory` inside Home Manager.
+Never hardcode `/home/shin`. Use `userName`/`homeDir` from NixOS `specialArgs`
+and Home Manager `extraSpecialArgs`, or `config.home.homeDirectory` inside Home
+Manager.
 
 ## Hardware and host-only values
 
@@ -152,10 +156,10 @@ nix flake check
 nixos-rebuild build --flake .#shin
 ```
 
-For Home Manager changes, also build the integrated activation package:
+For Home Manager changes, also build the standalone activation package:
 
 ```bash
-nix build .#nixosConfigurations.shin.config.home-manager.users.shin.home.activationPackage
+nix build .#homeConfigurations.shin.activationPackage
 ```
 
 For generated expressions, parse before evaluating:
@@ -165,5 +169,5 @@ nix-instantiate --parse --expr '<expr>'
 nix-instantiate --eval --json --strict --expr '<expr>'
 ```
 
-Do not run `sudo nixos-rebuild switch` or `boot`; hand the exact command to the
-user.
+Do not run `sudo nixos-rebuild switch`/`boot` or `home-manager switch`; hand the
+exact command to the user.

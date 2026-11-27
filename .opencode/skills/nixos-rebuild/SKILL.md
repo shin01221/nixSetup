@@ -9,7 +9,7 @@ description: Safe validation and rebuild workflow for this repository's shin and
 
 | Flake attribute | Host | Channel | Notes |
 | --- | --- | --- | --- |
-| `.#shin` | laptop/workstation | nixpkgs-stable 26.05 + `pkgsUnstable` overlay | integrated Home Manager, agenix |
+| `.#shin` | laptop/workstation | nixpkgs-stable 26.05 + `pkgsUnstable` overlay | standalone Home Manager, agenix |
 | `.#node1` | server | nixpkgs-stable 26.05 | disko + agenix, `server.baseline` |
 
 The flake attribute is the host key, not `networking.hostName`. The laptop sets
@@ -32,26 +32,29 @@ nixos-rebuild build --flake .#shin
 nixos-rebuild build --flake .#node1
 ```
 
-3. If Home Manager modules changed, build the integrated activation package:
+3. If Home Manager modules changed, build the standalone activation package:
 
 ```bash
-nix build .#nixosConfigurations.shin.config.home-manager.users.shin.home.activationPackage
+nix build .#homeConfigurations.shin.activationPackage
+nix build .#homeConfigurations.node1.activationPackage
 ```
 
-Use `node1`/`node1` (host and user are both `node1`) for the server. There are
-no standalone `homeConfigurations`; never run `home-manager switch`.
-
-4. Give the user the exact apply command to run in their own terminal:
+4. Give the user the exact apply commands to run in their own terminal:
 
 ```bash
 sudo nixos-rebuild switch --flake .#shin
 sudo nixos-rebuild boot --flake .#shin
 sudo nixos-rebuild switch --flake .#node1
+
+home-manager switch --flake .#shin
+home-manager switch --flake .#node1
 ```
 
 Do not run `sudo`, type a password, ask for a password, or pipe credentials.
 Use `build` or `dry-build` for non-root validation; leave `dry-activate`,
-`switch`, and `boot` to the user.
+`switch`, and `boot` to the user. Hand `home-manager switch` to the user as well.
+Use `-b backup` (or `HOME_MANAGER_BACKUP_EXT=backup`) if activation reports
+existing files.
 
 ## Quick evaluation without a full build
 
@@ -74,20 +77,22 @@ nix eval .#nixosConfigurations.shin.config.system.build.toplevel.drvPath
   and `.#node1` are defined.
 - **Unfree package**: `modules/system/baseline.nix` sets
   `nixpkgs.config.allowUnfree = true` for workstations, and
-  `modules/server/baseline.nix` does the same for the server. `mkHost` with
-  `withUnstable = true` also imports `pkgsUnstable` with `allowUnfree = true`.
-  A new host that does not enable a baseline will fail on unfree packages.
+  `modules/server/baseline.nix` does the same for the server. `mkHost` and
+  `mkHome` with `withUnstable = true` also import `pkgsUnstable` with
+  `allowUnfree = true`. A new host that does not enable a baseline will fail on
+  unfree packages.
 - **Not staged**: new or renamed files are invisible to Nix until added to the
   git index. Run `git add -A` before `nix flake check`/`nixos-rebuild build`.
 - **agenix**: evaluation does not need the decrypted secrets, but activation
   does. Do not try to read or print secrets to fix an evaluation error.
 - **Missing hardware module**: `devices/<host>/hardware-configuration.nix` is
   machine-specific. Do not copy it between hosts.
-- **Feature not wired**: add the feature name to the host's `features` list.
-  Feature modules apply their config directly; there is no `featureEnablePaths`
-  mapping to update.
-- **NixOS cannot read HM**: use `osConfig` from Home Manager, or pass values
-  through `specialArgs`. The reverse direction does not exist.
+- **Feature not wired**: add the feature name to `nixosFeatures` or
+  `homeFeatures` on the host. Feature modules apply their config directly; there
+  is no `featureEnablePaths` mapping to update.
+- **No cross-system reads**: NixOS cannot read Home Manager config, and
+  standalone Home Manager cannot read NixOS config. Use `hostFeatures`/`isServer`
+  or pass values through the builders' special args.
 - **`unknown flake output 'modules'`**: expected with flake-parts; harmless.
 
 ## After a successful build

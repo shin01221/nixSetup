@@ -40,6 +40,7 @@
         whois
         parted
         usbutils
+        v4l-utils
         smartmontools
         pciutils
         file

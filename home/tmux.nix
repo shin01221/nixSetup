@@ -1,7 +1,7 @@
 { ... }:
 {
   flake.modules.homeManager.tmux =
-    { config, pkgs, lib, osConfig, isServer ? false, ... }:
+    { config, pkgs, lib, isServer ? false, ... }:
 
     let
       inherit (builtins) readFile;
