@@ -244,5 +244,59 @@ Without `nh`, use `sudo nixos-rebuild switch --flake .#shin` and
 
 If `home-manager` is not on `PATH`, bootstrap with
 `nix run github:nix-community/home-manager/release-26.05 -- switch --flake .#shin`.
-Use `-b backup` (or `HOME_MANAGER_BACKUP_EXT=backup`) when existing files block
-activation.
+Conflicting files are renamed with a `.backup` suffix automatically: the host
+builder sets `HOME_MANAGER_BACKUP_EXT=backup`, which standalone Home Manager
+reads during activation. Pass `-b backup` for a one-off override. Home Manager
+26.05 does not expose a declarative `home.backupFileExtension` option.
+
+## Cleaning Home Manager and the Nix store
+
+Automatic cleanup is configured already:
+
+- NixOS generations: `nix.gc` runs weekly and deletes generations older than
+  7 days on `shin` and 14 days on `node1`.
+- Home Manager generations: `services.home-manager.autoExpire` runs weekly and
+  deletes Home Manager generations older than 14 days.
+- Both hosts run `nix.optimise.automatic` weekly and have
+  `auto-optimise-store` enabled.
+
+Remove old Home Manager generations as your user:
+
+```bash
+# List Home Manager generations
+home-manager generations
+
+# Remove Home Manager generations older than 14 days
+home-manager expire-generations '-14 days'
+
+# Remove specific generations by ID
+home-manager remove-generations 12 13
+```
+
+Then clean NixOS generations and unreachable store paths:
+
+```bash
+# Delete system generations older than 14 days, then garbage-collect
+sudo nix-collect-garbage --delete-older-than 14d
+
+# More aggressive: delete all old generations, then garbage-collect
+sudo nix-collect-garbage -d
+
+# Deduplicate identical files in the store
+sudo nix store optimise
+```
+
+`home-manager expire-generations` removes the old Home Manager profile entries;
+after that, garbage collection can reclaim their store paths. `nix-collect-garbage`
+only deletes store paths that are no longer reachable from a profile or GC root.
+
+If `nh` is available, it can combine profile cleanup, garbage collection, and
+optimisation:
+
+```bash
+# Keep at least 3 generations, run GC, and optimise the store
+nh clean all --keep 3 --optimise
+```
+
+See `nh clean all --help` for the available retention and GC options. It needs
+root for system profiles.

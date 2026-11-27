@@ -27,6 +27,7 @@
             "nix-command"
             "flakes"
           ];
+          auto-optimise-store = true;
           extra-substituters = [
             "https://kopuz.cachix.org"
             "https://noctalia.cachix.org"
@@ -70,6 +71,11 @@
           automatic = true;
           dates = "weekly";
           options = "--delete-older-than 7d";
+        };
+
+        nix.optimise = {
+          automatic = true;
+          dates = [ "weekly" ];
         };
 
         time.timeZone = "Africa/Cairo";

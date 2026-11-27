@@ -41,6 +41,11 @@ inputs.nixpkgs-stable.lib.nixosSystem {
     inputs.agenix.nixosModules.default
     {
       networking.hostName = hostName;
+
+      # Home Manager 26.05 has no home.backupFileExtension option. Standalone
+      # Home Manager reads this environment variable during activation.
+      environment.variables.HOME_MANAGER_BACKUP_EXT = lib.mkDefault "backup";
+
       nixpkgs.overlays = lib.optional withUnstable (final: prev: {
         unstable = pkgsUnstable;
       });

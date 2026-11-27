@@ -24,6 +24,13 @@
 
       fonts.fontconfig.enable = true;
 
+      # Root's nix.gc does not expire standalone Home Manager generations.
+      services.home-manager.autoExpire = {
+        enable = lib.mkDefault true;
+        frequency = lib.mkDefault "weekly";
+        timestamp = lib.mkDefault "-14 days";
+      };
+
     programs.git = {
         enable = true;
         package = pkgs.git;

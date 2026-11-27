@@ -13,6 +13,7 @@ List recently modified files in a directory and pick with fzf.
 
 Options:
   --save       Copy selected paths to clipboard (wl-copy)
+  --print      Print selected paths to stdout (one per line)
   --no-picker  Skip fzf, print N most recent files directly
   --help       Show this help and exit
 
@@ -24,17 +25,20 @@ Examples:
   recent_files.sh
   recent_files.sh 10 ~/Downloads
   recent_files.sh --save 3 ~/Documents
+  recent_files.sh --print 3 ~/Documents
   recent_files.sh --no-picker 8 ~/Videos
 EOF
     exit 0
 }
 
 save_mode=false
+print_mode=false
 no_picker=false
 positional=()
 for arg in "$@"; do
     case "$arg" in
     --save) save_mode=true ;;
+    --print) print_mode=true ;;
     --no-picker) no_picker=true ;;
     --help) usage ;;
     *) positional+=("$arg") ;;
@@ -62,7 +66,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 preview_helper="$(printf '%q' "$script_dir")/fzf_preview.sh"
 search_dir_q="$(printf '%q' "$search_dir")"
 
-if ! $save_mode && ! $no_picker; then
+if ! $save_mode && ! $print_mode && ! $no_picker; then
     command -v gio >/dev/null 2>&1 || die "gio not found (required for default open mode)"
 fi
 $save_mode && ! command -v wl-copy >/dev/null 2>&1 && die "wl-copy not found (required for --save)"
@@ -109,18 +113,27 @@ needs_graphics_cleanup() {
 }
 
 clear_graphics() {
+    local seq
     if [ -n "${TMUX:-}" ]; then
-        printf '\ePtmux;\e\e_Ga=d,d=A\e\e\\\e\\'
+        seq=$'\ePtmux;\e\e_Ga=d,d=A\e\e\\\e\\'
     else
-        printf '\e_Ga=d,d=A\x1b\\'
+        seq=$'\e_Ga=d,d=A\x1b\\'
+    fi
+    # Write to stdout only when it is the terminal. When this script is used
+    # as a picker (stdout is a pipe carrying selected paths), target the
+    # controlling terminal instead so cleanup never corrupts the output.
+    if [ -t 1 ]; then
+        printf '%s' "$seq"
+    elif [ -w /dev/tty ]; then
+        { printf '%s' "$seq" >/dev/tty; } 2>/dev/null
     fi
 }
 
 if [ -t 1 ]; then
     clear
-    if needs_graphics_cleanup; then
-        trap clear_graphics EXIT
-    fi
+fi
+if needs_graphics_cleanup; then
+    trap clear_graphics EXIT
 fi
 
 selected=$(printf '%s\n' "$files" |
@@ -134,6 +147,13 @@ selected=$(printf '%s\n' "$files" |
         --preview-window='right:70%:border:wrap')
 
 [ -z "$selected" ] && exit 0
+
+if $print_mode; then
+    while IFS= read -r sel; do
+        printf '%s\n' "$search_dir/$sel"
+    done <<<"$selected"
+    exit 0
+fi
 
 if $save_mode; then
     paths=$(printf '"%s"' "$search_dir/$selected" | paste -sd,)

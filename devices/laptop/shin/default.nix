@@ -34,7 +34,6 @@ let
     "fish"
     "scripts"
     "theming"
-    "tmux"
     "tuios"
     "spotify"
     "xdg"

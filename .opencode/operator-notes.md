@@ -85,8 +85,11 @@ sections here; `/evolve` reviews them. Keep secrets out of this file.
 - **Prescription:** Build with
   `nix build .#homeConfigurations.<host>.activationPackage`. Hand
   `home-manager switch` to the user. `useGlobalPkgs`, `useUserPackages`, and
-  `backupFileExtension` are NixOS-side options and no longer apply; use
-  `home-manager switch -b backup` if needed.
+  `backupFileExtension` are NixOS-side options and no longer apply. Home Manager
+  26.05 also lacks the standalone `home.backupFileExtension` option, so
+  `mkHost` sets `HOME_MANAGER_BACKUP_EXT=backup` system-wide; standalone
+  activation then renames conflicting files with a `.backup` suffix.
+  `home-manager switch -b backup` still works as a one-off override.
 
 ## 2026-11-27 — nixvim plugin groups and server preset
 

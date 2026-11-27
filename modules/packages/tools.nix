@@ -38,6 +38,7 @@
         blueman
         ffmpeg
         whois
+        gocryptfs
         parted
         usbutils
         v4l-utils
