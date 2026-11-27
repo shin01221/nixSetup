@@ -76,8 +76,8 @@ nix build .#homeConfigurations.node1.activationPackage
 Hand activation to the user:
 
 ```bash
-nh home switch .#shin
-nh home switch .#node1
+nh home switch . -c shin
+nh home switch . -c node1
 
 # Equivalent without nh
 home-manager switch --flake .#shin

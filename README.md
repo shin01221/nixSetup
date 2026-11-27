@@ -79,7 +79,7 @@ Both builders pass `inputs`, `userName`, `homeDir`, `hostName`, `self`,
 `"server-baseline"` is in `hostFeatures`.
 
 Home Manager is standalone: apply NixOS with `nh os switch .#shin` and Home
-Manager with `nh home switch .#shin`.
+Manager with `nh home switch . -c shin`.
 
 ## Adding a new module and feature
 
@@ -235,8 +235,8 @@ nix build .#homeConfigurations.shin.activationPackage
 nix build .#homeConfigurations.node1.activationPackage
 
 # Apply Home Manager
-nh home switch .#shin
-nh home switch .#node1
+nh home switch . -c shin
+nh home switch . -c node1
 ```
 
 Without `nh`, use `sudo nixos-rebuild switch --flake .#shin` and
