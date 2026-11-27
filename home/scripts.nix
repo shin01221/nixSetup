@@ -1,13 +1,18 @@
-{ pkgs, osConfig, ... }:
-let
-  wm =
-    if osConfig.workstation.umbriel.enable or false then
-      "umbriel"
-    else if osConfig.workstation.niri.enable or false then
-      "niri"
-    else
-      "auto";
-in
+{ ... }:
 {
-  home.packages = [ (pkgs.callPackage ../pkgs/scripts { inherit wm; }) ];
+  flake.modules.homeManager.scripts =
+    { pkgs, hostFeatures, ... }:
+    let
+      wm =
+        if builtins.elem "umbriel" hostFeatures then
+          "umbriel"
+        else if builtins.elem "niri" hostFeatures then
+          "niri"
+        else
+          "auto";
+    in
+    {
+      home.packages = [ (pkgs.callPackage ../pkgs/scripts { inherit wm; }) ];
+    }
+  ;
 }

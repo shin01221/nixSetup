@@ -1,7 +1,12 @@
-{ inputs, ... }:
-
+{ ... }:
 {
-  imports = [ inputs.zapfast.homeManagerModules.default ];
+  flake.modules.homeManager.zapfast =
+    { inputs, ... }:
 
-  programs.zapfast.enable = true;
+    {
+      imports = [ inputs.zapfast.homeManagerModules.default ];
+
+      programs.zapfast.enable = true;
+    }
+  ;
 }

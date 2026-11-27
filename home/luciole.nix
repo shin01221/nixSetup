@@ -1,6 +1,11 @@
-{ inputs, ... }:
+{ ... }:
 {
-  imports = [ inputs.luciole.homeModules.default ];
+  flake.modules.homeManager.luciole =
+    { inputs, ... }:
+    {
+      imports = [ inputs.luciole.homeModules.default ];
 
-  programs.luciole.enable = true;
+      programs.luciole.enable = true;
+    }
+  ;
 }

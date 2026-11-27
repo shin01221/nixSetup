@@ -1,0 +1,66 @@
+{ ... }:
+{
+  flake.modules.nixos.tools =
+    { pkgs, inputs, ... }:
+    {
+      environment.systemPackages = with pkgs; [
+        inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+        hyprpicker
+        (pkgs.unstable or pkgs).miru
+        nh
+        wget
+        sesh
+        git
+        killall
+        lazygit
+        bat
+        chafa
+        curl
+        ffmpegthumbnailer
+        fzf
+        inputs.tuios.packages.${pkgs.stdenv.hostPlatform.system}.default
+        direnv
+        atuin
+        trash-cli
+        zoxide
+        btop
+        ripgrep
+        fd
+        grim
+        htop
+        tree
+        eza
+        fastfetch
+        nitch
+        starship
+        lazyssh
+        nixfmt
+        blueman
+        ffmpeg
+        whois
+        parted
+        usbutils
+        smartmontools
+        pciutils
+        file
+        imagemagick
+        jq
+        brightnessctl
+        acpilight
+        libnotify
+        glib
+        poppler
+        satty
+        sd
+        slurp
+        screen
+        gh
+        unzip
+        parallel
+        man-pages
+        swappy
+        psmisc
+        inputs.wayscrollshot.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
+    };
+}

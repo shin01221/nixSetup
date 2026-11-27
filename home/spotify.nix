@@ -1,91 +1,96 @@
-{ pkgs, config, lib, ... }:
-
-let
-  spicetify-bin = pkgs.callPackage ../pkgs/spicetify-bin { };
-  spicetifyExtensions = {
-    "shuffle+.js" = pkgs.fetchurl {
-      name = "shuffle+.js";
-      url = "https://raw.githubusercontent.com/spicetify/cli/main/Extensions/shuffle%2B.js";
-      hash = "sha256-mg6RSPTfOHRjunTvm1ZGZOXPakhxvy0jNPJIPQHbBek=";
-    };
-    "copytoclipboard.js" = pkgs.fetchurl {
-      name = "copytoclipboard.js";
-      url = "https://raw.githubusercontent.com/pnthach95/spicetify-extensions/main/dist/copytoclipboard.js";
-      hash = "sha256-s2WwIo53n6UlvUwNbpeUIVrsdOxl0o3Pxif2/O5Etsk=";
-    };
-    "hidePodcasts.js" = pkgs.fetchurl {
-      name = "hidePodcasts.js";
-      url = "https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/hidePodcasts.js";
-      hash = "sha256-cn5aL5E39L536sg9I0oM6FjF1hjn/1YRam3vAXk/w/g=";
-    };
-    "adblock.js" = pkgs.fetchurl {
-      name = "adblock.js";
-      url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/adblock/adblock.js";
-      hash = "sha256-Uj8afW1sAKUKkUwF88JQrD2U+PJf8q3bG+7IF0e8tpk=";
-    };
-    "volumePercentage.js" = pkgs.fetchurl {
-      name = "volumePercentage.js";
-      url = "https://raw.githubusercontent.com/jeroentvb/spicetify-volume-percentage/main/volumePercentage.js";
-      hash = "sha256-G3+110V1uo/Vt7g2j45AD9ul7k3VKpnn16xOR6hYGnU=";
-    };
-  };
-in
+{ ... }:
 {
-  home.packages = with pkgs; [
-    spotify
-    spicetify-bin
-  ];
+  flake.modules.homeManager.spotify =
+    { pkgs, config, lib, ... }:
 
-  xdg.desktopEntries."spotify" = {
-    name = "Spotify";
-    exec = "${config.home.homeDirectory}/.local/bin/spotify %U";
-    terminal = false;
-    categories = [ "Audio" "Music" "Player" "AudioVideo" ];
-    mimeType = [ "x-scheme-handler/spotify" ];
-  };
+    let
+      spicetify-bin = pkgs.callPackage ../pkgs/spicetify-bin { };
+      spicetifyExtensions = {
+        "shuffle+.js" = pkgs.fetchurl {
+          name = "shuffle+.js";
+          url = "https://raw.githubusercontent.com/spicetify/cli/main/Extensions/shuffle%2B.js";
+          hash = "sha256-mg6RSPTfOHRjunTvm1ZGZOXPakhxvy0jNPJIPQHbBek=";
+        };
+        "copytoclipboard.js" = pkgs.fetchurl {
+          name = "copytoclipboard.js";
+          url = "https://raw.githubusercontent.com/pnthach95/spicetify-extensions/main/dist/copytoclipboard.js";
+          hash = "sha256-s2WwIo53n6UlvUwNbpeUIVrsdOxl0o3Pxif2/O5Etsk=";
+        };
+        "hidePodcasts.js" = pkgs.fetchurl {
+          name = "hidePodcasts.js";
+          url = "https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/hidePodcasts.js";
+          hash = "sha256-cn5aL5E39L536sg9I0oM6FjF1hjn/1YRam3vAXk/w/g=";
+        };
+        "adblock.js" = pkgs.fetchurl {
+          name = "adblock.js";
+          url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/adblock/adblock.js";
+          hash = "sha256-Uj8afW1sAKUKkUwF88JQrD2U+PJf8q3bG+7IF0e8tpk=";
+        };
+        "volumePercentage.js" = pkgs.fetchurl {
+          name = "volumePercentage.js";
+          url = "https://raw.githubusercontent.com/jeroentvb/spicetify-volume-percentage/main/volumePercentage.js";
+          hash = "sha256-G3+110V1uo/Vt7g2j45AD9ul7k3VKpnn16xOR6hYGnU=";
+        };
+      };
+    in
+    {
+      home.packages = with pkgs; [
+        spotify
+        spicetify-bin
+      ];
 
-  home.activation.setup-spicetify = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    SPICE="${spicetify-bin}/bin/spicetify"
-    SPOTIFY_STORE="${pkgs.spotify}/share/spotify"
-    SPOTIFY_MUTABLE="$HOME/.local/share/spicetify/Spotify"
-    EXTENSIONS_DIR="$HOME/.config/spicetify/Extensions"
-    SPICE_CONFIG="$HOME/.config/spicetify/config-xpui.ini"
-    STAMP="$HOME/.config/spicetify/.stamp"
+      xdg.desktopEntries."spotify" = {
+        name = "Spotify";
+        exec = "${config.home.homeDirectory}/.local/bin/spotify %U";
+        terminal = false;
+        categories = [ "Audio" "Music" "Player" "AudioVideo" ];
+        mimeType = [ "x-scheme-handler/spotify" ];
+      };
 
-    NEW_STAMP="$(md5sum "$SPOTIFY_STORE/spotify" 2>/dev/null | cut -d' ' -f1)-$(echo ${lib.concatStringsSep "-" (builtins.attrValues spicetifyExtensions)})"
-    if [ -f "$STAMP" ] && [ "$(cat "$STAMP")" = "$NEW_STAMP" ]; then
-      exit 0
-    fi
+      home.activation.setup-spicetify = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+        SPICE="${spicetify-bin}/bin/spicetify"
+        SPOTIFY_STORE="${pkgs.spotify}/share/spotify"
+        SPOTIFY_MUTABLE="$HOME/.local/share/spicetify/Spotify"
+        EXTENSIONS_DIR="$HOME/.config/spicetify/Extensions"
+        SPICE_CONFIG="$HOME/.config/spicetify/config-xpui.ini"
+        STAMP="$HOME/.config/spicetify/.stamp"
 
-    # Symlink extension files from nix store
-    mkdir -p "$EXTENSIONS_DIR"
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: path: ''
-      ln -sf "${path}" "$EXTENSIONS_DIR/${name}"
-    '') spicetifyExtensions)}
+        NEW_STAMP="$(md5sum "$SPOTIFY_STORE/spotify" 2>/dev/null | cut -d' ' -f1)-$(echo ${lib.concatStringsSep "-" (builtins.attrValues spicetifyExtensions)})"
+        if [ -f "$STAMP" ] && [ "$(cat "$STAMP")" = "$NEW_STAMP" ]; then
+          exit 0
+        fi
 
-    rm -rf "$SPOTIFY_MUTABLE"
-    cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
-    chmod -R u+w "$SPOTIFY_MUTABLE"
-    $SPICE config spotify_path "$SPOTIFY_MUTABLE"
-    $SPICE config current_theme Comfy
-    $SPICE config color_scheme Comfy
+        # Symlink extension files from nix store
+        mkdir -p "$EXTENSIONS_DIR"
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: path: ''
+          ln -sf "${path}" "$EXTENSIONS_DIR/${name}"
+        '') spicetifyExtensions)}
 
-    $SPICE backup apply 2>/dev/null || true
+        rm -rf "$SPOTIFY_MUTABLE"
+        cp -r "$SPOTIFY_STORE" "$SPOTIFY_MUTABLE"
+        chmod -R u+w "$SPOTIFY_MUTABLE"
+        $SPICE config spotify_path "$SPOTIFY_MUTABLE"
+        $SPICE config current_theme Comfy
+        $SPICE config color_scheme Comfy
 
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: _: ''
-      $SPICE config extensions "${name}" 2>/dev/null || true
-    '') spicetifyExtensions)}
-    $SPICE apply
+        $SPICE backup apply 2>/dev/null || true
 
-    # Fix wrapper to launch mutable .spotify-wrapped instead of nix store one
-    if [ -f "$SPOTIFY_MUTABLE/spotify" ]; then
-      sed -i "s|/nix/store/[^/]*/share/spotify/\.spotify-wrapped|$SPOTIFY_MUTABLE/.spotify-wrapped|g" "$SPOTIFY_MUTABLE/spotify"
-      sed -i '1s|#! */nix/store/[^/]*/bin/bash.*|#!/usr/bin/env bash|' "$SPOTIFY_MUTABLE/spotify"
-    fi
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: _: ''
+          $SPICE config extensions "${name}" 2>/dev/null || true
+        '') spicetifyExtensions)}
+        $SPICE apply
 
-    mkdir -p "$HOME/.local/bin"
-    ln -sf "$SPOTIFY_MUTABLE/spotify" "$HOME/.local/bin/spotify"
+        # Fix wrapper to launch mutable .spotify-wrapped instead of nix store one
+        if [ -f "$SPOTIFY_MUTABLE/spotify" ]; then
+          sed -i "s|/nix/store/[^/]*/share/spotify/\.spotify-wrapped|$SPOTIFY_MUTABLE/.spotify-wrapped|g" "$SPOTIFY_MUTABLE/spotify"
+          sed -i '1s|#! */nix/store/[^/]*/bin/bash.*|#!/usr/bin/env bash|' "$SPOTIFY_MUTABLE/spotify"
+        fi
 
-    echo "$NEW_STAMP" > "$STAMP"
-  '';
+        mkdir -p "$HOME/.local/bin"
+        ln -sf "$SPOTIFY_MUTABLE/spotify" "$HOME/.local/bin/spotify"
+
+        echo "$NEW_STAMP" > "$STAMP"
+      '';
+    }
+  ;
 }

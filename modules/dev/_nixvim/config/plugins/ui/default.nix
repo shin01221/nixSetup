@@ -1,0 +1,21 @@
+{
+  imports = [
+    ./alpha.nix
+    ./bufferline.nix
+    ./general.nix
+    ./flash.nix
+    ./lightbulb.nix
+    ./lualine.nix
+    ./noice.nix
+    ./notify.nix
+    ./nui.nix
+    ./precognition.nix
+    ./toggleterm.nix
+    ./markdown-preview.nix
+    ./transparent.nix
+    ./better-diagnostics.nix
+    ./render-markdown.nix
+    ./markdoc.nix
+    ./markdowny.nix
+  ];
+}

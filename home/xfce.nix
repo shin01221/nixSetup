@@ -1,32 +1,37 @@
-{ config, pkgs, lib, ... }:
-
-let
-  nixIconPath = "${config.xdg.dataHome}/icons/nix/nix-icon.svg";
-in
+{ ... }:
 {
-  gtk = {
-    enable = true;
-    theme = {
-      name = "Graphite-Dark";
-      package = pkgs.graphite-gtk-theme;
-    };
-    iconTheme = {
-      name = "elementary-xfce";
-      package = pkgs.elementary-xfce-icon-theme;
-    };
-    gtk3.extraConfig.Settings = ''
-      gtk-application-prefer-dark-theme=1
-    '';
-    gtk4.extraConfig.Settings = ''
-      gtk-application-prefer-dark-theme=1
-    '';
-  };
+  flake.modules.homeManager.xfce =
+    { config, pkgs, lib, ... }:
 
-  xdg.dataFile."icons/nix/nix-icon.svg".source = ../config/icons/nix-icon.svg;
+    let
+      nixIconPath = "${config.xdg.dataHome}/icons/nix/nix-icon.svg";
+    in
+    {
+      gtk = {
+        enable = true;
+        theme = {
+          name = "Graphite-Dark";
+          package = pkgs.graphite-gtk-theme;
+        };
+        iconTheme = {
+          name = "elementary-xfce";
+          package = pkgs.elementary-xfce-icon-theme;
+        };
+        gtk3.extraConfig.Settings = ''
+          gtk-application-prefer-dark-theme=1
+        '';
+        gtk4.extraConfig.Settings = ''
+          gtk-application-prefer-dark-theme=1
+        '';
+      };
 
-  xdg.configFile."xfce4/panel/whiskermenu-12.rc".text = ''
-    button-icon=${nixIconPath}
-    button-single-row=false
-    show-button-title=false
-  '';
+      xdg.dataFile."icons/nix/nix-icon.svg".source = ../config/icons/nix-icon.svg;
+
+      xdg.configFile."xfce4/panel/whiskermenu-12.rc".text = ''
+        button-icon=${nixIconPath}
+        button-single-row=false
+        show-button-title=false
+      '';
+    }
+  ;
 }

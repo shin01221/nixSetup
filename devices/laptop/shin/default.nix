@@ -1,145 +1,59 @@
+{ inputs, config, ... }:
+let
+  mkHost = import ../../../modules/flake/_mk-host.nix { inherit inputs; };
+in
 {
-  config,
-  lib,
-  pkgs,
-  inputs,
-  modulesPath,
-  ...
-}:
-
-{
-  imports = [
-    ./hardware-configuration.nix
-    ../../../modules
-  ];
-
-  # hostname
-  networking.hostName = "nixos";
-  hardware.cpu.amd.updateMicrocode = true;
-
-  boot.kernelModules = [
-    "i2c_hid"
-    "hid_multitouch"
-  ];
-
-  workstation = {
-    baseline = {
-      enable = true; # enable baseline config
-      userName = "shin";
-      packages = {
-        tools = true; # enable common suite of CLI tools
-        dev = true; # enable common langs/lang related tools
-        apps = true; # enable common desktop applications
-        themes = true;
-      };
-    };
-    nixvim.enable = true; # enable nixvim configuration
-    umbriel.enable = true; # change to a different profile if you want
-    polkit.enable = true;
-    yazi.enable = true; # yazi
-    virtualization.enable = true; # enable QEMU/KVM virtualization
-    nvidia = {
-      enable = true;
-      prime = {
-        amdgpuBusId = "PCI:5:0:0";
-        nvidiaBusId = "PCI:1:0:0";
-      };
-    };
-    games.enable = true; # enable gaming support
-    network = {
-      enable = true; # enable firewall
-      torProxy.enable = true; # enable Tor SOCKS proxy for blocked sites
-    };
-    security.enable = true; # enable AppArmor
-    services.enable = true; # enable fstrim, keyring
-    system.enable = true; # enable nix-index-database, GPG agent
-    memory.enable = true; # enable zRAM swap + oomd
-    media.enable = true;
-    audio.enable = true;
-    touchpad.enable = true;
-    sound.enable = true;
-    zen.enable = true;
-    tuning.tlp.enable = true;
-
-    # Home-manager toggles (all opt-in)
-    home = {
-      fish = true;
-      scripts = true;
-      theming = true;
-      tmux = {
-        enable = true;
-        sessionx.enable = false;
-      };
-      tuios = true;
-      spotify = true;
-      xdg = true;
-      obs-studio = true;
-      obsidian = true;
-      zapfast = true;
-      foot = true;
-      ghostty = true;
-      dolphin = true;
-      luciole = true;
-      niri = false;
-      umbriel = true;
-      matugen = true;
-      noctalia = true;
-      wlr-which-key = true;
-      audio = true;
-    };
-
-    # flatpak = {
-    #   enable = true;
-    #   onCalendar = "weekly";
-    #   packages = [ ];
-    # };
-  };
-
-  xdg.portal = {
-    extraPortals = [
-      inputs.luciole.packages.${pkgs.stdenv.hostPlatform.system}.default
+  flake.nixosConfigurations.shin = mkHost {
+    hostName = "nixos";
+    userName = "shin";
+    withUnstable = true;
+    nixosModules = config.flake.modules.nixos;
+    homeModules = config.flake.modules.homeManager;
+    features = [
+      "baseline"
+      "tools"
+      "dev"
+      "apps"
+      "themes"
+      "nixvim"
+      "umbriel"
+      "polkit"
+      "yazi"
+      "virtualization"
+      "nvidia"
+      "games"
+      "network"
+      "security"
+      "services"
+      "system"
+      "memory"
+      "media"
+      "audio"
+      "touchpad"
+      "sound"
+      "zen"
+      "tlp"
+      "fish"
+      "scripts"
+      "theming"
+      "tmux"
+      "tuios"
+      "spotify"
+      "xdg"
+      "obs-studio"
+      "obsidian"
+      "zapfast"
+      "foot"
+      "ghostty"
+      "dolphin"
+      "luciole"
+      "matugen"
+      "noctalia"
+      "wlr-which-key"
     ];
-    config.common."org.freedesktop.impl.portal.FileChooser" = [ "luciole" "gtk" ];
+    extraModules = [
+      ./hardware-configuration.nix
+      ./host.nix
+    ];
   };
-
-  programs.kdeconnect.enable = true;
-
-  services.openssh.enable = false;
-  services.fprintd.enable = false;
-
-  age.identityPaths = [ "/home/shin/.ssh/agenix_shin" ];
-
-  # symlink agenix key so I can use it in cli
-  # system.activationScripts.agenix-cli-identity = ''
-  #   mkdir -p /home/shin/.ssh
-  #   if [ ! -e /home/shin/.ssh/id_ed25519 ]; then
-  #     ln -s agenix_shin /home/shin/.ssh/id_ed25519
-  #   fi
-  # '';
-
-  systemd.services.micmute-led-off = {
-    description = "Turn off micmute LED at boot";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "sysinit.target" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 0 > /sys/class/leds/platform::micmute/brightness || true'";
-    };
-  };
-
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    dockerSocket.enable = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-
-  environment.systemPackages = with pkgs; [
-    v4l-utils
-    podman-compose
-    (writeShellScriptBin "docker-compose" ''
-      exec ${pkgs.podman-compose}/bin/podman-compose "$@"
-    '')
-  ];
 }

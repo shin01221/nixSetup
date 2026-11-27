@@ -1,0 +1,102 @@
+{ ... }:
+{
+  flake.modules.nixos.server-baseline =
+    {
+      config,
+      lib,
+      pkgs,
+      inputs,
+      ...
+    }:
+    let
+      userName = config.server.baseline.userName;
+    in
+    {
+      options.server.baseline = {
+        userName = lib.mkOption {
+          type = lib.types.str;
+          description = "Primary user account name";
+        };
+      };
+
+      config = {
+        users.users.${userName} = {
+          isNormalUser = true;
+          extraGroups = [ "wheel" ];
+        };
+
+        nix.settings.experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+
+        nixpkgs.config.allowUnfree = true;
+
+        networking.networkmanager.enable = true;
+
+        nix.gc = {
+          automatic = true;
+          dates = "weekly";
+          options = "--delete-older-than 14d";
+        };
+
+        nix.optimise = {
+          automatic = true;
+          dates = [ "weekly" ];
+        };
+
+        services.journald.extraConfig = ''
+          SystemMaxUse=500M
+        '';
+
+        time.timeZone = "Africa/Cairo";
+
+        i18n.defaultLocale = "en_US.UTF-8";
+        console = {
+          font = "Lat2-Terminus16";
+          keyMap = "us";
+        };
+
+        programs.zsh.enable = true;
+        environment.pathsToLink = [ "/share/zsh" ];
+
+        environment.systemPackages = with pkgs; [
+          # tools/etc
+          inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+          wget
+          git
+          htop
+          curl
+          tree
+          fastfetch
+          starship
+          ffmpeg
+          whois
+          parted
+          usbutils
+          smartmontools
+          pciutils
+          file
+          dig
+          oh-my-zsh
+          autojump
+          compose2nix
+          jq
+          tmux
+          eza
+          neovim
+          vim
+          python3
+          zoxide
+          fish
+        ];
+
+        services = {
+          tailscale.enable = true;
+          qemuGuest.enable = true;
+        };
+
+        system.stateVersion = "25.05";
+      };
+    };
+}

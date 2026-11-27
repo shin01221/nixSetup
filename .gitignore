@@ -5,3 +5,10 @@ terra/terraform.tfstate.backup
 terra/.terraform.tfstate.lock.info
 secrets.fish
 config/fish/secrets.fish
+
+# Nix build symlinks
+/result
+/result-*
+
+# OpenCode local plugin state
+.opencode/node_modules/

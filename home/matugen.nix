@@ -1,3 +1,8 @@
+{ ... }:
 {
-  xdg.configFile."matugen".source = ../config/matugen;
+  flake.modules.homeManager.matugen =
+    {
+      xdg.configFile."matugen".source = ../config/matugen;
+    }
+  ;
 }

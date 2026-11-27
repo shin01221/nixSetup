@@ -5,6 +5,9 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:denful/import-tree";
+
     home-managerU = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -78,215 +81,14 @@
 
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs-unstable,
-      nixpkgs-stable,
-      home-managerU,
-      home-managerS,
-      noctalia,
-      kopuz,
-      agenix,
-      nixvim,
-      disko,
-      tuios,
-      ...
-    }@inputs:
-    let
-      system = "x86_64-linux";
-      libU = nixpkgs-unstable.lib;
-      libS = nixpkgs-stable.lib;
-
-      mkWorkstation =
-        {
-          deviceModule,
-          userName ? "shin",
-        }:
-        let
-          homeDir = "/home/${userName}";
-        in
-        libU.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit
-              self
-              inputs
-              userName
-              homeDir
-              ;
-          };
-          modules = [
-            deviceModule
-            home-managerU.nixosModules.home-manager
-            agenix.nixosModules.default
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                extraSpecialArgs = {
-                  inherit
-                    self
-                    inputs
-                    userName
-                    homeDir
-                    ;
-                };
-                sharedModules = [
-                  (
-                    { osConfig, ... }:
-                    {
-                      _module.args = {
-                        hostName = osConfig.networking.hostName;
-                        isServer = osConfig.server.baseline.enable or false;
-                      };
-                    }
-                  )
-                ];
-                users.${userName} = {
-                  imports = [ ./home ];
-                };
-              };
-            }
-          ];
-        };
-
-      mkWorkstationStable =
-        {
-          deviceModule,
-          userName ? "shin",
-        }:
-        let
-          homeDir = "/home/${userName}";
-          pkgsUnstable = import inputs.nixpkgs-unstable {
-            inherit system;
-            config = {
-              allowUnfree = true;
-              nvidia.acceptLicense = true;
-              permittedInsecurePackages = [ "electron-39.8.10" ];
-            };
-          };
-        in
-        libS.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit
-              self
-              inputs
-              userName
-              homeDir
-              pkgsUnstable
-              ;
-          };
-          modules = [
-            deviceModule
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  unstable = pkgsUnstable;
-                })
-              ];
-            }
-            home-managerS.nixosModules.home-manager
-            agenix.nixosModules.default
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                extraSpecialArgs = {
-                  inherit
-                    self
-                    inputs
-                    userName
-                    homeDir
-                    pkgsUnstable
-                    ;
-                };
-                sharedModules = [
-                  (
-                    { osConfig, ... }:
-                    {
-                      _module.args = {
-                        hostName = osConfig.networking.hostName;
-                        isServer = osConfig.server.baseline.enable or false;
-                      };
-                    }
-                  )
-                ];
-                users.${userName} = {
-                  imports = [ ./home ];
-                };
-              };
-            }
-          ];
-        };
-
-      mkServer =
-        {
-          deviceModule,
-          userName ? "shin",
-        }:
-        let
-          homeDir = "/home/${userName}";
-        in
-        libS.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit self inputs;
-          };
-          modules = [
-            deviceModule
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./modules/baseline.server.nix
-            ./modules/home-options.nix
-            ./modules/nixvim
-            ./modules/ssh.nix
-            home-managerS.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                extraSpecialArgs = {
-                  inherit
-                    self
-                    inputs
-                    userName
-                    homeDir
-                    ;
-                };
-                sharedModules = [
-                  (
-                    { osConfig, ... }:
-                    {
-                      _module.args = {
-                        hostName = osConfig.networking.hostName;
-                        isServer = osConfig.server.baseline.enable or false;
-                      };
-                    }
-                  )
-                ];
-                users.${userName} = {
-                  imports = [ ./home ];
-                };
-              };
-            }
-          ];
-        };
-    in
-    {
-      nixosConfigurations = {
-        shin = mkWorkstationStable {
-          deviceModule = ./devices/laptop/shin/default.nix;
-          userName = "shin";
-        };
-        node1 = mkServer {
-          deviceModule = ./devices/server/node1/default.nix;
-          userName = "node1";
-        };
-      };
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.flake-parts.flakeModules.modules
+        inputs.home-managerS.flakeModules.home-manager
+        (inputs.import-tree ./modules)
+        (inputs.import-tree ./home)
+        (inputs.import-tree.filter (path: builtins.baseNameOf path == "default.nix") ./devices)
+      ];
     };
 }
