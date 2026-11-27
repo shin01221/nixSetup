@@ -1,65 +1,205 @@
-# My NixOS configurations v3
+# NixOS configuration
 
-This is a pretty significant overhaul of the structure the repo used previously, and should allow for more flexibility and easier modification. About 20 directories and 40 files were removed.
+Personal NixOS configuration for two hosts:
 
-The flake builds no longer depend on hostname-profile (e.g. `erebos-niri`, `prometheus-hypr`, etc) and are now only `.#hostname`. I've converted the "profiles" I used before into modules which can be enabled or disabled as needed. At the time of writing, the Home Manager file for the respective environment will need to be swapped out in `flake.nix`. Make sure you comment or remove any conflicting files from other environments.
+- `shin` — laptop/workstation, nixpkgs-stable with an `unstable` overlay.
+- `node1` — server, nixpkgs-stable with disko and agenix.
 
-I previously got a little over-ambitious in the past and pushed a structure for servers, I have since removed that structure (the bulk of the directories and files that were removed) and instead am slowly migrating services to NixOS servers. If you would like to take a look at how I have configured those, relevant files are `/flake.nix`, `/modules/baseline.server.nix`, `/home/server.nix`, and `/devices/server/*`. 
-
-Though I've learned a lot about NixOS since I started daily driving it in 2025, this configuration should be used with caution. You should review all files for anything that may conflict with what you are looking for out of your build. You may need to adjust occurrences of things specific to my environment, like hostnames, usernames, filesystem mounts, etc. Part of the reason I broke things up into modules is to make that process easier.
-
-## Table of Contents
-- [Repo structure](#repo-structure)
-- [Important things to note](#important-things-to-note)
-- [Current valid build commands](#current-valid-build-commands-from-root-of-repo)
-- [Showcase](#showcase)
-- [Installation](#installation)
-- [Sponsor NixOS](#sponsor-nixos)
-- [Github mirror](#github-mirror)
+The flake attribute is the host key (`.#shin`, `.#node1`). This is not always the
+same as `networking.hostName`; for example, `shin` sets `hostName = "nixos"`.
 
 ## Repo structure
 
-- `/config`: software configuration files (ghostty, fastfetch, niri binds, etc). Pretty much all of these are managed through Home Manager and deployed to `~/.config`.
-- `/devices`: broken into `/desktop`, `/laptop`, and `/server`. This is where device-specific configurations and modules are imported and set, as well as the home for `hardware-configuration.nix`. If you're cloning this repo, don't forget to replace this file with your own.
-- `/home`: Home Manager configurations for my baseline (`common.nix`), DE/WM-specific configurations, etc.
-- `/modules`: this is where the vast majority of the restructuring was done. Review and adjust as needed. Many things are specific to my environment. Overall, the move to modules should make this repo much more flexible for both myself and anyone else who may want to use it.
-- `/pics`: profile pictures and eventually screenshots to include in the README.
+- `flake.nix` — flake-parts entry point. It imports
+  `flake-parts.flakeModules.modules`,
+  `home-managerS.flakeModules.home-manager`, and uses `import-tree` over
+  `./modules`, `./home`, and `./devices`.
+- `modules/<domain>/<name>.nix` — NixOS features, defined as
+  `flake.modules.nixos.<name>`.
+- `home/<name>.nix` — Home Manager features, defined as
+  `flake.modules.homeManager.<name>`.
+- `devices/<type>/<host>/default.nix` — host entry point. It calls `mkHost` and
+  lists the features enabled on that host.
+- `devices/<type>/<host>/host.nix` — host-specific plain NixOS module.
+- `config/` — raw dotfiles deployed by Home Manager.
+- Files and directories prefixed with `_` are ignored by `import-tree` and are
+  implementation details.
 
-## Important things to note
+## How `mkHost` works
 
-- My workstations run on the **unstable** branch, use the **latest kernel**, and **allow unfree software**. My servers run on the **stable** branch, use an **LTS kernel**, and also allow **unfree software**. Garbage collection removes all generations older than 7 days on both workstations and servers, Nix store optimization is run on every rebuild.
-- `/modules/baseline.nix` is exactly what it sounds like. Services, kernel and boot parameters, and other core, shared settings are defined here. You should review this file. The baseline is enabled with: ```workstation.baseline.enable = true;```. Most modules are nested within the ```workstation``` option.
-- `/modules/packages.nix` handles all shared packages for workstations. It is broken up into options, being ```tools```, ```dev```, and ```apps```. I have nested the modules options into the ```baseline``` option as I still consider it a part of the baseline, but that file was getting too big and this makes more sense.
-- All builds use **zsh** by default. I have separate **zsh** and **bash** Home Manager files, you can switch the shell to say bash by modifying the shell file Home Manager imports under either machines entry in ```flake.nix```.
-- I use **Niri** almost exclusively. The Niri module uses **Noctalia Shell**. If you don't want to use Noctalia, remove it's input in `flake.nix` and remove the package from Niri's module. If you're using my Niri config from `/config/niri`, remove ```spawn-at-startup "noctalia-shell"``` from the file. The Niri module will be up to date more often than the others. GNOME and XFCE modules should be stable and usable.
-- Hyprland currently lags behind upstream. Breaking changes were made to window-rule syntax in version 0.53, and I have not yet made adjustments to accommodate this. I don't really have any window rules though so it's probably fine. Use niri.
-- KDE and GNOME work great if that's what you like.
-- Display managers change depending on what environment you choose:
-  - Desktop environments use their defaults (GNOME = GDM, KDE = SDDM, XFCE = LightDM)
-  - Window managers use `tuigreet` with autologin
-- The **SteamOS** build is **not** a functional configuration. This was an experiment to create a SteamOS-like environment that boots directly into Gamescope, aiming for a more console-like experience with support for things like Netflix or YouTube as non-Steam games. It does boot into Gamescope with Steam in Big Picture mode (after a delay), but playing games or streaming them from another device does not work.
-- This repo is not 100 MB. Wallpapers used to live here and were removed. The blobs should also be removed from `.git`. ```du -hs``` reports **8.7 MB** at the time of writing.
+`modules/flake/_mk-host.nix` is the shared host builder. A host passes:
 
-## Current valid build commands (from root of repo)
+```nix
+mkHost {
+  hostName = "nixos";
+  userName = "shin";
+  withUnstable = true;
+  nixosModules = config.flake.modules.nixos;
+  homeModules = config.flake.modules.homeManager;
+  features = [ "baseline" "tools" "dev" "nixvim" "fish" ];
+  extraModules = [ ./hardware-configuration.nix ./host.nix ];
+}
+```
 
-```sudo nixos-rebuild boot --flake .#shin``` (laptop build)
+It does three important things:
 
-```sudo nixos-rebuild boot --flake .#erebos``` (desktop/gaming build)
+1. **Selects features by name.** `halves` walks the `features` list and looks up
+   each name in `nixosModules` and `homeModules` independently:
+   - if the name exists in `nixosModules`, that NixOS module is applied;
+   - if it exists in `homeModules`, that Home Manager module is applied;
+   - if it exists in both, both are applied.
+2. **Builds the NixOS system.** It calls
+   `inputs.nixpkgs-stable.lib.nixosSystem` with the selected NixOS modules plus
+   `extraModules`.
+3. **Builds Home Manager inside NixOS.** It imports
+   `home-managerS.nixosModules.home-manager`, enables
+   `useGlobalPkgs`/`useUserPackages`, and sets
+   `home-manager.users.<user>.imports` to `homeModules.common` plus the selected
+   Home Manager features. `homeModules.common` is always imported.
 
-Same goes for any other entry in the flake.
+It also passes `inputs`, `userName`, `homeDir`, `hostName`, `self`,
+`hostFeatures`, and `isServer` to both module systems. `isServer` is true when
+`"server-baseline"` is in the feature list.
 
-## Showcase
+Because Home Manager is integrated into NixOS, do not run
+`home-manager switch`. Use `nixos-rebuild switch` instead.
 
-<video src="https://codeberg.org/sensei/nixos/raw/branch/assets/recording_20260208_103359.mp4" controls width="100%"></video>
+## Adding a new module and feature
 
-## Installation
+### NixOS module
 
-For installation instructions, please see https://codeberg.org/sensei/nixos/wiki/Installation-instructions
+Create `modules/<domain>/<name>.nix`:
 
-## Sponsor NixOS
+```nix
+{ ... }:
+{
+  flake.modules.nixos.example =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.hello ];
+    };
+}
+```
 
-Please consider sponsoring NixOS to support the people that this possible https://github.com/sponsors/NixOS
+Then add `"example"` to the host's `features` list in
+`devices/<type>/<host>/default.nix`:
 
-## GitHub mirror
+```nix
+features = [
+  "baseline"
+  "example"
+];
+```
 
-For the GitHub only folks, you can find the mirror here https://github.com/epic9491/nixos
+### Home Manager module
+
+Create `home/<name>.nix`:
+
+```nix
+{ ... }:
+{
+  flake.modules.homeManager.example =
+    { pkgs, ... }:
+    {
+      home.packages = [ pkgs.hello ];
+    };
+}
+```
+
+Add the same feature name to the host's `features` list. If a NixOS module and a
+Home Manager module share the name `example`, both are selected automatically.
+
+Home Manager modules receive `hostFeatures`, `isServer`, `userName`, `homeDir`,
+`hostName`, `inputs`, and `self`. Use those instead of reading NixOS `osConfig`.
+Host-only Home Manager modules can be passed through `extraHomeModules`.
+
+## Nixvim and server hosts
+
+Nixvim is wrapped by `modules/dev/nixvim.nix`, which imports
+`modules/dev/_nixvim` and sets `workstation.nixvim.enable = true` when the
+`"nixvim"` feature is selected.
+
+The useful options are:
+
+- `workstation.nixvim.groups` — enable or disable whole plugin groups.
+- `workstation.nixvim.plugins` — per-plugin overrides.
+- `workstation.nixvim.lspServers` — per-LSP overrides.
+- `workstation.nixvim.server` — use the server preset.
+- `workstation.nixvim.minimal` — strip heavy UI, most LSPs, and non-essential
+  plugins.
+- `workstation.nixvim.servers.ansiblels` — enable the Ansible LSP.
+
+On a host with `"server-baseline"` in `features`:
+
+- `isServer` is `true`.
+- `workstation.nixvim.server` defaults to `isServer`.
+- `workstation.nixvim.minimal` defaults to `server`.
+
+So a server host gets the minimal nvim configuration automatically. To force the
+minimal preset on a non-server host, set `workstation.nixvim.server = true;` or
+`workstation.nixvim.minimal = true;`.
+
+## Example server host
+
+Create `devices/server/example/default.nix`:
+
+```nix
+{ inputs, config, ... }:
+let
+  mkHost = import ../../../modules/flake/_mk-host.nix { inherit inputs; };
+in
+{
+  flake.nixosConfigurations.example = mkHost {
+    hostName = "example";
+    userName = "example";
+    nixosModules = config.flake.modules.nixos;
+    homeModules = config.flake.modules.homeManager;
+    features = [
+      "server-baseline"
+      "nixvim"
+      "tmux"
+      "fish"
+    ];
+    extraModules = [
+      ./hardware-configuration.nix
+      ./host.nix
+    ];
+  };
+}
+```
+
+Create `devices/server/example/host.nix`:
+
+```nix
+{ ... }:
+{
+  server.baseline.userName = "example";
+
+  # Minimal nvim is automatic because "server-baseline" is selected.
+  # Optional extras:
+  workstation.nixvim.servers.ansiblels = true;
+
+  system.stateVersion = "25.05";
+}
+```
+
+## Commands
+
+```bash
+# Evaluate the flake
+nix flake check
+
+# Build a host without activating it
+nixos-rebuild build --flake .#shin
+nixos-rebuild build --flake .#node1
+
+# Apply — these need root
+sudo nixos-rebuild switch --flake .#shin
+sudo nixos-rebuild switch --flake .#node1
+```
+
+To verify the Home Manager side builds:
+
+```bash
+nix build .#nixosConfigurations.shin.config.home-manager.users.shin.home.activationPackage
+```
