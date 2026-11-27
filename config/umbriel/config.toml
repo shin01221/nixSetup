@@ -308,8 +308,8 @@ default_floating = true
 
 # Workspace assignments.
 [[window_rule]]
-match.app_id = 'zen'
-default_workspace = "Net"
+match.app_id = 'zen\-beta'
+default_workspace = "web"
 default_maximize_to_edges = true
 
 # Maximize-to-edges when a window is alone, except the apps excluded below.
