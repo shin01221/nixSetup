@@ -125,6 +125,7 @@ default_display = "normal"
 "Mod+D" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
 "Mod+Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
 "Mod+Alt+Print" = { action = "spawn noctalia msg screenshot-fullscreen all", repeat = false }
+"Mod+Shift+Print" = { action = "spawn noctalia msg screenshot-window", repeat = false }
 "Ctrl+Print" = { action = 'spawn mkdir -p /home/shin/Pictures/Screenshots && wayscrollshot -o /home/shin/Pictures/Screenshots/wayscrollshot-$(date +%Y-%m-%d_%H-%M-%S).png', repeat = false }
 "Ctrl+Shift+Print" = { action = 'spawn mkdir -p /home/shin/Pictures/Screenshots && wayscrollshot -o /tmp/wss.png && swappy -f /tmp/wss.png -o /home/shin/Pictures/Screenshots/wayscrollshot-$(date +%Y-%m-%d_%H-%M-%S).png; rm -f /tmp/wss.png', repeat = false }
 "Mod+F1" = { action = "spawn pkill -SIGUSR1 wayscriber", repeat = false }
