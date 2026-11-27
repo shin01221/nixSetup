@@ -15,6 +15,11 @@
         username = lib.mkDefault userName;
         homeDirectory = lib.mkDefault homeDir;
         stateVersion = "25.05";
+        packages = [ pkgs.home-manager ];
+
+        file.".ssh/git.pub".text = ''
+          ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAnU8Xy/qbxa4cDYxcxoTx2zsz4gBJBi6sXcfpcDnRbe shin@shin
+        '';
       };
 
       fonts.fontconfig.enable = true;
@@ -27,7 +32,7 @@
         # 1. Keep signing and ignores out here as they are top-level options
         signing = {
           format = "ssh";
-          key = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
+          key = "${config.home.homeDirectory}/.ssh/git.pub";
           signByDefault = true;
         };
 

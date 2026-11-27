@@ -1,4 +1,4 @@
-{ pkgs, homeDir, ... }:
+{ pkgs, homeDir, userName, ... }:
 {
   hardware.cpu.amd.updateMicrocode = true;
 
@@ -11,6 +11,21 @@
   };
 
   age.identityPaths = [ "${homeDir}/.ssh/agenix_shin" ];
+
+  age.secrets."router-password.age" = {
+    file = ../../../secrets/router-password.age;
+    owner = userName;
+    group = "users";
+    mode = "0400";
+  };
+
+  age.secrets."git.age" = {
+    file = ../../../secrets/git.age;
+    path = "${homeDir}/.ssh/git";
+    owner = userName;
+    group = "users";
+    mode = "0400";
+  };
 
   systemd.services.micmute-led-off = {
     description = "Turn off micmute LED at boot";

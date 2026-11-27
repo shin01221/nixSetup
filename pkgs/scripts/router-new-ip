@@ -1,0 +1,313 @@
+#!/usr/bin/env python3
+import argparse
+import base64
+import http.client
+import json
+import os
+import re
+import secrets
+import ssl
+import sys
+import time
+from pathlib import Path
+
+DEFAULT_HOST = os.environ.get("ROUTER_HOST", "192.168.1.1")
+DEFAULT_USER = os.environ.get("ROUTER_USER", "admin")
+DEFAULT_PASSWORD_FILE = Path(
+    os.environ.get("ROUTER_PASSWORD_FILE", "/run/agenix/router-password.age")
+)
+DEFAULT_ATTEMPTS = int(os.environ.get("ROUTER_ATTEMPTS", "5"))
+DEFAULT_TIMEOUT = int(os.environ.get("ROUTER_TIMEOUT", "180"))
+IP_ENDPOINTS = (
+    ("api.ipify.org", "/"),
+    ("ifconfig.me", "/ip"),
+    ("icanhazip.com", "/"),
+)
+
+
+def router_tls_context():
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
+    context.options |= getattr(ssl, "OP_LEGACY_SERVER_CONNECT", 0)
+    context.set_ciphers("DEFAULT@SECLEVEL=0")
+    return context
+
+
+def parse_json(raw):
+    text = raw.decode("utf-8", "replace").strip()
+    if text.startswith("while(1); /*"):
+        text = text[len("while(1); /*") :]
+        end = text.rfind("*/")
+        if end != -1:
+            text = text[:end]
+    return json.loads(text)
+
+
+def public_ip():
+    last_error = None
+    for host, path in IP_ENDPOINTS:
+        try:
+            context = ssl.create_default_context()
+            connection = http.client.HTTPSConnection(
+                host, 443, context=context, timeout=10
+            )
+            connection.request(
+                "GET",
+                path,
+                headers={
+                    "Host": host,
+                    "User-Agent": "router-new-ip/1.0",
+                    "Connection": "close",
+                },
+            )
+            response = connection.getresponse()
+            body = response.read().decode("utf-8", "replace").strip()
+            connection.close()
+            if response.status == 200 and re.fullmatch(r"[0-9a-fA-F:.]+", body):
+                return body
+            last_error = f"{host}: HTTP {response.status}"
+        except Exception as error:
+            last_error = f"{host}: {error}"
+    raise RuntimeError(f"could not determine public IP ({last_error})")
+
+
+class Router:
+    def __init__(self, host, timeout=10):
+        self.host = host
+        self.timeout = timeout
+        self.context = router_tls_context()
+        self.cookie = None
+        self.csrf = None
+        self.modulus = None
+        self.exponent = None
+
+    def request(self, method, path, body=None, headers=None, allow_disconnect=False):
+        connection = http.client.HTTPSConnection(
+            self.host, 443, context=self.context, timeout=self.timeout
+        )
+        request_headers = {
+            "Host": self.host,
+            "User-Agent": "router-new-ip/1.0",
+            "Accept": "*/*",
+            "Connection": "close",
+        }
+        if self.cookie:
+            request_headers["Cookie"] = self.cookie
+        if headers:
+            request_headers.update(headers)
+
+        payload = None
+        if body is not None:
+            payload = json.dumps(body, separators=(",", ":")).encode()
+            request_headers.setdefault(
+                "Content-Type", "application/json;charset=UTF-8;enp"
+            )
+
+        try:
+            connection.request(method, path, body=payload, headers=request_headers)
+            response = connection.getresponse()
+            raw = response.read()
+            set_cookie = response.getheader("Set-Cookie")
+            if set_cookie:
+                self.cookie = set_cookie.split(";", 1)[0]
+            return response.status, raw
+        except (
+            ConnectionResetError,
+            BrokenPipeError,
+            http.client.RemoteDisconnected,
+        ):
+            if allow_disconnect:
+                return None, b""
+            raise
+        finally:
+            connection.close()
+
+    def load(self):
+        status, raw = self.request("GET", "/")
+        if status != 200:
+            raise RuntimeError(f"login page returned HTTP {status}")
+
+        html = raw.decode("utf-8", "replace")
+        metadata = {}
+        for match in re.finditer(r"<meta\b[^>]*>", html, re.IGNORECASE):
+            tag = match.group(0)
+            name = re.search(r'name="([^"]*)"', tag, re.IGNORECASE)
+            content = re.search(r'content="([^"]*)"', tag, re.IGNORECASE)
+            if name and content:
+                metadata[name.group(1)] = content.group(1)
+
+        required = ("csrf_param", "csrf_token", "n", "e")
+        missing = [name for name in required if name not in metadata]
+        if missing:
+            raise RuntimeError(f"login page missing metadata: {', '.join(missing)}")
+
+        self.csrf = {
+            "csrf_param": metadata["csrf_param"],
+            "csrf_token": metadata["csrf_token"],
+        }
+        self.modulus = metadata["n"]
+        self.exponent = metadata["e"]
+
+    def encrypt_password(self, password):
+        encoded = base64.b64encode(password.encode("utf-8")).decode("ascii")
+        modulus = int(self.modulus, 16)
+        exponent = int(self.exponent, 16)
+        size = (modulus.bit_length() + 7) // 8
+        chunk_size = size - 11
+        output = []
+
+        for offset in range(0, len(encoded), chunk_size):
+            chunk = encoded[offset : offset + chunk_size].encode("ascii")
+            padding = bytes(secrets.randbelow(255) + 1 for _ in range(size - len(chunk) - 3))
+            block = b"\x00\x02" + padding + b"\x00" + chunk
+            encrypted = pow(int.from_bytes(block, "big"), exponent, modulus)
+            output.append(encrypted.to_bytes(size, "big").hex())
+
+        return "".join(output)
+
+    def login(self, username, password):
+        body = {
+            "csrf": self.csrf,
+            "data": {
+                "UserName": username,
+                "Password": self.encrypt_password(password),
+            },
+        }
+        status, raw = self.request(
+            "POST",
+            "/api/system/user_login",
+            body,
+            {
+                "Referer": f"https://{self.host}/",
+                "Origin": f"https://{self.host}",
+            },
+        )
+        if status != 200:
+            raise RuntimeError(f"login returned HTTP {status}")
+
+        result = parse_json(raw)
+        if result.get("csrf_param") and result.get("csrf_token"):
+            self.csrf = {
+                "csrf_param": result["csrf_param"],
+                "csrf_token": result["csrf_token"],
+            }
+        if result.get("errorCategory") != "ok" and result.get("errcode") != 0:
+            reason = result.get("errorCategory") or result.get("errcode") or result
+            raise RuntimeError(f"login failed: {reason}")
+
+    def reboot(self):
+        self.request(
+            "POST",
+            "/api/service/reboot.cgi",
+            {"csrf": self.csrf},
+            {
+                "Referer": f"https://{self.host}/",
+                "Origin": f"https://{self.host}",
+            },
+            allow_disconnect=True,
+        )
+
+
+def router_is_up(host, timeout):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        try:
+            router = Router(host, timeout=5)
+            status, _ = router.request("GET", "/")
+            if status == 200:
+                return True
+        except Exception:
+            pass
+        time.sleep(2)
+    return False
+
+
+def wait_for_new_ip(old_ip, timeout):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        try:
+            current = public_ip()
+            if current != old_ip:
+                return current
+        except Exception:
+            pass
+        time.sleep(3)
+    return None
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Reboot the Huawei DG8045 until the public IP changes."
+    )
+    parser.add_argument("--host", default=DEFAULT_HOST)
+    parser.add_argument("--user", default=DEFAULT_USER)
+    parser.add_argument("--password-file", default=str(DEFAULT_PASSWORD_FILE))
+    parser.add_argument("--attempts", type=int, default=DEFAULT_ATTEMPTS)
+    parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT)
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="log in to the router but do not reboot it",
+    )
+    args = parser.parse_args()
+
+    try:
+        password = Path(args.password_file).read_text().rstrip("\r\n")
+    except OSError as error:
+        print(f"cannot read router password: {error}", file=sys.stderr)
+        return 1
+
+    if not password:
+        print(f"router password file is empty: {args.password_file}", file=sys.stderr)
+        return 1
+
+    try:
+        old_ip = public_ip()
+    except Exception as error:
+        print(f"cannot read current public IP: {error}", file=sys.stderr)
+        return 1
+
+    print(f"current public IP: {old_ip}")
+
+    if args.dry_run:
+        try:
+            router = Router(args.host)
+            router.load()
+            router.login(args.user, password)
+        except Exception as error:
+            print(f"login failed: {error}", file=sys.stderr)
+            return 1
+        print("login ok")
+        return 0
+
+    for attempt in range(1, args.attempts + 1):
+        print(f"attempt {attempt}/{args.attempts}: rebooting {args.host}")
+        try:
+            router = Router(args.host)
+            router.load()
+            router.login(args.user, password)
+            router.reboot()
+        except Exception as error:
+            print(f"reboot request failed: {error}", file=sys.stderr)
+            return 1
+
+        if not router_is_up(args.host, args.timeout):
+            print("router did not come back in time", file=sys.stderr)
+            continue
+
+        new_ip = wait_for_new_ip(old_ip, args.timeout)
+        if new_ip:
+            print(f"new public IP: {new_ip}")
+            return 0
+
+        print("public IP did not change; retrying")
+        old_ip = public_ip()
+        time.sleep(10)
+
+    print("could not obtain a different public IP", file=sys.stderr)
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

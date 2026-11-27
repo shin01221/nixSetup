@@ -28,5 +28,8 @@ pkgs.stdenv.mkDerivation {
 
     wrapProgram $out/bin/wallpaper-history.sh \
       --prefix PATH : ${pkgs.lib.makeBinPath wallpaperHistoryDeps}
+
+    wrapProgram $out/bin/router-new-ip \
+      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.python3 ]}
   '';
 }

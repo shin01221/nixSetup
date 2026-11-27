@@ -510,8 +510,10 @@ hide_when_empty = true
 match.app_id = "^kopuz$"
 default_scratchpad = "music"
 default_focused = true
+# Scratchpad windows ignore default_maximize; tile Kopuz so the 1.0 extent
+# fills the music pad inside its struts.
+default_floating = false
 default_scrolling_extent = 1.0
-default_maximize = true
 dim_behind = 0.4
 
 [[scratchpad]]
