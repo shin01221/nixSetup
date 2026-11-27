@@ -19,6 +19,7 @@
     xdg = lib.mkEnableOption "XDG MIME and user-dirs";
     obs-studio = lib.mkEnableOption "OBS Studio config";
     obsidian = lib.mkEnableOption "Obsidian config";
+    zapfast = lib.mkEnableOption "ZapFast WhatsApp client";
     foot = lib.mkEnableOption "Foot terminal config";
     ghostty = lib.mkEnableOption "Ghostty terminal config";
     dolphin = lib.mkEnableOption "Dolphin file manager";

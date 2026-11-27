@@ -273,6 +273,12 @@ default_display = "normal"
 # ==============================================================================
 # Window rules
 # ==============================================================================
+# Dim unfocused windows by 0.3 (30%). Focused windows fall back to the base
+# opacity from solid.toml / transparency.toml.
+# [[window_rule]]
+# match.is_focused = false
+# dim_behind = 0.3
+
 # Dolphin popups blur against live content.
 [[window_rule]]
 match.app_id = '^org\.kde\.dolphin$'
@@ -306,16 +312,19 @@ match.app_id = 'zen'
 default_workspace = "Net"
 default_maximize_to_edges = true
 
+# Maximize-to-edges when a window is alone, except the apps excluded below.
+# Add more by extending the negative lookahead, e.g. '^(?!(kopuz|spotify)$).*'
 [[window_rule]]
 match.is_alone = true
+match.app_id = '^(?!kopuz$).*'
 default_maximize_to_edges = true
 
-# Floating windows: rounded corners, niri's fixed 800x800 default size.
 [[window_rule]]
 match.is_floating = true
 corner_radius = 5
 border_width = 1
 default_floating_size_px = { width = 800, height = 800 }
+dim_behind = 0.3
 
 # Wallpaper history picker: centered 800x800 floating terminal.
 [[window_rule]]
@@ -365,6 +374,7 @@ default_floating = true
 [[window_rule]]
 match.app_id = ['dev.noctalia.Noctalia']
 dim_behind = 0.7
+default_pinned = true
 
 # Password managers are excluded from screenshots and recordings.
 [[window_rule]]
@@ -492,14 +502,16 @@ background_blur = false
 # =================================================================================
 [[scratchpad]]
 name = "music"
-layout.mode = "dwindle"
-layout.struts = { left = 20, right = 20, top = 20, bottom = 20 }
+layout.mode = "scrolling"
+layout.struts = { left = 30, right = 30, top = 30, bottom = 30 }
 hide_when_empty = true
 
 [[window_rule]]
 match.app_id = "^kopuz$"
 default_scratchpad = "music"
 default_focused = true
+default_scrolling_extent = 1.0
+default_maximize = true
 dim_behind = 0.4
 
 [[scratchpad]]

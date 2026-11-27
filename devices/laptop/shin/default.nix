@@ -75,6 +75,7 @@
       xdg = true;
       obs-studio = true;
       obsidian = true;
+      zapfast = true;
       foot = true;
       ghostty = true;
       dolphin = true;
@@ -100,6 +101,8 @@
     ];
     config.common."org.freedesktop.impl.portal.FileChooser" = [ "luciole" "gtk" ];
   };
+
+  programs.kdeconnect.enable = true;
 
   services.openssh.enable = false;
   services.fprintd.enable = false;

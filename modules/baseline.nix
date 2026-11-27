@@ -115,6 +115,9 @@ in
       packages = with pkgs; [
         nerd-fonts.jetbrains-mono
         inter
+        ((pkgs.unstable or pkgs).noto-fonts.override {
+          variants = [ "Noto Sans Arabic" ];
+        })
       ];
       fontconfig = {
         enable = true;

@@ -66,6 +66,11 @@
 
     wayscrollshot.url = "github:jswysnemc/wayscrollshot";
 
+    zapfast = {
+      url = "github:crmne/zapfast";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     wlr-which-key-patched = {
       url = "github:shin01221/wlr-which-key/flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
