@@ -30,6 +30,8 @@
       home.packages = with pkgs; [
         darkly
         colloid-icon-theme
+        matugen
+        nwg-look
       ];
     }
   ;
