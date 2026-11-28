@@ -1,5 +1,7 @@
-{ pkgs, wm ? "auto" }:
+{ pkgs, wm ? "auto", enablePowerToggle ? true }:
 let
+  lib = pkgs.lib;
+
   wallpaperHistoryDeps = with pkgs; [
     sqlite
     fzf
@@ -18,7 +20,11 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     for f in $src/*; do
-      [ "$(basename "$f")" = "default.nix" ] && continue
+      name="$(basename "$f")"
+      [ "$name" = "default.nix" ] && continue
+      ${lib.optionalString (!enablePowerToggle) ''
+      [ "$name" = "power-toggle" ] && continue
+      ''}
       cp -a "$f" $out/bin/
     done
 
@@ -27,9 +33,9 @@ pkgs.stdenv.mkDerivation {
     chmod +x $out/bin/transparency-toggle.sh
 
     wrapProgram $out/bin/wallpaper-history.sh \
-      --prefix PATH : ${pkgs.lib.makeBinPath wallpaperHistoryDeps}
+      --prefix PATH : ${lib.makeBinPath wallpaperHistoryDeps}
 
     wrapProgram $out/bin/router-new-ip \
-      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.python3 ]}
+      --prefix PATH : ${lib.makeBinPath [ pkgs.python3 ]}
   '';
 }

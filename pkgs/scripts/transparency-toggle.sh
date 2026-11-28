@@ -17,14 +17,20 @@ notify() {
 }
 
 detect_wm() {
-    if [ -n "${NIRI_SOCKET:-}" ] || pgrep -x niri >/dev/null 2>&1; then
+    if pgrep -x niri >/dev/null 2>&1; then
         printf 'niri\n'
-    elif [ -n "${UMBRIEL_SOCKET:-}" ] ||
-        pgrep -x umbriel >/dev/null 2>&1 ||
+    elif pgrep -x umbriel >/dev/null 2>&1 ||
         pgrep -x .umbriel-wrappe >/dev/null 2>&1 ||
-        pgrep -x start-umbriel >/dev/null 2>&1 ||
-        [[ "${XDG_CURRENT_DESKTOP:-}" == *[Uu]mbriel* ]]; then
+        pgrep -x start-umbriel >/dev/null 2>&1; then
         printf 'umbriel\n'
+    elif [ -n "${NIRI_SOCKET:-}" ] && [ -S "$NIRI_SOCKET" ]; then
+        printf 'niri\n'
+    elif [ -n "${UMBRIEL_SOCKET:-}" ] && [ -S "$UMBRIEL_SOCKET" ]; then
+        printf 'umbriel\n'
+    elif [[ "${XDG_CURRENT_DESKTOP:-}" == *[Uu]mbriel* ]]; then
+        printf 'umbriel\n'
+    elif [[ "${XDG_CURRENT_DESKTOP:-}" == *[Nn]iri* ]]; then
+        printf 'niri\n'
     else
         printf 'unknown\n'
     fi

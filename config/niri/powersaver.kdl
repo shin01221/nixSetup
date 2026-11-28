@@ -1,5 +1,14 @@
 include "transparency.kdl"
 
+layer-rule {
+    match namespace="^wlr_which_key$"
+    opacity 1.0
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
 animations {
     workspace-switch {
         duration-ms 0

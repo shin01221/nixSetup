@@ -1,0 +1,418 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DEFAULT_WM="auto"
+CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+noctaliaConf="$CONFIG_HOME/noctalia"
+powersaverNoctalia="$noctaliaConf/powersaver.toml"
+niriConf="$CONFIG_HOME/niri/override.kdl"
+
+stateDir="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/power-toggle-$(id -u)"
+modeFile="$stateDir/mode"
+activeFile="$stateDir/active"
+persistDir="${XDG_STATE_HOME:-$HOME/.local/state}/power-toggle"
+noctaliaState="$persistDir/noctalia.state"
+
+noctaliaKeys=(
+    shell.animation.enabled
+    shell.panel.transparency_mode
+    bar.main.background_opacity
+    bar.main.capsule_opacity
+    dock.background_opacity
+    notifications.background_opacity
+)
+
+backlight="${POWER_TOGGLE_BACKLIGHT:-amdgpu_bl1}"
+
+if command -v rg >/dev/null 2>&1; then
+    GREP="rg"
+else
+    GREP="grep"
+fi
+
+if command -v sd >/dev/null 2>&1; then
+    SD="sd"
+else
+    SD="sed"
+fi
+
+have() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+is_on_battery() {
+    local supply type online seen=0
+    for supply in /sys/class/power_supply/*; do
+        [ -r "$supply/type" ] || continue
+        type=$(cat "$supply/type" 2>/dev/null || true)
+        case "$type" in
+            Mains | USB | USB_C | USB_PD) ;;
+            *) continue ;;
+        esac
+        seen=1
+        online=$(cat "$supply/online" 2>/dev/null || true)
+        if [ "$online" = "1" ]; then
+            return 1
+        fi
+    done
+    [ "$seen" = "1" ]
+}
+
+detect_wm() {
+    if pgrep -x niri >/dev/null 2>&1; then
+        printf 'niri\n'
+    elif pgrep -x umbriel >/dev/null 2>&1 ||
+        pgrep -x .umbriel-wrappe >/dev/null 2>&1 ||
+        pgrep -x start-umbriel >/dev/null 2>&1; then
+        printf 'umbriel\n'
+    elif [ -n "${NIRI_SOCKET:-}" ] && [ -S "$NIRI_SOCKET" ]; then
+        printf 'niri\n'
+    elif [ -n "${UMBRIEL_SOCKET:-}" ] && [ -S "$UMBRIEL_SOCKET" ]; then
+        printf 'umbriel\n'
+    elif [[ "${XDG_CURRENT_DESKTOP:-}" == *[Uu]mbriel* ]]; then
+        printf 'umbriel\n'
+    elif [[ "${XDG_CURRENT_DESKTOP:-}" == *[Nn]iri* ]]; then
+        printf 'niri\n'
+    else
+        printf 'unknown\n'
+    fi
+}
+
+inline_sub() {
+    local pattern="$1" replacement="$2" file="$3"
+    if [ "$SD" = "sd" ]; then
+        sd "$pattern" "$replacement" "$file"
+    else
+        sed -i "s|$pattern|$replacement|" "$file"
+    fi
+}
+
+has_line() {
+    local pattern="$1" file="$2"
+    if [ "$GREP" = "rg" ]; then
+        rg -q "$pattern" "$file"
+    else
+        grep -q "$pattern" "$file"
+    fi
+}
+
+get_mode() {
+    if [ -r "$modeFile" ]; then
+        cat "$modeFile"
+    else
+        printf 'auto\n'
+    fi
+}
+
+set_mode() {
+    mkdir -p "$stateDir"
+    printf '%s\n' "$1" >"$modeFile"
+}
+
+set_brightness() {
+    local value="$1"
+    if have brightnessctl; then
+        brightnessctl --device "$backlight" set "$value" >/dev/null 2>&1 || true
+    fi
+}
+
+noctalia_conf_write() {
+    mkdir -p "$noctaliaConf"
+    cat >"$powersaverNoctalia" <<'EOF'
+[shell.animation]
+enabled = false
+
+[shell.panel]
+transparency_mode = "solid"
+
+[notifications]
+background_opacity = 1.0
+
+[dock]
+background_opacity = 1.0
+
+[bar.main]
+background_opacity = 1.0
+capsule_opacity = 1.0
+EOF
+}
+
+noctalia_conf_remove() {
+    rm -f "$powersaverNoctalia"
+}
+
+noctalia_state_save() {
+    have noctalia || return 0
+    [ -f "$noctaliaState" ] && return 0
+    mkdir -p "$persistDir"
+    : >"$noctaliaState"
+    local key val
+    for key in "${noctaliaKeys[@]}"; do
+        val=$(noctalia msg config-get "$key" 2>/dev/null || true)
+        [ -n "$val" ] && printf '%s\t%s\n' "$key" "$val" >>"$noctaliaState"
+    done
+    [ -s "$noctaliaState" ] || rm -f "$noctaliaState"
+}
+
+noctalia_apply_on() {
+    have noctalia || return 0
+    noctalia_state_save
+    noctalia msg config-set shell.animation.enabled false >/dev/null 2>&1 || true
+    noctalia msg config-set shell.panel.transparency_mode "'solid'" >/dev/null 2>&1 || true
+    noctalia msg config-set bar.main.background_opacity 1.0 >/dev/null 2>&1 || true
+    noctalia msg config-set bar.main.capsule_opacity 1.0 >/dev/null 2>&1 || true
+    noctalia msg config-set dock.background_opacity 1.0 >/dev/null 2>&1 || true
+    noctalia msg config-set notifications.background_opacity 1.0 >/dev/null 2>&1 || true
+}
+
+noctalia_apply_off() {
+    have noctalia || return 0
+    if [ -f "$noctaliaState" ]; then
+        local key val
+        while IFS=$'\t' read -r key val; do
+            [ -n "$key" ] || continue
+            case "$key" in
+                shell.panel.transparency_mode) val="'$val'" ;;
+            esac
+            noctalia msg config-set "$key" "$val" >/dev/null 2>&1 || true
+        done <"$noctaliaState"
+        rm -f "$noctaliaState"
+    else
+        noctalia msg config-set shell.animation.enabled true >/dev/null 2>&1 || true
+    fi
+}
+
+niri_is_on() {
+    [ -f "$niriConf" ] && has_line '^[[:space:]]*include[[:space:]]+"powersaver\.kdl"' "$niriConf"
+}
+
+niri_is_off() {
+    [ -f "$niriConf" ] && has_line '^[[:space:]]*//[[:space:]]*include[[:space:]]+"powersaver\.kdl"' "$niriConf"
+}
+
+niri_transparency_on() {
+    [ -f "$niriConf" ] || return 0
+    if has_line '^[[:space:]]*//[[:space:]]*include[[:space:]]+"transparency\.kdl"' "$niriConf"; then
+        inline_sub '^[[:space:]]*//[[:space:]]*include[[:space:]]+"transparency\.kdl".*' 'include "transparency.kdl"' "$niriConf"
+    elif ! has_line '^[[:space:]]*include[[:space:]]+"transparency\.kdl"' "$niriConf"; then
+        printf '\ninclude "transparency.kdl"\n' >>"$niriConf"
+    fi
+}
+
+niri_transparency_off() {
+    [ -f "$niriConf" ] || return 0
+    if has_line '^[[:space:]]*include[[:space:]]+"transparency\.kdl"' "$niriConf"; then
+        inline_sub '^[[:space:]]*include[[:space:]]+"transparency\.kdl".*' '// include "transparency.kdl"' "$niriConf"
+    fi
+}
+
+niri_on() {
+    [ -f "$niriConf" ] || return 0
+    niri_transparency_on
+    if niri_is_on; then
+        return 0
+    elif niri_is_off; then
+        inline_sub '^[[:space:]]*//[[:space:]]*include[[:space:]]+"powersaver\.kdl".*' 'include "powersaver.kdl"' "$niriConf"
+    else
+        printf '\ninclude "powersaver.kdl"\n' >>"$niriConf"
+    fi
+}
+
+niri_off() {
+    [ -f "$niriConf" ] || return 0
+    niri_transparency_off
+    if niri_is_on; then
+        inline_sub '^[[:space:]]*include[[:space:]]+"powersaver\.kdl".*' '// include "powersaver.kdl"' "$niriConf"
+    fi
+}
+
+umbriel_on() {
+    have umbriel || return 0
+    umbriel config set animation.enabled false >/dev/null 2>&1 || true
+    umbriel config set appearance.blur.enabled false >/dev/null 2>&1 || true
+}
+
+umbriel_off() {
+    have umbriel || return 0
+    umbriel config unset animation.enabled >/dev/null 2>&1 || true
+    umbriel config unset appearance.blur.enabled >/dev/null 2>&1 || true
+}
+
+refresh_which_key() {
+    case "$wm" in
+        niri | umbriel) ;;
+        *) return 0 ;;
+    esac
+    local script
+    script="$(dirname "$0")/which-key.sh"
+    if [ ! -x "$script" ]; then
+        script="$(command -v which-key.sh || true)"
+    fi
+    [ -n "$script" ] || return 0
+    "$script" "$wm" >/dev/null 2>&1 || true
+}
+
+resolve_wm() {
+    if [ "$WM_ARG" != "auto" ]; then
+        wm="$WM_ARG"
+    else
+        wm="$(detect_wm)"
+    fi
+}
+
+set_active() {
+    mkdir -p "$stateDir"
+    printf '%s\n' "$1" >"$activeFile"
+}
+
+apply_on() {
+    resolve_wm
+    set_brightness 30%
+    noctalia_apply_on
+    noctalia_conf_write
+    case "$wm" in
+        niri) niri_on ;;
+        umbriel) umbriel_on ;;
+    esac
+    set_active on
+    refresh_which_key
+}
+
+apply_off() {
+    resolve_wm
+    set_brightness 100%
+    noctalia_conf_remove
+    noctalia_apply_off
+    case "$wm" in
+        niri) niri_off ;;
+        umbriel) umbriel_off ;;
+    esac
+    set_active off
+    refresh_which_key
+}
+
+apply_mode() {
+    case "$1" in
+        on) apply_on ;;
+        off) apply_off ;;
+        auto | *)
+            if is_on_battery; then
+                apply_on
+            else
+                apply_off
+            fi
+            ;;
+    esac
+}
+
+apply_current() {
+    apply_mode "$(get_mode)"
+}
+
+state_from_mode() {
+    case "$(get_mode)" in
+        on) printf 'on\n' ;;
+        off) printf 'off\n' ;;
+        *)
+            if is_on_battery; then printf 'on\n'; else printf 'off\n'; fi
+            ;;
+    esac
+}
+
+current_state() {
+    resolve_wm
+    case "$wm" in
+        niri)
+            if niri_is_on; then printf 'on\n'; else printf 'off\n'; fi
+            ;;
+        umbriel)
+            if have umbriel; then
+                local anim blur
+                anim=$(umbriel config get animation.enabled 2>/dev/null || true)
+                blur=$(umbriel config get appearance.blur.enabled 2>/dev/null || true)
+                if [ "$anim" = "false" ] || [ "$blur" = "false" ]; then
+                    printf 'on\n'
+                else
+                    printf 'off\n'
+                fi
+            else
+                state_from_mode
+            fi
+            ;;
+        *) state_from_mode ;;
+    esac
+}
+
+watch_power() {
+    local i
+    for i in $(seq 1 30); do
+        resolve_wm
+        [ "$wm" != "unknown" ] && break
+        sleep 1
+    done
+    apply_current
+    if have upower; then
+        upower --monitor | while IFS= read -r line; do
+            case "$line" in
+                *line_power* | *on-battery* | *on-ac*) apply_current ;;
+            esac
+        done
+    else
+        while sleep 30; do
+            apply_current
+        done
+    fi
+}
+
+usage() {
+    cat <<'EOF'
+Usage: power-toggle [auto|on|off|toggle|status|watch] [niri|umbriel]
+
+  auto    Follow AC/battery state (default)
+  on      Force power saver on: animations/blur off, dim screen
+  off     Force power saver off: animations/blur on, full brightness
+  toggle  Flip the current state and force it
+  status  Print the current power saver state
+  watch   Follow power changes until interrupted
+EOF
+}
+
+WM_ARG="${2:-$DEFAULT_WM}"
+
+case "${1:-auto}" in
+    auto | reset)
+        set_mode auto
+        apply_mode auto
+        ;;
+    on)
+        set_mode on
+        apply_mode on
+        ;;
+    off)
+        set_mode off
+        apply_mode off
+        ;;
+    toggle)
+        if [ "$(current_state)" = "on" ]; then
+            set_mode off
+            apply_mode off
+        else
+            set_mode on
+            apply_mode on
+        fi
+        ;;
+    status)
+        current_state
+        ;;
+    watch)
+        watch_power
+        ;;
+    -h | --help | help)
+        usage
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+esac
